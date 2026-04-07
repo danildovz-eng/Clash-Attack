@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <link rel="manifest" href="manifest.json">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Clash Arena</title>
@@ -17,6 +15,7 @@
         @keyframes slideDownToast { to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOutToast { to { opacity: 0; transform: translateY(-20px); } }
         @keyframes emotePop { 0% { transform: scale(0) translateY(20px); opacity: 0; } 50% { transform: scale(1.2) translateY(-10px); opacity: 1; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         #toast-container { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; width: 90%; max-width: 400px; }
         .toast { background: var(--danger); color: white; padding: 15px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.5); animation: popIn 0.3s forwards; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
@@ -31,16 +30,18 @@
         #loading-progress { width: 0%; height: 100%; background: linear-gradient(90deg, #f1c40f, #f39c12); transition: width 0.2s linear; }
         #loading-text { color: white; font-weight: bold; margin-top: 10px; text-shadow: 1px 1px 0 #000; font-size: 14px; }
 
-        .screen { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: var(--bg); overflow-y: auto; overflow-x: hidden; padding-top: 75px; padding-bottom: calc(var(--nav-height) + 20px); opacity: 0; transition: opacity 0.2s; }
-        .screen.active { display: block; opacity: 1; }
+        .screen { display: block; width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: var(--bg); overflow-y: auto; overflow-x: hidden; padding-top: 75px; padding-bottom: calc(var(--nav-height) + 20px); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; transform: translateX(100%); pointer-events: none; }
+        .screen.active { transform: translateX(0); opacity: 1; pointer-events: auto; z-index: 2; }
+        .screen.past { transform: translateX(-100%); opacity: 0; pointer-events: none; }
+        
         .fullscreen-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 4500; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
 
         .modal-box { width: 90%; max-width: 400px; background: var(--panel); border-radius: 15px; border: 2px solid #3498db; overflow: hidden; display: flex; flex-direction: column; max-height: 80vh; animation: popIn 0.3s ease forwards; }
         
-        #auth-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 5000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        #auth-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 8000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .auth-box { width: 100%; max-width: 400px; background: #1e1e24; padding: 40px 30px; border-radius: 12px; border: 1px solid #3498db; display: none; flex-direction: column; align-items: center; animation: popIn 0.3s ease; }
         .auth-box.active { display: flex; }
-        .auth-title { color: var(--primary); font-size: 28px; font-weight: 900; margin-bottom: 30px; }
+        .auth-title { color: var(--primary); font-size: 28px; font-weight: 900; margin-bottom: 20px; text-align: center;}
         .auth-input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 2px solid #2b2b36; background: #121212; color: white; font-size: 16px; outline: none; }
         .auth-input:focus { border-color: var(--primary); }
         .auth-btn { width: 100%; padding: 15px; border-radius: 8px; border: none; background: var(--primary); color: white; font-size: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 15px; }
@@ -50,8 +51,8 @@
         .top-bar { position: fixed; top: 0; left: 0; width: 100%; height: var(--top-bar-height); background: #121212; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; z-index: 2000; border-bottom: 2px solid #2b2b36; }
         .top-bar-stat { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: bold; background: #1e1e24; padding: 6px 12px; border-radius: 20px; }
         nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height); background: #121212; display: flex; justify-content: space-around; align-items: center; z-index: 2000; border-top: 2px solid #2b2b36; }
-        .nav-btn { padding: 10px; font-size: 11px; text-align: center; cursor: pointer; opacity: 0.5; transition: 0.2s; text-transform: uppercase; color: white; font-weight: bold; flex: 1; }
-        .nav-btn.active { opacity: 1; color: var(--primary); transform: scale(1.1); }
+        .nav-btn { padding: 10px; font-size: 11px; text-align: center; cursor: pointer; opacity: 0.5; transition: 0.2s transform, 0.2s opacity; text-transform: uppercase; color: white; font-weight: bold; flex: 1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+        .nav-btn.active { opacity: 1; color: var(--primary); transform: scale(1.15); }
 
         .big-btn { width: 240px; height: 70px; background: linear-gradient(to bottom, #f1c40f, #e67e22); border: 3px solid #d35400; border-radius: 12px; color: white; font-size: 26px; font-weight: 900; text-transform: uppercase; text-shadow: 2px 2px 0 #a04000; cursor: pointer; box-shadow: 0 8px 0 #a04000; transition: 0.1s; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .big-btn:active { transform: translateY(8px); box-shadow: 0 0 0 #a04000; }
@@ -80,8 +81,8 @@
         .chest-slot { width: 50px; height: 50px; background: #121212; border-radius: 8px; border: 2px dashed #555; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #aaa; transition: 0.3s; }
         .chest-slot.filled { border-style: solid; border-color: var(--accent); background: #f39c12; }
         
-        #arena-bg-container { background: linear-gradient(to bottom, #74b9ff, #2ecc71); border-radius: 20px; padding: 50px 20px; width: 90%; max-width: 400px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); position: relative; overflow: hidden; margin: 60px auto 10px auto; border: 4px solid #34495e; transition: background 0.5s ease; }
-        .arena-blur { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.2); z-index: 1; }
+        #arena-bg-container { border-radius: 20px; padding: 50px 20px; width: 90%; max-width: 400px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); position: relative; overflow: hidden; margin: 60px auto 10px auto; border: 4px solid #34495e; transition: background 0.5s ease; background-color: #2ecc71; }
+        .arena-blur { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 1; }
         .arena-title-text { -webkit-text-stroke: 1.5px #000; color: var(--primary); text-shadow: 3px 3px 0 #000, -1px -1px 0 #000; font-size: 46px; font-weight: 900; }
         .arena-desc-text { -webkit-text-stroke: 0.5px #000; color: #fff; text-shadow: 2px 2px 0 #000; font-size: 16px; font-weight: bold; }
 
@@ -97,6 +98,7 @@
         .medal-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
         .medal-item { width: 45px; height: 45px; border-radius: 50%; background: radial-gradient(circle, #e67e22, #935116); border: 2px solid #f39c12; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; filter: grayscale(100%); transition: 0.2s; }
         .medal-item.unlocked { filter: grayscale(0%); }
+        .medal-item.equipped { border-color: var(--success); box-shadow: 0 0 10px rgba(46,204,113,0.8); transform: scale(1.1); filter: grayscale(0%); }
 
         .emote-slot { width: 45px; height: 45px; border-radius: 8px; border: 2px dashed #aaa; background: #121212; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
         .emote-slot.filled { border: 2px solid var(--primary); background: #2c3e50; }
@@ -119,7 +121,6 @@
         .chest-item-reveal { font-size: 80px; display: none; flex-direction: column; align-items: center; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .chest-item-count { font-size: 40px; color: white; font-weight: 900; margin-top: 10px; text-shadow: 2px 2px 0 #000; }
 
-        /* ИСПРАВЛЕННЫЙ БОЕВОЙ ЭКРАН (ЖЕСТКАЯ СЕТКА) */
         #battle-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 6000; flex-direction: column; overflow: hidden; opacity: 0; transition: opacity 0.3s ease; }
         #battle-screen.active { display: flex; opacity: 1; } 
         
@@ -146,7 +147,6 @@
         .game-card-name { color: white; font-size: 8px; font-weight: bold; white-space: normal; line-height: 1.1; overflow: hidden; width: 95%; text-align: center; text-shadow: 1px 1px 0 #000; }
         .elixir-cost { position: absolute; top: -6px; left: -6px; background: #9b59b6; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border: 1.5px solid #fff; z-index: 2; color: white; }
 
-        /* Экран завершения */
         #battle-end-overlay { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 6500; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.5s ease; }
         #battle-end-overlay.active { display: flex; opacity: 1; }
         .end-banner-container { display: flex; align-items: center; width: 90%; max-width: 400px; margin: 10px 0; background: #2b2b36; border: 2px solid #555; border-radius: 10px; overflow: hidden; height: 60px; animation: popIn 0.5s ease; }
@@ -171,40 +171,6 @@
 </head>
 <body>
 
-<script>
-    let audioCtx;
-    function initAudio() {
-        try {
-            if(!audioCtx && (window.AudioContext || window.webkitAudioContext)) { 
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
-            }
-            if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-        } catch(e) { console.warn("Audio Context error"); }
-    }
-    function playTone(freq, type, duration, vol=0.1) {
-        if(!audioCtx) return;
-        try {
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(vol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration);
-        } catch(e){}
-    }
-    function playSound(name) {
-        initAudio();
-        if(name==='click') playTone(800, 'sine', 0.1, 0.1);
-        if(name==='spawn') playTone(400, 'square', 0.15, 0.05);
-        if(name==='hit') playTone(150, 'sawtooth', 0.1, 0.05);
-        if(name==='towerDestroy') { playTone(100, 'square', 0.5, 0.2); setTimeout(()=>playTone(50, 'sawtooth', 0.6, 0.3), 100); }
-        if(name==='win') { playTone(400, 'sine', 0.2, 0.1); setTimeout(()=>playTone(600, 'sine', 0.4, 0.1), 200); }
-        if(name==='lose') { playTone(300, 'sawtooth', 0.3, 0.1); setTimeout(()=>playTone(200, 'sawtooth', 0.5, 0.1), 300); }
-    }
-    document.addEventListener('click', (e) => {
-        initAudio();
-        if(e.target.tagName === 'BUTTON' || e.target.closest('.nav-btn') || e.target.closest('.card-item') || e.target.closest('.main-floating-btn') || e.target.closest('.medal-slot') || e.target.closest('.emote-slot')) playSound('click');
-    });
-</script>
-
 <div id="toast-container"></div>
 
 <div id="intro-screen" onclick="forceStart()">
@@ -218,27 +184,52 @@
     <div id="loading-text" style="margin-top:15px;">Загрузка...</div>
 </div>
 
-<div id="auth-screen">
-    <div class="auth-box active" id="view-login">
-        <div class="auth-title">CLASH ARENA</div>
-        <input type="email" id="login-email" class="auth-input" placeholder="Почта">
-        <input type="password" id="login-pass" class="auth-input" placeholder="Пароль">
-        <button class="auth-btn" onclick="processLogin()">Войти</button>
-        <div class="auth-link" style="color: var(--primary);" onclick="switchAuthView('view-reg-email')">Создать аккаунт</div>
-    </div>
-    <div class="auth-box" id="view-reg-email">
-        <div class="auth-title">РЕГИСТРАЦИЯ</div>
-        <input type="email" id="reg-email" class="auth-input" placeholder="Введите почту">
-        <button class="auth-btn" onclick="sendRegCode()">Далее</button>
-        <div class="auth-link" onclick="switchAuthView('view-login')">Назад ко входу</div>
-    </div>
-    <div class="auth-box" id="view-reg-details">
-        <div class="auth-title">ДАННЫЕ ПРОФИЛЯ</div>
-        <input type="text" id="reg-nick" class="auth-input" placeholder="Никнейм">
-        <input type="password" id="reg-pass" class="auth-input" placeholder="Пароль (минимум 8 символов)">
-        <button class="auth-btn" onclick="completeRegistration()">Завершить</button>
+<div id="nickname-modal" class="fullscreen-overlay" style="z-index: 9000;">
+    <div class="modal-box" style="padding: 20px; align-items: center;">
+        <h2 style="color: var(--primary); margin-bottom:10px;">ВВЕДИТЕ НИК</h2>
+        <input type="text" id="tutorial-nick" class="auth-input" placeholder="Ваш никнейм">
+        <button class="primary-btn" onclick="saveTutorialNick()">Далее</button>
     </div>
 </div>
+
+<div id="reg-prompt-modal" class="fullscreen-overlay" style="z-index: 9000;">
+    <div class="modal-box" style="padding: 20px; align-items: center;">
+        <h2 style="color: #f1c40f;">СОХРАНИТЬ ПРОГРЕСС?</h2>
+        <p style="color:#aaa; text-align:center; margin-bottom:15px; font-size: 14px;">Зарегистрируйтесь, чтобы не потерять аккаунт.</p>
+        <button class="primary-btn success-btn" style="height: 40px; font-size:14px;" onclick="openRegEmail()">Зарегистрироваться</button>
+        <button class="primary-btn" style="background: #555; height: 40px; font-size:14px;" onclick="skipReg()">Позже (Гость)</button>
+    </div>
+</div>
+
+<div id="reg-email-modal" class="fullscreen-overlay" style="z-index: 9000;">
+    <div class="modal-box" style="padding: 20px; align-items: center;">
+        <h2 style="color: var(--primary); margin-bottom: 10px;">РЕГИСТРАЦИЯ</h2>
+        <input type="email" id="reg-email-input" class="auth-input" placeholder="Email">
+        <input type="password" id="reg-pass-input" class="auth-input" placeholder="Пароль">
+        <button class="primary-btn success-btn" onclick="submitRegEmail()">Далее</button>
+        <button class="primary-btn" style="background: #555;" onclick="safeStyle('reg-email-modal','display','none')">Закрыть</button>
+    </div>
+</div>
+
+<div id="reg-code-modal" class="fullscreen-overlay" style="z-index: 9000;">
+    <div class="modal-box" style="padding: 20px; align-items: center;">
+        <h2 style="color: var(--primary); margin-bottom: 10px;">КОД ИЗ ПИСЬМА</h2>
+        <p style="color:#aaa; text-align:center; font-size:12px;">Введите любой код для симуляции</p>
+        <input type="text" id="reg-code-input" class="auth-input" placeholder="Код">
+        <button class="primary-btn success-btn" onclick="submitRegCode()">Подтвердить</button>
+    </div>
+</div>
+
+<div id="login-modal" class="fullscreen-overlay" style="z-index: 9000;">
+    <div class="modal-box" style="padding: 20px; align-items: center;">
+        <h2 style="color: var(--primary); margin-bottom: 10px;">ВХОД</h2>
+        <input type="email" id="login-email" class="auth-input" placeholder="Email">
+        <input type="password" id="login-pass" class="auth-input" placeholder="Пароль">
+        <button class="primary-btn success-btn" onclick="processLogin()">Войти</button>
+        <button class="primary-btn" style="background: #555;" onclick="safeStyle('login-modal','display','none')">Отмена</button>
+    </div>
+</div>
+
 
 <div class="top-bar" id="main-top-bar" style="display: none;">
     <div class="top-bar-stat">🏆 <span id="ui-trophies">0</span></div>
@@ -246,7 +237,7 @@
     <div class="top-bar-stat" style="color: #2ecc71;">💎 <span id="ui-gems">0</span></div>
 </div>
 
-<div id="screen-shop" class="screen">
+<div id="screen-shop" class="screen" data-index="0">
     <h2 style="text-align: center; margin-top: 5px;">МАГАЗИН</h2>
     
     <div class="deck-section">
@@ -282,9 +273,9 @@
     </div>
 </div>
 
-<div id="screen-main" class="screen">
+<div id="screen-main" class="screen active" data-index="1">
     <div class="main-floating-btn main-friends-btn" onclick="openFriends()">👥 Друзья <div class="notif-badge" id="friend-notif-badge"></div></div>
-    <div class="main-floating-btn main-top-btn" onclick="navTo('screen-top')">🏆 Топ</div>
+    <div class="main-floating-btn main-top-btn" onclick="navToInstant('screen-top', 5)">🏆 Топ</div>
 
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 20px; height: 100%; padding-bottom: 50px;">
         <div id="arena-bg-container">
@@ -314,13 +305,13 @@
     </div>
 </div>
 
-<div id="screen-deck" class="screen">
+<div id="screen-deck" class="screen" data-index="2">
     <div class="deck-section"><div class="section-title">БОЕВАЯ КОЛОДА (Нажми для замены)</div><div class="grid" id="ui-deck-container"></div></div>
     <div class="deck-section"><div class="section-title">КОЛЛЕКЦИЯ КАРТ</div><div class="grid" id="ui-collection-container"></div></div>
     <div class="deck-section"><div class="section-title">ЗАБЛОКИРОВАННЫЕ БОЙЦЫ</div><div class="grid" id="ui-locked-container"></div></div>
 </div>
 
-<div id="screen-pass" class="screen">
+<div id="screen-pass" class="screen" data-index="3">
     <div style="text-align: center; padding: 15px;">
         <h1 style="color: var(--primary); text-shadow: 2px 2px 0 #000;">ПРОПУСК</h1>
         <p style="color: #f1c40f; font-weight: bold; font-size: 18px;">У вас: 👑 <span id="ui-crowns">0</span></p>
@@ -330,10 +321,16 @@
     <div class="deck-section"><div class="section-title">Награды Пропуска (1 Ур = 10 👑)</div><div id="ui-pass-track" style="display: flex; flex-direction: column;"></div></div>
 </div>
 
-<div id="screen-settings" class="screen">
+<div id="screen-settings" class="screen" data-index="4">
     <h2 style="text-align: center; margin-top: 5px;">НАСТРОЙКИ</h2>
     <div style="padding: 20px;">
         
+        <div class="deck-section" id="settings-auth-buttons" style="display: none;">
+            <div class="section-title">Аккаунт (Гость)</div>
+            <button class="primary-btn success-btn" onclick="openRegEmail()">Зарегистрироваться</button>
+            <button class="primary-btn" style="background:#3498db;" onclick="safeStyle('login-modal','display','flex')">Войти</button>
+        </div>
+
         <div class="deck-section">
             <div class="section-title">Слоты Медалей</div>
             <div style="display:flex; justify-content:center; gap:20px; margin-bottom:15px;">
@@ -371,9 +368,9 @@
     </div>
 </div>
 
-<div id="screen-top" class="screen">
+<div id="screen-top" class="screen" data-index="5">
     <div style="padding: 20px;">
-        <button class="primary-btn" style="margin-bottom: 15px;" onclick="navTo('screen-main', 2)">⬅ Назад</button>
+        <button class="primary-btn" style="margin-bottom: 15px;" onclick="navToInstant('screen-main', 1)">⬅ Назад</button>
         <div style="border: 2px solid var(--primary); border-radius: 15px; padding: 15px; background: rgba(0,0,0,0.3);">
             <h2 style="text-align: center; margin-bottom: 15px; color: var(--accent);">ТОПЫ ИГРОКОВ</h2>
             <div id="ui-leaderboard"></div>
@@ -459,8 +456,8 @@
 
 <nav id="main-nav" style="display: none;">
     <div class="nav-btn" onclick="navToInstant('screen-shop', 0)">Магазин</div>
-    <div class="nav-btn" onclick="navToInstant('screen-deck', 1)">Колода</div>
-    <div class="nav-btn active" onclick="navToInstant('screen-main', 2)">Бой</div>
+    <div class="nav-btn active" onclick="navToInstant('screen-main', 1)">Бой</div>
+    <div class="nav-btn" onclick="navToInstant('screen-deck', 2)">Колода</div>
     <div class="nav-btn" onclick="navToInstant('screen-pass', 3)">Пропуск</div>
     <div class="nav-btn" onclick="navToInstant('screen-settings', 4)">Настройки</div>
 </nav>
@@ -521,11 +518,24 @@ function playLoadingScreen(textStr, callback) {
     }, 700);
 }
 
+let currentNavIndex = 1;
 function navToInstant(id, btnIndex) {
-    document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.opacity = '0'; });
-    const target = document.getElementById(id); if(target) { target.classList.add('active'); target.style.opacity = '1'; }
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    if(btnIndex !== undefined) { const btns = document.querySelectorAll('.nav-btn'); if(btns[btnIndex]) btns[btnIndex].classList.add('active'); }
+    if(btnIndex === undefined) return;
+    
+    let screens = document.querySelectorAll('.screen');
+    screens.forEach((s) => {
+        let idx = parseInt(s.dataset.index);
+        if (idx < btnIndex) { s.className = 'screen past'; s.style.transform = 'translateX(-100%)'; s.style.opacity = '0'; }
+        else if (idx > btnIndex) { s.className = 'screen'; s.style.transform = 'translateX(100%)'; s.style.opacity = '0'; }
+        else { s.className = 'screen active'; s.style.transform = 'translateX(0)'; s.style.opacity = '1'; }
+    });
+
+    document.querySelectorAll('.nav-btn').forEach((b, i) => {
+        if(i === btnIndex) { b.classList.add('active'); b.style.transform = 'scale(1.1)'; }
+        else { b.classList.remove('active'); b.style.transform = 'scale(1)'; }
+    });
+    currentNavIndex = btnIndex;
+    if(btnIndex === 5) loadLeaderboard();
 }
 
 function updateChestTimer() {
@@ -552,20 +562,20 @@ function clearLocalId() { try { localStorage.removeItem('clash_uid'); } catch (e
 function showNotification(msg, isSuccess = false) {
     const container = document.getElementById('toast-container'); if(!container) return;
     const toast = document.createElement('div'); toast.className = 'toast' + (isSuccess ? ' success' : ''); toast.innerText = msg; container.appendChild(toast);
-    setTimeout(() => { toast.classList.add('fade-out'); setTimeout(() => toast.remove(), 300); }, 3000);
+    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
 const ARENAS = [
-    { name: 'Лужайка', trophies: 0, bg: 'linear-gradient(to bottom, #74b9ff, #2ecc71)' },
-    { name: 'Пустыня', trophies: 600, bg: 'linear-gradient(to bottom, #f1c40f, #e67e22)' },
-    { name: 'Саванна', trophies: 1000, bg: 'linear-gradient(to bottom, #e67e22, #d35400)' },
-    { name: 'Дремучий лес', trophies: 1500, bg: 'linear-gradient(to bottom, #2c3e50, #27ae60)' },
-    { name: 'Ледниковый период', trophies: 1900, bg: 'linear-gradient(to bottom, #74b9ff, #0984e3)' },
-    { name: 'Джунгли', trophies: 2400, bg: 'linear-gradient(to bottom, #00b894, #00cec9)' },
-    { name: 'Замок', trophies: 2800, bg: 'linear-gradient(to bottom, #636e72, #2d3436)' },
-    { name: 'Бамбуковые леса', trophies: 3300, bg: 'linear-gradient(to bottom, #55efc4, #00b894)' },
-    { name: 'Глиновые пустоши', trophies: 3900, bg: 'linear-gradient(to bottom, #d63031, #b2bec3)' },
-    { name: 'Гора', trophies: 4700, bg: 'linear-gradient(to bottom, #dfe6e9, #636e72)' }
+    { name: 'Лужайка', trophies: 0, img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=400&auto=format&fit=crop' },
+    { name: 'Пустыня', trophies: 600, img: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=400&auto=format&fit=crop' },
+    { name: 'Саванна', trophies: 1000, img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=400&auto=format&fit=crop' },
+    { name: 'Дремучий лес', trophies: 1500, img: 'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=400&auto=format&fit=crop' },
+    { name: 'Ледниковый период', trophies: 1900, img: 'https://images.unsplash.com/photo-1518782358066-508b9fdf5585?q=80&w=400&auto=format&fit=crop' },
+    { name: 'Джунгли', trophies: 2400, img: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=400&auto=format&fit=crop' },
+    { name: 'Замок', trophies: 2800, img: 'https://images.unsplash.com/photo-1505322022379-7c3353ee6291?q=80&w=400&auto=format&fit=crop' },
+    { name: 'Бамбуковые леса', trophies: 3300, img: 'https://images.unsplash.com/photo-153ea4274d320-b8db1d5ec423?q=80&w=400&auto=format&fit=crop' },
+    { name: 'Глиновые пустоши', trophies: 3900, img: 'https://images.unsplash.com/photo-1519969446452-bd8de56417fb?q=80&w=400&auto=format&fit=crop' },
+    { name: 'Гора', trophies: 4700, img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400&auto=format&fit=crop' }
 ];
 
 const ALL_CARDS = [
@@ -601,17 +611,7 @@ const ALL_CARDS = [
     { id: 'lumber', arena: 9, name: 'Дровосек', cost: 4, hp: 990, dmg: 200, speed: 0.85, range: 40, type: 'ground', targets: 'ground', icon: '🪓', proj: null }
 ];
 
-const BANNERS = [
-    { id: 'blue', style: '#3498db' }, { id: 'red', style: '#e74c3c' }, { id: 'green', style: '#2ecc71' }, 
-    { id: 'purple', style: '#9b59b6' }, { id: 'orange', style: '#e67e22' }, { id: 'dark', style: '#2c3e50' },
-    { id: 'grad_fire', style: 'linear-gradient(45deg, #f12711, #f5af19)' },
-    { id: 'grad_ice', style: 'linear-gradient(45deg, #00c6ff, #0072ff)' },
-    { id: 'grad_toxic', style: 'linear-gradient(45deg, #11998e, #38ef7d)' },
-    { id: 'grad_magic', style: 'linear-gradient(45deg, #8A2387, #E94057, #F27121)' },
-    { id: 'anim_rgb', style: 'linear-gradient(90deg, #ff0000, #00ff00, #0000ff); background-size: 200% 200%; animation: pulse 3s infinite;' },
-    { id: 'anim_gold', style: 'linear-gradient(45deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C); background-size: 200% 200%; animation: pulse 2s infinite;' }
-];
-
+const BANNERS = [ { id: 'blue', style: '#3498db' }, { id: 'red', style: '#e74c3c' }, { id: 'green', style: '#2ecc71' }, { id: 'purple', style: '#9b59b6' }, { id: 'orange', style: '#e67e22' }, { id: 'dark', style: '#2c3e50' } ];
 const ALL_EMOTES = ['😂','😭','😡','🙄','🤩','😴','🥶','🤯','😱','😈','🤡','💩','👻','💀','👽','🤖','🎃','🐶','🐱','🐵'];
 const MEDALS_DB = [
     { id: 'm1', icon: '⚔️', desc: 'Сыграть 1 бой' }, { id: 'm2', icon: '🏆', desc: '1 Победа' }, { id: 'm3', icon: '👑', desc: '10 Побед' }, { id: 'm4', icon: '🌟', desc: '50 Побед' }, { id: 'm5', icon: '🔥', desc: '100 Побед' },
@@ -628,16 +628,26 @@ const PASS_REWARDS = Array.from({length: 30}, (_, i) => {
     return { crowns, type: 'gems', val: 10 + i, icon: '💎', name: `${10 + i} Гемов` };
 });
 
-let currentUser = null; let swapMode = false; let swapTargetId = null; let currentBattleId = null; let isMultiplayer = false; let pendingWinChest = false; let isSuddenDeath = false;
+let currentUser = null; let swapMode = false; let swapTargetId = null; let currentBattleId = null; 
+let isMultiplayer = false; let pendingWinChest = false; let isSuddenDeath = false; let isFriendlyMatch = false; let isTutorial = false;
+let networkListener = null;
 
 function initApp() {
     const savedId = getLocalId();
     if(savedId) {
         db.ref('users/' + savedId).once('value').then(snap => {
             if(snap.exists()) { currentUser = migrateUser(snap.val()); startGameUI(); listenNotifications(); } 
-            else { clearLocalId(); safeStyle('auth-screen', 'display', 'flex'); }
-        }).catch(err => { safeStyle('auth-screen', 'display', 'flex'); });
-    } else { safeStyle('auth-screen', 'display', 'flex'); }
+            else { clearLocalId(); startTutorial(); }
+        }).catch(err => { clearLocalId(); startTutorial(); });
+    } else { startTutorial(); }
+}
+
+function startTutorial() {
+    isTutorial = true;
+    currentUser = migrateUser({ uid: generateUID(), nickname: "Новичок", trophies: 0, gold: 500, gems: 50, isGuest: true });
+    safeStyle('main-nav', 'display', 'none'); safeStyle('main-top-bar', 'display', 'none');
+    startBattleCommon("Бот (Обучение)", '#3498db');
+    showNotification("ОБУЧЕНИЕ: Разрушь башни врага!");
 }
 
 function migrateUser(user) {
@@ -651,7 +661,7 @@ function migrateUser(user) {
     if(!user.emotes) user.emotes = ['😂','😭','😡']; if(!user.equippedEmotes) user.equippedEmotes = ['😂','😭','😡'];
     if(!user.stats) user.stats = { wins: 0, matches: 0, sdMatches: 0, sdWins: 0, quests: 0 };
     if(!user.medals) user.medals = []; if(!user.equippedMedals) user.equippedMedals = [null, null];
-    
+    if(user.isGuest === undefined) user.isGuest = false;
     return user;
 }
 
@@ -663,47 +673,88 @@ function generateDailyShop() {
     for(let i=0; i<3; i++) { if(availEmotes.length > 0) { let rIdx = Math.floor(Math.random()*availEmotes.length); currentUser.dailyEmotes.push(availEmotes[rIdx]); availEmotes.splice(rIdx, 1); } }
 }
 function getCurrentArenaIndex() { let index = [...ARENAS].reverse().findIndex(a => currentUser.trophies >= a.trophies); return index !== -1 ? ARENAS.length - 1 - index : 0; }
-function switchAuthView(viewId) { document.querySelectorAll('.auth-box').forEach(el => el.classList.remove('active')); document.getElementById(viewId).classList.add('active'); }
 function generateUID() { return Math.random().toString(36).substr(2, 8).toUpperCase(); }
 
-function findUserByEmail(email, callback) {
-    const searchEmail = email.toLowerCase().trim();
-    db.ref('users').once('value').then(snap => {
-        let foundUid = null, foundUser = null;
-        snap.forEach(child => { const u = child.val(); if(u.email && u.email.toLowerCase().trim() === searchEmail) { foundUid = child.key; foundUser = u; } });
-        callback(foundUid, foundUser);
-    }).catch(err => showNotification("Ошибка базы данных"));
+// --- МОДАЛКИ И РЕГИСТРАЦИЯ ЛОББИ ---
+function saveTutorialNick() {
+    const nick = document.getElementById('tutorial-nick').value.trim();
+    if(!nick) return showNotification("Никнейм обязателен!");
+    currentUser.nickname = nick;
+    safeStyle('nickname-modal', 'display', 'none');
+    safeStyle('reg-prompt-modal', 'display', 'flex');
+}
+
+function skipReg() {
+    safeStyle('reg-prompt-modal', 'display', 'none');
+    currentUser.isGuest = true;
+    saveLocalId(currentUser.uid);
+    startGameUI();
+}
+
+function openRegEmail() {
+    safeStyle('reg-prompt-modal', 'display', 'none');
+    safeStyle('reg-email-modal', 'display', 'flex');
+}
+
+function submitRegEmail() {
+    const email = document.getElementById('reg-email-input').value.trim();
+    const pass = document.getElementById('reg-pass-input').value;
+    if(!email || pass.length < 5) return showNotification("Введите почту и пароль (мин. 5 симв.)");
+    
+    db.ref('users').orderByChild('email').equalTo(email).once('value', snap => {
+        if(snap.exists()) return showNotification("Эта почта уже занята!");
+        currentUser.email = email;
+        currentUser.password = pass;
+        safeStyle('reg-email-modal', 'display', 'none');
+        safeStyle('reg-code-modal', 'display', 'flex');
+        showNotification("Код отправлен на почту!", true);
+    });
+}
+
+function submitRegCode() {
+    const code = document.getElementById('reg-code-input').value;
+    if(code.length >= 4) {
+        currentUser.isGuest = false;
+        safeStyle('reg-code-modal', 'display', 'none');
+        saveLocalId(currentUser.uid);
+        db.ref('users/' + currentUser.uid).set(currentUser).then(() => {
+            showNotification("Аккаунт сохранен!", true);
+            startGameUI();
+            listenNotifications();
+        });
+    } else {
+        showNotification("Введите код (мин. 4 цифры)");
+    }
 }
 
 function processLogin() {
     const email = document.getElementById('login-email').value; const pass = document.getElementById('login-pass').value;
     if(!email || !pass) return showNotification('Заполните поля');
-    findUserByEmail(email, (uid, user) => {
-        if(!user) return showNotification('Аккаунт не найден');
-        if(user.password === pass) {
-            currentUser = migrateUser(user); saveLocalId(uid); showNotification('Вход выполнен!', true);
+    db.ref('users').once('value').then(snap => {
+        let foundUid = null, foundUser = null;
+        snap.forEach(child => { const u = child.val(); if(u.email && u.email.toLowerCase().trim() === email.toLowerCase().trim()) { foundUid = child.key; foundUser = u; } });
+        if(foundUser && foundUser.password === pass) {
+            // Удаляем гостевой аккаунт, если игрок сразу зашел
+            if(currentUser && currentUser.isGuest && currentUser.uid !== foundUid) {
+                db.ref('users/' + currentUser.uid).remove();
+            }
+            currentUser = migrateUser(foundUser); saveLocalId(foundUid); showNotification('Вход выполнен!', true);
+            safeStyle('login-modal', 'display', 'none');
             playLoadingScreen('Загрузка профиля...', () => { startGameUI(); listenNotifications(); });
-        } else showNotification('Неверный пароль');
+        } else showNotification('Неверный пароль или аккаунт не найден');
     });
-}
-
-function sendRegCode() { 
-    const email = document.getElementById('reg-email').value;
-    if(!email || !email.includes('@')) return showNotification('Некорректная почта');
-    findUserByEmail(email, (uid, user) => { if(user) return showNotification('Почта уже зарегистрирована!'); switchAuthView('view-reg-details'); });
-}
-
-function completeRegistration() {
-    const email = document.getElementById('reg-email').value.trim(); const nick = document.getElementById('reg-nick').value.trim(); const pass = document.getElementById('reg-pass').value;
-    if(!nick || pass.length < 8) return showNotification('Пароль минимум 8 символов');
-    const uid = generateUID(); let newUser = migrateUser({ uid: uid, email: email, password: pass, nickname: nick, gold: 1000, gems: 50, trophies: 0 });
-    db.ref('users/' + uid).set(newUser).then(() => { showNotification("Успешно!", true); document.getElementById('login-email').value = email; switchAuthView('view-login'); });
 }
 
 function logout() { clearLocalId(); location.reload(); }
 
 function startGameUI() {
-    safeStyle('auth-screen', 'display', 'none'); safeStyle('main-top-bar', 'display', 'flex'); safeStyle('main-nav', 'display', 'flex');
+    safeStyle('auth-screen', 'display', 'none'); 
+    safeStyle('main-top-bar', 'display', 'flex'); 
+    safeStyle('main-nav', 'display', 'flex');
+    
+    currentNavIndex = -1; // Сброс индекса, чтобы принудительно обновить вкладку
+    navToInstant('screen-main', 1);
+
     const resetStr = getResetDateStr();
     if(currentUser.lastReset !== resetStr || !currentUser.dailyShop || currentUser.dailyShop.length === 0) {
         currentUser.winsToday = 0; currentUser.crownsFromWinsToday = 0; currentUser.lastGiftDate = null; currentUser.lastReset = resetStr; currentUser.quests = generateDailyQuests(); generateDailyShop();
@@ -712,10 +763,10 @@ function startGameUI() {
     if(!currentUser.crownsFromWinsToday) currentUser.crownsFromWinsToday = 0;
     if(!currentUser.dailyEmotes || currentUser.dailyEmotes.length === 0) generateDailyShop();
     
-    checkArenaProgression(); checkMedals(); navToInstant('screen-main', 2); saveUser(); 
+    checkArenaProgression(); checkMedals(); updateUI(); saveUser(); 
 }
 
-function saveUser() { db.ref('users/' + currentUser.uid).set(currentUser); updateUI(); }
+function saveUser() { if(!currentUser.isGuest || getLocalId()) db.ref('users/' + currentUser.uid).set(currentUser); updateUI(); }
 
 function checkArenaProgression() {
     const cArena = getCurrentArenaIndex();
@@ -734,6 +785,7 @@ function checkArenaProgression() {
 function checkMedals() {
     let s = currentUser.stats || { wins: 0, matches: 0, sdMatches: 0, sdWins: 0, quests: 0 }; 
     let u = currentUser; let unlocks = [];
+    
     if(s.matches >= 1) unlocks.push('m1'); if(s.wins >= 1) unlocks.push('m2'); if(s.wins >= 10) unlocks.push('m3'); if(s.wins >= 50) unlocks.push('m4'); if(s.wins >= 100) unlocks.push('m5');
     if(u.maxArena >= 1) unlocks.push('m6'); if(u.maxArena >= 4) unlocks.push('m7'); if(u.maxArena >= 9) unlocks.push('m8');
     if(u.gold >= 10000) unlocks.push('m9'); if(u.gems >= 100) unlocks.push('m10');
@@ -750,8 +802,14 @@ function updateUI() {
     safeText('ui-gold', currentUser.gold); safeText('ui-gems', currentUser.gems); safeText('ui-trophies', currentUser.trophies);
     safeText('ui-player-id-display', "ID: " + currentUser.uid); safeText('ui-player-name', currentUser.nickname); safeText('ui-crowns', currentUser.crowns); safeText('ui-wins-crowns', currentUser.crownsFromWinsToday);
     
-    const cArena = getCurrentArenaIndex(); const arenaObj = ARENAS[cArena]; const bgCont = document.getElementById('arena-bg-container');
-    if(bgCont) { bgCont.style.background = arenaObj.bg; safeText('ui-arena-name', `АРЕНА ${cArena + 1}`); safeText('ui-arena-desc', `${arenaObj.name} (${arenaObj.trophies} 🏆)`); }
+    const cArena = getCurrentArenaIndex(); const arenaObj = ARENAS[cArena] || ARENAS[0]; const bgCont = document.getElementById('arena-bg-container');
+    if(bgCont) { 
+        bgCont.style.backgroundImage = `url('${arenaObj.img}')`; 
+        bgCont.style.backgroundSize = 'cover'; 
+        bgCont.style.backgroundPosition = 'center'; 
+        safeText('ui-arena-name', `АРЕНА ${cArena + 1}`); 
+        safeText('ui-arena-desc', `${arenaObj.name} (${arenaObj.trophies} 🏆)`); 
+    }
     
     const chestContainer = document.getElementById('chest-slots-ui');
     if(chestContainer) { chestContainer.innerHTML = ''; for(let i=0; i<3; i++) { chestContainer.innerHTML += `<div class="chest-slot ${i < currentUser.winsToday ? 'filled' : ''}">${i < currentUser.winsToday ? '📦' : '🔒'}</div>`; } }
@@ -763,6 +821,9 @@ function updateUI() {
             else { medalSlot.style.display = 'none'; }
         }
     }
+
+    if(currentUser.isGuest) safeStyle('settings-auth-buttons', 'display', 'block');
+    else safeStyle('settings-auth-buttons', 'display', 'none');
 
     renderDeckUI(); renderCollectionUI(); renderBannersUI(); renderShopPowerPoints(); renderPassUI(); renderMedalsUI(); renderEmotesUI();
 }
@@ -780,7 +841,7 @@ function updateQuestProgress(type, amount) {
 function claimQuest(id) {
     const q = currentUser.quests.find(x => x.id === id);
     if(q && q.progress >= q.target && !q.claimed) { 
-        q.claimed = true; currentUser.crowns += q.crowns; currentUser.stats.quests++; playSound('win'); checkMedals(); saveUser(); showNotification(`+${q.crowns} Короны 👑`, true); 
+        q.claimed = true; currentUser.crowns += q.crowns; currentUser.stats.quests++; checkMedals(); saveUser(); showNotification(`+${q.crowns} Короны 👑`, true); 
     }
 }
 
@@ -789,8 +850,8 @@ function claimPass(index) {
     if(currentUser.crowns >= reward.crowns && !(currentUser.passClaimed || []).includes(index)) {
         if(!currentUser.passClaimed) currentUser.passClaimed = [];
         currentUser.passClaimed.push(index);
-        if(reward.type === 'gold') { currentUser.gold += reward.val; showNotification(`+${reward.val} Золота!`, true); playSound('win'); } 
-        else if(reward.type === 'gems') { currentUser.gems += reward.val; showNotification(`+${reward.val} Гемов!`, true); playSound('win'); } 
+        if(reward.type === 'gold') { currentUser.gold += reward.val; showNotification(`+${reward.val} Золота!`, true); } 
+        else if(reward.type === 'gems') { currentUser.gems += reward.val; showNotification(`+${reward.val} Гемов!`, true); } 
         else if(reward.type === 'chest') generateChestLoot(reward.val);
         saveUser();
     }
@@ -881,7 +942,7 @@ function chestTap() { const box = document.getElementById('chest-box'); if(box &
 function showNextChestItem() {
     const reveal = document.getElementById('chest-reveal');
     if(chestQueue.length === 0) { safeStyle('chest-overlay', 'display', 'none'); checkMedals(); saveUser(); return; }
-    playSound('spawn'); const item = chestQueue.shift(); safeText('chest-item-icon', item.icon); safeText('chest-item-text', item.text); safeText('chest-item-count', "+" + item.val);
+    const item = chestQueue.shift(); safeText('chest-item-icon', item.icon); safeText('chest-item-text', item.text); safeText('chest-item-count', "+" + item.val);
     if(reveal) { reveal.style.display = 'flex'; reveal.style.animation = 'none'; reveal.offsetHeight; reveal.style.animation = 'popIn 0.3s forwards'; }
     safeText('chest-tap-text', "Нажмите далее...");
     if(item.type === 'gold') currentUser.gold += item.val;
@@ -922,7 +983,7 @@ function renderCollectionUI() {
 }
 function upgradeCard(id) {
     const data = currentUser.cards[id]; const cost = getUpgradeCost(data.level); const req = getUpgradeReq(data.level);
-    if(currentUser.gold >= cost && data.power >= req && data.level < 8) { currentUser.gold -= cost; data.power -= req; data.level++; checkMedals(); saveUser(); playSound('win'); showNotification(`${ALL_CARDS.find(c=>c.id===id).name} улучшен до ${data.level}!`, true); } else showNotification("Не хватает монет или очков силы");
+    if(currentUser.gold >= cost && data.power >= req && data.level < 8) { currentUser.gold -= cost; data.power -= req; data.level++; checkMedals(); saveUser(); showNotification(`${ALL_CARDS.find(c=>c.id===id).name} улучшен до ${data.level}!`, true); } else showNotification("Не хватает монет или очков силы");
 }
 function handleDeckClick(id, index) { if(swapMode) { swapMode = false; swapTargetId = null; updateUI(); } else { swapMode = true; swapTargetId = id; showNotification("Выберите карту ниже для замены"); updateUI(); } }
 function handleCollectionClick(id) { if(swapMode && swapTargetId) { const index = currentUser.deck.indexOf(swapTargetId); if(index !== -1) { currentUser.deck[index] = id; swapMode = false; swapTargetId = null; saveUser(); showNotification("Карта заменена!", true); } } else showNotification("Сначала выберите карту в КОЛОДЕ, чтобы заменить её."); }
@@ -980,19 +1041,6 @@ function renderEmotesUI() {
         cont.innerHTML += `<div class="medal-item unlocked ${eq ? 'equipped' : ''}" onclick="equipEmote('${e}')">${e}</div>`;
     });
 }
-function equipEmote(e) {
-    if(!currentUser.equippedEmotes) currentUser.equippedEmotes = [null, null, null];
-    let idx = currentUser.equippedEmotes.indexOf(e);
-    if(idx !== -1) { currentUser.equippedEmotes[idx] = null; } 
-    else {
-        if(!currentUser.equippedEmotes[0]) currentUser.equippedEmotes[0] = e;
-        else if(!currentUser.equippedEmotes[1]) currentUser.equippedEmotes[1] = e;
-        else if(!currentUser.equippedEmotes[2]) currentUser.equippedEmotes[2] = e;
-        else { currentUser.equippedEmotes[0] = currentUser.equippedEmotes[1]; currentUser.equippedEmotes[1] = currentUser.equippedEmotes[2]; currentUser.equippedEmotes[2] = e; }
-    }
-    saveUser();
-}
-function unequipEmote(slotIndex) { if(currentUser.equippedEmotes) currentUser.equippedEmotes[slotIndex] = null; saveUser(); }
 
 function loadLeaderboard() {
     const lb = document.getElementById('ui-leaderboard'); if(!lb) return;
@@ -1058,7 +1106,7 @@ function renderFriendsList() {
                         if(m) { let med = MEDALS_DB.find(x=>x.id===m); if(med) mHtml += `<div class="medal-icon" style="width:16px;height:16px;font-size:8px;">${med.icon}</div>`; } 
                     }); 
                 }
-                cont.innerHTML += `<div class="friend-item"><div style="display:flex; flex-direction:column;"><span style="color:white; font-weight:bold; display:flex; align-items:center; gap:5px;">${u.nickname} ${mHtml}</span><span style="color:var(--accent); font-size:12px;">🏆 ${u.trophies}</span></div><div class="friend-battle-btn" onclick="sendBattleReq('${uid}')">⚔️</div></div>`;
+                cont.innerHTML += `<div class="friend-item"><div style="display:flex; flex-direction:column;"><span style="color:white; font-weight:bold; display:flex; align-items:center; gap:5px;">${u.nickname} ${mHtml}</span><span style="color:var(--accent); font-size:12px;">🏆 ${u.trophies}</span></div><div class="friend-battle-btn" style="cursor:pointer;" onclick="sendBattleReq('${uid}')">⚔️</div></div>`;
             }
         });
     });
@@ -1066,10 +1114,10 @@ function renderFriendsList() {
 
 function sendBattleReq(friendUid) {
     const battleId = generateUID(); db.ref(`battles/${battleId}`).set({ p1: currentUser.uid, p2: friendUid, state: 'waiting' }); db.ref(`users/${friendUid}/notifications`).push({ type: 'battle_req', fromUid: currentUser.uid, fromName: currentUser.nickname, battleId: battleId }); showNotification("Приглашение отправлено!", true); safeStyle('friends-overlay', 'display', 'none');
-    playLoadingScreen('Ожидание друга...', () => { db.ref(`battles/${battleId}/state`).on('value', snap => { if(snap.val() === 'playing') { db.ref(`battles/${battleId}/state`).off(); initMultiplayerBattle(battleId, friendUid, 0); } }); });
+    playLoadingScreen('Ожидание друга...', () => { db.ref(`battles/${battleId}/state`).on('value', snap => { if(snap.val() === 'playing') { db.ref(`battles/${battleId}/state`).off(); initMultiplayerBattle(battleId, friendUid, 0, true); } }); });
 }
 
-function acceptBattle(battleId, notifKey, friendUid) { rejectNotif(notifKey); db.ref(`battles/${battleId}`).update({ state: 'playing' }); safeStyle('friends-overlay', 'display', 'none'); playLoadingScreen('Загрузка арены...', () => { initMultiplayerBattle(battleId, friendUid, 1); }); }
+function acceptBattle(battleId, notifKey, friendUid) { rejectNotif(notifKey); db.ref(`battles/${battleId}`).update({ state: 'playing' }); safeStyle('friends-overlay', 'display', 'none'); playLoadingScreen('Загрузка арены...', () => { initMultiplayerBattle(battleId, friendUid, 1, true); }); }
 
 /** БОЕВАЯ СИСТЕМА **/
 let battleActive = false, elixir = 5, battleHand = [], towers = [], entities = [], projectiles = [], particles = [];
@@ -1099,17 +1147,29 @@ function showEmoteBubble(id, str) {
     setTimeout(() => { el.style.display = 'none'; }, 2000);
 }
 
-function prepareMatchmaking(isSD) { isSuddenDeath = isSD; playLoadingScreen('Поиск противника...', () => { initBotBattle(); }); }
+function prepareMatchmaking(isSD) { isSuddenDeath = isSD; isFriendlyMatch = false; isTutorial = false; playLoadingScreen('Поиск противника...', () => { initBotBattle(); }); }
 
 function initBotBattle() { isMultiplayer = false; currentBattleId = null; botTimer = 0; botBanner = BANNERS[Math.floor(Math.random() * BANNERS.length)]; botName = botNamesList[Math.floor(Math.random() * botNamesList.length)]; startBattleCommon(botName, botBanner.style); }
 
-function initMultiplayerBattle(battleId, opponentUid, playerIndex) {
-    isMultiplayer = true; currentBattleId = battleId;
+function initMultiplayerBattle(battleId, opponentUid, playerIndex, friendly = false) {
+    isMultiplayer = true; currentBattleId = battleId; isFriendlyMatch = friendly; isTutorial = false;
     db.ref('users/' + opponentUid).once('value').then(snap => {
         const op = snap.val(); const opBanner = BANNERS.find(b => b.id === op.equippedBanner) || BANNERS[0]; startBattleCommon(op.nickname, opBanner.style);
+        
         if(networkListener) db.ref(`battles/${currentBattleId}/actions`).off('child_added', networkListener);
-        networkListener = db.ref(`battles/${currentBattleId}/actions`).on('child_added', actionSnap => { const act = actionSnap.val(); if(act.uid !== currentUser.uid) { spawnEntityFromCard(act.cardId, 1, cw - act.x, ch - act.y, act.level); } });
-        db.ref(`battles/${currentBattleId}/emotes`).on('child_added', snap => { const e = snap.val(); if(e.uid !== currentUser.uid) showEmoteBubble('enemy-emote', e.emote); });
+        networkListener = db.ref(`battles/${currentBattleId}/actions`).on('child_added', actionSnap => { 
+            const act = actionSnap.val(); 
+            if(act.uid !== currentUser.uid) { 
+                let realX = cw - (act.rx * cw);
+                let realY = ch - (act.ry * ch);
+                spawnEntityFromCard(act.cardId, 1, realX, realY, act.level); 
+            } 
+        });
+        
+        db.ref(`battles/${currentBattleId}/emotes`).off();
+        db.ref(`battles/${currentBattleId}/emotes`).on('child_added', snap => { 
+            const e = snap.val(); if(e.uid !== currentUser.uid) showEmoteBubble('enemy-emote', e.emote); 
+        });
     });
 }
 
@@ -1123,12 +1183,13 @@ function startBattleCommon(enemyName, enemyBannerStyle) {
         battleEndTime = Date.now() + 180000; isOvertime = false; safeStyle('battle-timer', 'color', 'white');
         if(isSuddenDeath) safeStyle('battle-timer', 'color', '#e74c3c');
         
-        if(!currentUser.stats) currentUser.stats = { wins: 0, matches: 0, sdMatches: 0, sdWins: 0, quests: 0 };
-        currentUser.stats.matches++; if(isSuddenDeath) currentUser.stats.sdMatches++; checkMedals(); saveUser();
+        if(!isTutorial) {
+            if(!currentUser.stats) currentUser.stats = { wins: 0, matches: 0, sdMatches: 0, sdWins: 0, quests: 0 };
+            currentUser.stats.matches++; if(isSuddenDeath) currentUser.stats.sdMatches++; checkMedals(); saveUser();
+        }
 
         setTimeout(() => {
             const container = document.getElementById('canvas-container'); if(!container) return;
-            
             cw = container.clientWidth || window.innerWidth || 360; 
             ch = container.clientHeight || (window.innerHeight - 140) || 600; 
             
@@ -1162,7 +1223,6 @@ function startBattleCommon(enemyName, enemyBannerStyle) {
             gameLoopId = requestAnimationFrame(gameLoop);
         }, 150);
     } catch(e) {
-        console.error(e);
         showNotification("Ошибка запуска боя!");
         exitBattle();
     }
@@ -1184,7 +1244,6 @@ function renderBattleHand() {
 function spawnEntityFromCard(cardId, team, x, y, level) {
     const card = ALL_CARDS.find(c => c.id === cardId); if(!card) return;
     const speedMult = isSuddenDeath ? 1.5 : 1; const statMult = 1 + (level-1)*0.4;
-    if(team === 0) playSound('spawn');
 
     if(card.type === 'spell') {
         towers.forEach(t => { if(t.team !== team && Math.hypot(t.x-x, t.y-y) < card.range) t.hp -= card.dmg * statMult; });
@@ -1219,7 +1278,11 @@ function setupDragAndDrop() {
             let lvl = 1; if(currentUser.cards[cardId]) lvl = currentUser.cards[cardId].level;
             
             spawnEntityFromCard(cardId, 0, canvasX, canvasY, lvl);
-            if(isMultiplayer) db.ref(`battles/${currentBattleId}/actions`).push({ uid: currentUser.uid, cardId: cardId, x: canvasX, y: canvasY, level: lvl });
+            
+            if(isMultiplayer) {
+                let relX = canvasX / cw; let relY = canvasY / ch;
+                db.ref(`battles/${currentBattleId}/actions`).push({ uid: currentUser.uid, cardId: cardId, rx: relX, ry: relY, level: lvl });
+            }
             
             if(cardObj) elixir -= cardObj.cost; 
             battleHand.push(battleHand.splice(dragCardIndex, 1)[0]); renderBattleHand();
@@ -1240,9 +1303,11 @@ function updateGame() {
         let timeLeft = Math.ceil((battleEndTime - Date.now()) / 1000);
         if(timeLeft <= 0) {
             timeLeft = 0; let pTowers = towers.filter(t => t.team === 0).length; let eTowers = towers.filter(t => t.team === 1).length;
-            if(!isOvertime) {
+            if(!isOvertime && !isTutorial) {
                 if(pTowers > eTowers) { showEndScreen(true); return; } else if(eTowers > pTowers) { showEndScreen(false); return; }
                 else { isOvertime = true; battleEndTime = Date.now() + 60000; showNotification("ДОПОЛНИТЕЛЬНОЕ ВРЕМЯ!", false); safeStyle('battle-timer', 'color', 'var(--danger)'); }
+            } else if (isTutorial && !isOvertime) {
+                battleEndTime = Date.now() + 180000; // Бесконечное время для обучения
             } else {
                 let pKing = towers.find(t => t.team === 0 && t.type === 'king'); let eKing = towers.find(t => t.team === 1 && t.type === 'king');
                 let pHP = pKing ? pKing.hp : 0; let eHP = eKing ? eKing.hp : 0;
@@ -1259,7 +1324,7 @@ function updateGame() {
     if(elixir < 10) elixir += 0.008; safeStyle('elixir-fill', 'width', `${elixir*10}%`); safeText('elixir-text', `${Math.floor(elixir)} / 10`);
 
     botTimer++; let botDelay = currentUser.trophies < 600 ? 500 : 400 - Math.min(300, (currentUser.trophies / 15)); 
-    if(!isMultiplayer && botTimer > botDelay) {
+    if(!isMultiplayer && botTimer > botDelay && !isTutorial) {
         const botCardId = currentUser.deck[Math.floor(Math.random() * currentUser.deck.length)]; const botUnits = entities.filter(en => en.team === 1 && en.cardId === botCardId).length;
         if(botUnits < 2) { const card = ALL_CARDS.find(c => c.id === botCardId); if(card && card.type !== 'spell') { spawnEntityFromCard(botCardId, 1, cw*0.2 + Math.random()*cw*0.6, ch/5, 1); botTimer = 0; } }
     }
@@ -1267,7 +1332,7 @@ function updateGame() {
     towers.forEach(t => {
         if(t.cd > 0) { t.cd--; return; } let closest = null, minD = 150;
         entities.forEach(e => { if(e.team !== t.team) { const d = Math.hypot(e.x-t.x, e.y-t.y); if(d < minD) { minD = d; closest = e; } } });
-        if(closest) { playSound('hit'); projectiles.push({x: t.x, y: t.y-20, tx: closest.x, ty: closest.y, timer: 10, max: 10, icon: t.proj}); closest.hp -= 50; t.cd = 60; }
+        if(closest) { projectiles.push({x: t.x, y: t.y-20, tx: closest.x, ty: closest.y, timer: 10, max: 10, icon: t.proj}); closest.hp -= 50; t.cd = 60; }
     });
 
     entities.forEach(e => {
@@ -1277,7 +1342,7 @@ function updateGame() {
         if(target) {
             if(minD <= e.range) {
                 e.state = 'attack';
-                if(e.cd <= 0) { playSound('hit'); if(e.range > 50) projectiles.push({x: e.x, y: e.y, tx: target.x, ty: target.y, timer: 12, max: 12, icon: e.proj}); target.hp -= e.dmg; e.cd = 60; }
+                if(e.cd <= 0) { if(e.range > 50) projectiles.push({x: e.x, y: e.y, tx: target.x, ty: target.y, timer: 12, max: 12, icon: e.proj}); target.hp -= e.dmg; e.cd = 60; }
             } else {
                 e.state = 'walk'; let tx = target.x, ty = target.y;
                 if(e.type === 'ground' && ((e.team === 0 && e.y > ch/2 && target.y < ch/2) || (e.team === 1 && e.y < ch/2 && target.y > ch/2))) { const b1 = cw*0.25, b2 = cw*0.75; tx = Math.abs(e.x - b1) < Math.abs(e.x - b2) ? b1 : b2; ty = ch/2; }
@@ -1287,9 +1352,9 @@ function updateGame() {
     });
 
     let towerCountBefore = towers.length;
-    towers = towers.filter(t => { if(t.hp <= 0) { playSound('towerDestroy'); particles.push({x: t.x, y: t.y, timer: 30, max: 30}); return false; } return true; });
+    towers = towers.filter(t => { if(t.hp <= 0) { particles.push({x: t.x, y: t.y, timer: 30, max: 30}); return false; } return true; });
     
-    if(towers.length < towerCountBefore) {
+    if(towers.length < towerCountBefore && !isTutorial) {
         let destroyed = towerCountBefore - towers.length;
         updateQuestProgress('destroy', destroyed);
     }
@@ -1354,11 +1419,16 @@ function showEndScreen(win) {
     if(!battleActive) return; battleActive = false;
     if(gameLoopId) { cancelAnimationFrame(gameLoopId); gameLoopId = null; }
     
-    if(win === 'tie') { playSound('lose'); safeText('battle-result-title', 'НИЧЬЯ'); safeStyle('battle-result-title', 'color', '#f1c40f'); } 
-    else { playSound(win ? 'win' : 'lose'); safeText('battle-result-title', win ? 'ПОБЕДА' : 'ПОРАЖЕНИЕ'); safeStyle('battle-result-title', 'color', win ? 'var(--success)' : 'var(--danger)'); if(win) { updateQuestProgress('win', 1); currentUser.stats.wins++; if(isSuddenDeath) currentUser.stats.sdWins++; } }
-    
-    let enemyTowersNow = towers.filter(t => t.team === 1).length; let destroyed = enemyTowersBefore - enemyTowersNow;
-    if(destroyed > 0) updateQuestProgress('destroy', destroyed);
+    if(win === 'tie') { safeText('battle-result-title', 'НИЧЬЯ'); safeStyle('battle-result-title', 'color', '#f1c40f'); } 
+    else { 
+        safeText('battle-result-title', win ? 'ПОБЕДА' : 'ПОРАЖЕНИЕ'); 
+        safeStyle('battle-result-title', 'color', win ? 'var(--success)' : 'var(--danger)'); 
+        if(!isTutorial) {
+            if(win) { updateQuestProgress('win', 1); currentUser.stats.wins++; if(isSuddenDeath) currentUser.stats.sdWins++; }
+            let enemyTowersNow = towers.filter(t => t.team === 1).length; let destroyed = enemyTowersBefore - enemyTowersNow;
+            if(destroyed > 0) updateQuestProgress('destroy', destroyed);
+        }
+    }
     
     const endOverlay = document.getElementById('battle-end-overlay'); if(endOverlay) { endOverlay.style.display = 'flex'; endOverlay.classList.add('active'); }
     safeText('end-enemy-name', isMultiplayer ? "Противник" : botName); safeStyle('end-enemy-color', 'background', botBanner ? botBanner.style : '#e74c3c');
@@ -1366,19 +1436,25 @@ function showEndScreen(win) {
     const pBanner = BANNERS.find(b => b.id === currentUser.equippedBanner) || BANNERS[0];
     safeText('end-player-name', currentUser.nickname); safeStyle('end-player-color', 'background', pBanner.style);
 
-    if(win === 'tie') {
+    if(isTutorial) {
+        safeText('end-enemy-trophies', '0 🏆'); safeText('end-player-trophies', '0 🏆'); document.getElementById('end-enemy-trophies').className = 'end-trophies tie'; document.getElementById('end-player-trophies').className = 'end-trophies tie';
+    } else if(win === 'tie') {
         safeText('end-enemy-trophies', '0 🏆'); safeText('end-player-trophies', '0 🏆'); document.getElementById('end-enemy-trophies').className = 'end-trophies tie'; document.getElementById('end-player-trophies').className = 'end-trophies tie';
     } else {
-        safeText('end-enemy-trophies', win ? '-20 🏆' : '+30 🏆'); document.getElementById('end-enemy-trophies').className = 'end-trophies ' + (win ? 'lose' : 'win');
-        safeText('end-player-trophies', win ? '+30 🏆' : '-20 🏆'); document.getElementById('end-player-trophies').className = 'end-trophies ' + (win ? 'win' : 'lose');
+        let gain = isFriendlyMatch ? 15 : 30;
+        let loss = isFriendlyMatch ? 10 : 20;
+
+        safeText('end-enemy-trophies', win ? `-${loss} 🏆` : `+${gain} 🏆`); document.getElementById('end-enemy-trophies').className = 'end-trophies ' + (win ? 'lose' : 'win');
+        safeText('end-player-trophies', win ? `+${gain} 🏆` : `-${loss} 🏆`); document.getElementById('end-player-trophies').className = 'end-trophies ' + (win ? 'win' : 'lose');
         
         if(win) {
-            currentUser.trophies += 30;
-            if(currentUser.crownsFromWinsToday < 5) { currentUser.crownsFromWinsToday++; currentUser.crowns++; }
-            if(currentUser.winsToday < 3) { currentUser.winsToday++; pendingWinChest = true; }
-        } else { currentUser.trophies = Math.max(0, currentUser.trophies - 20); }
+            currentUser.trophies += gain;
+            if(currentUser.crownsFromWinsToday < 5 && !isFriendlyMatch) { currentUser.crownsFromWinsToday++; currentUser.crowns++; }
+            if(currentUser.winsToday < 3 && !isFriendlyMatch) { currentUser.winsToday++; pendingWinChest = true; }
+        } else { currentUser.trophies = Math.max(0, currentUser.trophies - loss); }
         checkMedals(); saveUser(); checkArenaProgression();
     }
+    
     if(isMultiplayer) { db.ref(`battles/${currentBattleId}`).remove(); if(networkListener) db.ref(`battles/${currentBattleId}/actions`).off('child_added', networkListener); }
 }
 
@@ -1386,19 +1462,23 @@ function exitBattle() {
     playLoadingScreen('Возврат в меню...', () => {
         const battleScreen = document.getElementById('battle-screen'); if(battleScreen) battleScreen.classList.remove('active');
         const endOverlay = document.getElementById('battle-end-overlay'); if(endOverlay) { endOverlay.classList.remove('active'); endOverlay.style.display = 'none'; }
-        safeStyle('main-nav', 'display', 'flex'); safeStyle('main-top-bar', 'display', 'flex'); playMusic('menuMusic'); navToInstant('screen-main', 2); updateUI();
-        if(pendingWinChest) { pendingWinChest = false; setTimeout(() => { generateChestLoot('gold'); }, 500); }
+        
+        if (isTutorial) {
+            isTutorial = false;
+            safeStyle('nickname-modal', 'display', 'flex');
+        } else {
+            safeStyle('main-nav', 'display', 'flex'); 
+            safeStyle('main-top-bar', 'display', 'flex'); 
+            
+            // Сбрасываем индекс для корректной навигации после боя
+            currentNavIndex = -1;
+            navToInstant('screen-main', 1); 
+            
+            updateUI();
+            if(pendingWinChest) { pendingWinChest = false; setTimeout(() => { generateChestLoot('gold'); }, 500); }
+        }
     });
 }
-</script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('SW зарегистрирован', reg))
-        .catch(err => console.error('Ошибка SW', err));
-    });
-  }
 </script>
 </body>
 </html>
