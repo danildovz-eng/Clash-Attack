@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <link rel="manifest" href="manifest.json">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Clash Arena</title>
@@ -1388,6 +1390,15 @@ function exitBattle() {
         if(pendingWinChest) { pendingWinChest = false; setTimeout(() => { generateChestLoot('gold'); }, 500); }
     });
 }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('SW зарегистрирован', reg))
+        .catch(err => console.error('Ошибка SW', err));
+    });
+  }
 </script>
 </body>
 </html>
