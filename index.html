@@ -29,15 +29,16 @@ html, body {
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes emotePop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
-@keyframes slideBannerE{0%{right:-280px}15%{right:0}85%{right:0}100%{right:-280px}}
-@keyframes slideBannerP{0%{left:-280px}15%{left:0}85%{left:0}100%{left:-280px}}
+@keyframes slideBannerE{0%{right:-320px}15%{right:0}85%{right:0}100%{right:-320px}}
+@keyframes slideBannerP{0%{left:-320px}15%{left:0}85%{left:0}100%{left:-320px}}
 @keyframes flashRed{0%,100%{border-color:rgba(255,255,255,.12);background:rgba(42,45,69,1)}40%,70%{border-color:#e8415a;background:rgba(232,65,90,.2)}}
 @keyframes mmPulse{0%,100%{opacity:.3;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
+@keyframes foilSweep{0%{left:-150%}30%{left:150%}100%{left:150%}}
 
 /* ШИРМА ОТ ПРОПЛЕШИН */
 #app-cover {
   position: fixed; inset: 0; background: var(--bg); z-index: 19000;
-  transition: opacity 0.5s ease; pointer-events: none;
+  transition: opacity 0.4s ease; pointer-events: none;
 }
 
 #toast-c{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:88%;max-width:350px}
@@ -54,14 +55,14 @@ html, body {
 #lprog{height:100%;background:linear-gradient(90deg,var(--pr),var(--ac));width:0%;transition:width .2s;border-radius:4px}
 #ltxt{color:rgba(255,255,255,.4);font-size:12px;margin-top:14px;letter-spacing:2px}
 
-/* ПАНЕЛИ МЕНЮ (Увеличены) */
+/* ПАНЕЛИ МЕНЮ */
 .topbar{position:fixed;top:0;left:0;width:100%;height:var(--top);background:rgba(18,19,26,.96);display:flex;justify-content:space-between;align-items:center;padding:0 14px;z-index:2000;border-bottom:1px solid var(--br);backdrop-filter:blur(8px)}
 .tstat{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;background:var(--panel);padding:7px 14px;border-radius:20px;border:1px solid var(--br)}
 nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(18,19,26,.97);display:flex;justify-content:space-around;align-items:center;z-index:2000;border-top:1px solid var(--br);backdrop-filter:blur(8px);padding-bottom:env(safe-area-inset-bottom, 0);}
 .nb{padding:9px 4px;font-size:10px;text-align:center;cursor:pointer;opacity:.4;transition:.2s;text-transform:uppercase;color:var(--tx);font-weight:700;flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;letter-spacing:.4px}
 .nb.active{opacity:1;color:var(--pr)}.ni{font-size:24px;transition:.2s}
 
-/* ФИКС ВКЛАДОК */
+/* ФИКС ВКЛАДОК: СТРОГО МЕЖДУ ПАНЕЛЯМИ */
 .scr {
   display: block; width: 100%;
   position: absolute !important; 
@@ -79,7 +80,7 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 .scr.active{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2}
 .scr.past{transform:translateX(-100%);opacity:0;pointer-events:none}
 
-/* ФИКС ЭКРАНА БОЯ (БЕЗ СКРОЛЛА, УВЕЛИЧЕН) */
+/* ФИКС ЭКРАНА БОЯ (БЕЗ СКРОЛЛА) */
 #s-main {
   overflow: hidden !important; 
   display: flex !important; 
@@ -123,7 +124,16 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 }
 #qpanel.open { transform: translateY(0); }
 
-/* ЭЛЕМЕНТЫ (Увеличены) */
+/* РЕДКОСТЬ КАРТ И ГОЛОГРАФИЯ */
+.rr-c { border: 1.5px solid rgba(255,255,255,0.15) !important; }
+.rr-r { border: 1.5px solid #3d9be9 !important; box-shadow: inset 0 0 12px rgba(61,155,233,0.15); }
+.rr-e { border: 1.5px solid #9b5de5 !important; box-shadow: inset 0 0 12px rgba(155,93,229,0.15); }
+.rr-l { border: 1.5px solid #f5c518 !important; box-shadow: inset 0 0 15px rgba(245,197,24,0.25); }
+
+.foil { border-color: #f5c518 !important; overflow: hidden !important; box-shadow: 0 0 15px rgba(245,197,24,0.5) !important; }
+.foil-fx { position: absolute; top: -50%; bottom: -50%; width: 150%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); transform: rotate(25deg); animation: foilSweep 3s infinite ease-in-out; pointer-events: none; z-index: 5; }
+
+/* ЭЛЕМЕНТЫ */
 .rbubble { position: absolute; display: flex; flex-direction: column; align-items: center; cursor: pointer; transform: translate(-50%,-50%); pointer-events: auto; z-index: 10; }
 .rbubble .rib{width:56px;height:56px;border-radius:50%;background:var(--p2);border:2px solid var(--br);display:flex;align-items:center;justify-content:center;font-size:24px;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.4)}
 .rbubble.canclaim .rib{border-color:var(--ac);background:rgba(245,197,24,.15);box-shadow:0 0 12px rgba(245,197,24,.4)}
@@ -142,16 +152,16 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:11px;padding:13px}
 .ci{background:linear-gradient(155deg,#2a2d45,#1e2030);border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;height:180px;cursor:pointer;transition:.2s}
 .ci:active{transform:scale(.96)}.ci.locked{filter:grayscale(1) brightness(.4);height:120px;justify-content:center;pointer-events:none}
-.ci.sel{border-color:var(--ac)}.cicon{font-size:38px;margin-bottom:4px}
-.cname{font-size:13px;font-weight:700;color:#fff;width:100%;line-height:1.2;text-align:center}
-.clvl{position:absolute;top:-8px;right:-8px;background:var(--bg);color:var(--ac);border:1.5px solid var(--ac);border-radius:8px;padding:3px 6px;font-size:10px;font-weight:900;font-family:'Orbitron',sans-serif}
-.cpb{width:100%;height:8px;background:rgba(0,0,0,.4);border-radius:4px;overflow:hidden;margin-top:auto;margin-bottom:3px}
+.ci.sel{border-color:var(--ac) !important; box-shadow: 0 0 10px rgba(245,197,24,0.5) !important;}
+.cicon{font-size:38px;margin-bottom:4px;position:relative;z-index:2;}
+.cname{font-size:13px;font-weight:700;color:#fff;width:100%;line-height:1.2;text-align:center;position:relative;z-index:2;}
+.clvl{position:absolute;top:-8px;right:-8px;background:var(--bg);color:var(--ac);border:1.5px solid var(--ac);border-radius:8px;padding:3px 6px;font-size:10px;font-weight:900;font-family:'Orbitron',sans-serif;z-index:10;}
+.cpb{width:100%;height:8px;background:rgba(0,0,0,.4);border-radius:4px;overflow:hidden;margin-top:auto;margin-bottom:3px;position:relative;z-index:2;}
 .cpbf{height:100%;background:linear-gradient(90deg,var(--ok),#5ef09a);border-radius:4px;transition:width .3s}
-.cpt{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px}
+.cpt{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px;position:relative;z-index:2;}
 .sec{background:rgba(0,0,0,.22);border-radius:15px;padding:11px;margin:11px 15px;border:1px solid var(--br)}
 .stit{text-align:center;color:rgba(255,255,255,.38);font-size:11px;margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px}
 
-/* Кнопки меню Боя (Увеличены) */
 .cslot{width:46px;height:46px;background:rgba(0,0,0,.3);border-radius:12px;border:1.5px dashed rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(255,255,255,.18);transition:.3s}
 .cslot.filled{border-style:solid;border-color:var(--ac);background:rgba(245,197,24,.1)}
 .mfbtn{flex:1;padding:11px 6px;background:var(--panel);border:1px solid var(--br);border-radius:13px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;font-size:13px;font-weight:700;transition:.15s;text-align:center}
@@ -193,42 +203,42 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 .xpwrap{width:100%;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-top:4px}
 .xpfill{height:100%;background:linear-gradient(90deg,var(--pr),var(--pu));border-radius:3px;transition:width .5s ease}
 
-/* БОЙ */
+/* БОЙ (УВЕЛИЧЕННЫЙ ИНТЕРФЕЙС) */
 #bscr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease}
 #bscr.active{display:flex;opacity:1}
 #cvs-c{flex:1;width:100%;position:relative;overflow:hidden}
 canvas{display:block;width:100%;height:100%;touch-action:none}
-#btimer{position:absolute;top:12px;left:12px;z-index:2600;background:rgba(0,0,0,.65);border-radius:10px;padding:6px 12px;color:#fff;font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;pointer-events:none;backdrop-filter:blur(4px)}
-#bscore{position:absolute;top:12px;right:12px;z-index:2600;background:rgba(0,0,0,.65);border-radius:10px;padding:6px 12px;color:#fff;font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;pointer-events:none;backdrop-filter:blur(4px);display:flex;gap:5px;align-items:center}
-#emote-btn{position:absolute;bottom:170px;left:12px;width:40px;height:40px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);border-radius:50%;font-size:18px;display:flex;justify-content:center;align-items:center;z-index:2600;cursor:pointer;pointer-events:auto}
-#emote-panel{display:none;position:absolute;bottom:218px;left:12px;background:rgba(0,0,0,.82);border:1px solid rgba(255,255,255,.14);border-radius:15px;padding:9px;flex-direction:column;gap:7px;z-index:2600;animation:popIn .2s ease;pointer-events:auto}
+#btimer{position:absolute;top:12px;left:12px;z-index:2600;background:rgba(0,0,0,.65);border-radius:10px;padding:6px 14px;color:#fff;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;pointer-events:none;backdrop-filter:blur(4px)}
+#bscore{position:absolute;top:12px;right:12px;z-index:2600;background:rgba(0,0,0,.65);border-radius:10px;padding:6px 14px;color:#fff;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;pointer-events:none;backdrop-filter:blur(4px);display:flex;gap:5px;align-items:center}
+#emote-btn{position:absolute;bottom:185px;left:12px;width:40px;height:40px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);border-radius:50%;font-size:18px;display:flex;justify-content:center;align-items:center;z-index:2600;cursor:pointer;pointer-events:auto}
+#emote-panel{display:none;position:absolute;bottom:235px;left:12px;background:rgba(0,0,0,.82);border:1px solid rgba(255,255,255,.14);border-radius:15px;padding:9px;flex-direction:column;gap:7px;z-index:2600;animation:popIn .2s ease;pointer-events:auto}
 .ebubble{position:absolute;background:rgba(255,255,255,.94);border-radius:15px;padding:6px 12px;font-size:26px;z-index:2500;display:none;box-shadow:0 4px 10px rgba(0,0,0,.4)}
-#dghost{position:fixed;pointer-events:none;z-index:9000;width:70px;height:96px;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:11px;border:2px solid var(--pr);display:none;flex-direction:column;align-items:center;justify-content:center;opacity:.88;transform:translate(-50%,-50%)}
-#dg-icon{font-size:32px;pointer-events:none}
-#dg-name{font-size:9px;font-weight:700;color:rgba(255,255,255,.8);text-align:center;margin-top:3px;pointer-events:none}
-.bui{flex:0 0 160px;width:100%;height:160px;background:rgba(10,11,18,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 10px;border-top:1px solid rgba(255,255,255,.07);position:relative;z-index:10;box-sizing:border-box}
+#dghost{position:fixed;pointer-events:none;z-index:9000;width:76px;height:112px;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:2px solid var(--pr);display:none;flex-direction:column;align-items:center;justify-content:center;opacity:.88;transform:translate(-50%,-50%)}
+#dg-icon{font-size:36px;pointer-events:none}
+#dg-name{font-size:10px;font-weight:700;color:rgba(255,255,255,.8);text-align:center;margin-top:3px;pointer-events:none}
+.bui{flex:0 0 176px;width:100%;height:176px;background:rgba(10,11,18,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 10px;border-top:1px solid rgba(255,255,255,.07);position:relative;z-index:10;box-sizing:border-box}
 .elwrap{width:85%;display:flex;align-items:center;gap:5px;margin-bottom:8px;flex-shrink:0}
 .elsegs{flex:1;display:flex;gap:3px;height:15px}
 .elseg{flex:1;border-radius:4px;background:rgba(255,255,255,.07);transition:background .12s}
 .elseg.on{background:#9b5de5}.elseg.half{background:rgba(155,93,229,.4)}
-.elcnt{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:#c084fc;min-width:20px;text-align:right}
-.hand{display:flex;flex-direction:row;gap:8px;justify-content:center;align-items:center;width:100%;overflow:visible;height:104px}
-.gc{width:68px;height:100px;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:11px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,background .15s}
+.elcnt{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#c084fc;min-width:24px;text-align:right}
+.hand{display:flex;flex-direction:row;gap:10px;justify-content:center;align-items:center;width:100%;overflow:visible;height:116px}
+.gc{width:76px;height:112px;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,background .15s}
 .gc.can{border-color:rgba(61,155,233,.6);background:linear-gradient(155deg,#2e3550,#1e2540)}
 .gc.cant{opacity:.45;border-color:rgba(232,65,90,.28)}
 .gc.flash{animation:flashRed .3s ease 3}
-.gc-icon{font-size:30px;line-height:1;margin-bottom:3px;pointer-events:none}
-.gc-name{color:rgba(255,255,255,.8);font-size:9px;font-weight:700;text-align:center;line-height:1.15;width:94%;pointer-events:none}
-.ecost{position:absolute;top:-6px;left:-6px;background:var(--pu);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;border:1.5px solid rgba(255,255,255,.22);z-index:2;color:#fff;font-family:'Orbitron',sans-serif;pointer-events:none}
+.gc-icon{font-size:36px;line-height:1;margin-bottom:4px;pointer-events:none;position:relative;z-index:2;}
+.gc-name{color:rgba(255,255,255,.8);font-size:10px;font-weight:700;text-align:center;line-height:1.15;width:94%;pointer-events:none;position:relative;z-index:2;}
+.ecost{position:absolute;top:-8px;left:-8px;background:var(--pu);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;border:1.5px solid rgba(255,255,255,.22);z-index:10;color:#fff;font-family:'Orbitron',sans-serif;pointer-events:none}
 #bend{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.96);z-index:9999;flex-direction:column;justify-content:center;align-items:center;opacity:0;transition:opacity .5s}
 #bend.active{display:flex;opacity:1}
 .ebanner{display:flex;align-items:center;width:92%;max-width:420px;margin:6px 0;background:var(--panel);border:1px solid var(--br);border-radius:15px;overflow:hidden;height:58px;animation:popIn .5s ease}
 .ebc{width:16px;height:100%}.ebi{flex:1;padding:0 14px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px}
 .etro{font-size:18px;font-weight:900;font-family:'Orbitron',sans-serif}
 .etro.win{color:var(--ok)}.etro.lose{color:var(--dn)}.etro.tie{color:var(--ac)}
-.bban{position:absolute;width:240px;height:54px;display:flex;align-items:center;font-size:14px;font-weight:800;color:#fff;text-shadow:1px 1px 3px rgba(0,0,0,.8);z-index:2600;text-transform:uppercase;padding:0 18px;pointer-events:none;font-family:'Exo 2',sans-serif}
-.bban-e{top:50px;right:-300px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,14% 50%);justify-content:flex-end}
-.bban-p{bottom:155px;left:-300px;clip-path:polygon(0 0,100% 0,86% 50%,100% 100%,0 100%);justify-content:flex-start}
+.bban{position:absolute;width:260px;height:58px;display:flex;align-items:center;font-size:14px;font-weight:800;color:#fff;text-shadow:1px 1px 3px rgba(0,0,0,.8);z-index:2600;text-transform:uppercase;padding:0 18px;pointer-events:none;font-family:'Exo 2',sans-serif}
+.bban-e{top:55px;right:-320px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,14% 50%);justify-content:flex-end}
+.bban-p{bottom:165px;left:-320px;clip-path:polygon(0 0,100% 0,86% 50%,100% 100%,0 100%);justify-content:flex-start}
 .bban-e.anim{animation:slideBannerE 3s forwards}
 .bban-p.anim{animation:slideBannerP 3s forwards}
 #mmov{z-index:5500}
@@ -246,6 +256,24 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <div id="dghost"><div id="dg-icon"></div><div id="dg-name"></div></div>
 <div id="intro"><h1>TERROV<br>STUDIO</h1><p>Game Development</p></div>
 <div id="loading"><h1>CLASH<br><span>ARENA</span></h1><div class="lbar"><div id="lprog"></div></div><div id="ltxt">ИНИЦИАЛИЗАЦИЯ...</div></div>
+
+<div id="m-profile" class="ov" style="z-index:5500;">
+  <div class="mbox" style="padding:24px; align-items:center;">
+    <div style="font-family:'Orbitron',sans-serif; font-size:22px; font-weight:900; color:var(--pr); margin-bottom:8px;">ПРОФИЛЬ</div>
+    <h2 id="prof-name" style="font-size:20px; font-weight:800; margin-bottom:4px;">Игрок</h2>
+    <div id="prof-tr" style="color:var(--ac); font-weight:900; font-size:16px; margin-bottom:16px; font-family:'Orbitron',sans-serif;">🏆 0</div>
+    
+    <div class="sec" style="width:100%; margin:0 0 16px 0; padding:15px;">
+      <div class="stit">Любимая карта</div>
+      <div id="prof-fav" style="display:flex; justify-content:center;"></div>
+    </div>
+    
+    <div style="width:100%; display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px;"><span>Всего боёв:</span><b id="prof-matches">0</b></div>
+    <div style="width:100%; display:flex; justify-content:space-between; margin-bottom:18px; font-size:14px;"><span>Побед:</span><b id="prof-wins" style="color:var(--ok);">0</b></div>
+    
+    <button class="pbtn" onclick="ss('m-profile','display','none')">ЗАКРЫТЬ</button>
+  </div>
+</div>
 
 <div id="m-nick" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center;">
   <div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--pr);margin-bottom:6px;">ВЫБЕРИ НИК</div>
@@ -330,7 +358,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     </div>
     
     <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
-      <p style="font-size:17px;font-weight:800;" id="ui-pname">Игрок</p>
+      <p style="font-size:17px;font-weight:800; cursor:pointer; text-decoration:underline; text-decoration-color:rgba(255,255,255,.3);" id="ui-pname" onclick="openProfile()">Игрок</p>
       <div id="um0" style="display:none;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#f5c518,#c87d0a);border:1.5px solid var(--ac);align-items:center;justify-content:center;font-size:11px;"></div>
       <div id="um1" style="display:none;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#f5c518,#c87d0a);border:1.5px solid var(--ac);align-items:center;justify-content:center;font-size:11px;"></div>
     </div>
@@ -484,8 +512,18 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 </div>
 
 <div id="bscr">
-  <div class="bban bban-e" id="bban-e">ВРАГ</div>
-  <div class="bban bban-p" id="bban-p">ИГРОК</div>
+  <div class="bban bban-e" id="bban-e">
+    <div style="display:flex; flex-direction:column; align-items:flex-end;">
+      <span id="bban-e-name" style="font-size:14px;">ВРАГ</span>
+      <span id="bban-e-tr" style="font-size:11px; color:var(--ac); text-shadow:0 1px 3px rgba(0,0,0,1);">🏆 0</span>
+    </div>
+  </div>
+  <div class="bban bban-p" id="bban-p">
+    <div style="display:flex; flex-direction:column; align-items:flex-start;">
+      <span id="bban-p-name" style="display:flex; align-items:center; gap:4px; font-size:14px;">ИГРОК</span>
+      <span id="bban-p-tr" style="font-size:11px; color:var(--ac); text-shadow:0 1px 3px rgba(0,0,0,1);">🏆 0</span>
+    </div>
+  </div>
   <div id="btimer">3:00</div>
   <div id="bscore"><span id="sc-e" style="color:var(--dn)">0</span>--<span id="sc-p" style="color:var(--pr)">0</span></div>
   <div id="emote-btn" onclick="toggleEmote()">💬</div>
@@ -503,8 +541,8 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div id="bend">
     <h1 style="font-family:'Orbitron',sans-serif;color:#fff;font-size:32px;margin-bottom:6px;" id="bend-title">КОНЕЦ БОЯ</h1>
     <div style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:15px;" id="bend-sub">+0 XP</div>
-    <div class="ebanner"><div class="ebc" id="en-color"></div><div class="ebi"><span id="en-name">Враг</span><span class="etro lose" id="en-tro">-20 🏆</span></div></div>
-    <div class="ebanner"><div class="ebc" id="ep-color"></div><div class="ebi"><span id="ep-name">Игрок</span><span class="etro win" id="ep-tro">+30 🏆</span></div></div>
+    <div class="ebanner"><div class="ebc" id="en-color"></div><div class="ebi"><span id="en-name-end">Враг</span><span class="etro lose" id="en-tro">-20 🏆</span></div></div>
+    <div class="ebanner"><div class="ebc" id="ep-color"></div><div class="ebi"><span id="ep-name-end">Игрок</span><span class="etro win" id="ep-tro">+30 🏆</span></div></div>
     <button class="bigbtn" onclick="exitBattle()" style="margin-top:18px;">ВЫЙТИ</button>
   </div>
 </div>
@@ -519,7 +557,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 
 <script>
 'use strict';
-
 function ss(id,p,v){const e=document.getElementById(id);if(e)e.style[p]=v;}
 function st(id,t){const e=document.getElementById(id);if(e)e.textContent=t;}
 function uid(){return Math.random().toString(36).substr(2,9).toUpperCase();}
@@ -548,35 +585,35 @@ const ARENAS=[
 {name:'Гора',        th:4700, img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=600&auto=format&fit=crop'}
 ];
 const CARDS=[
-{id:'spear_g',a:0,n:'Копейщики',c:2,hp:110, d:50, sp:0.70,r:120,t:'ground',tg:'all',     ic:'👺',pr:'🏹'},
-{id:'fire_s', a:0,n:'Огн.Духи', c:2,hp:90,  d:160,sp:0.90,r:40, t:'ground',tg:'all',     ic:'🔥',pr:null},
-{id:'giant',  a:0,n:'Гигант',   c:5,hp:2000,d:100,sp:0.30,r:40, t:'ground',tg:'building',ic:'👹',pr:null},
-{id:'arrows', a:0,n:'Стрелы',   c:3,hp:0,   d:150,sp:0,   r:150,t:'spell', tg:'all',     ic:'🏹',pr:'🏹'},
-{id:'archer', a:0,n:'Лучница',  c:3,hp:250, d:60, sp:0.60,r:140,t:'ground',tg:'all',     ic:'👱‍♀️',pr:'🏹'},
-{id:'minion', a:0,n:'Миньон',   c:3,hp:200, d:40, sp:0.75,r:40, t:'air',   tg:'all',     ic:'🦇',pr:'🟣'},
-{id:'knight', a:0,n:'Рыцарь',   c:3,hp:800, d:70, sp:0.50,r:40, t:'ground',tg:'all',     ic:'🤺',pr:null},
-{id:'goblin', a:0,n:'Гоблин',   c:2,hp:150, d:40, sp:0.90,r:40, t:'ground',tg:'all',     ic:'😈',pr:null},
-{id:'bomber', a:0,n:'Подрывник',c:3,hp:300, d:150,sp:0.55,r:100,t:'ground',tg:'ground',  ic:'💣',pr:'💣'},
-{id:'skel',   a:0,n:'Скелеты',  c:1,hp:50,  d:20, sp:0.75,r:40, t:'ground',tg:'all',     ic:'💀',pr:null},
-{id:'valk',   a:1,n:'Валькирия',c:4,hp:1100,d:120,sp:0.50,r:50, t:'ground',tg:'all',     ic:'🧝‍♀️',pr:null},
-{id:'musk',   a:1,n:'Мушкетер', c:4,hp:400, d:110,sp:0.50,r:150,t:'ground',tg:'all',     ic:'🎯',pr:'⚫'},
-{id:'drag',   a:2,n:'Дракончик',c:4,hp:800, d:80, sp:0.60,r:90, t:'air',   tg:'all',     ic:'🐉',pr:'🔥'},
-{id:'mpekka', a:2,n:'МиниПЕККА',c:4,hp:700, d:300,sp:0.70,r:40, t:'ground',tg:'all',     ic:'🤖',pr:null},
-{id:'witch',  a:3,n:'Ведьма',   c:5,hp:500, d:60, sp:0.50,r:120,t:'ground',tg:'all',     ic:'🧙‍♀️',pr:'🟣'},
-{id:'prince', a:3,n:'Принц',    c:5,hp:1200,d:200,sp:0.80,r:50, t:'ground',tg:'all',     ic:'🤴',pr:null},
-{id:'wizard', a:4,n:'Колдун',   c:5,hp:450, d:130,sp:0.50,r:130,t:'ground',tg:'all',     ic:'🧙‍♂️',pr:'🔥'},
-{id:'ball',   a:4,n:'Шар',      c:5,hp:1050,d:400,sp:0.40,r:40, t:'air',   tg:'building',ic:'🎈',pr:'💣'},
-{id:'hog',    a:5,n:'Всадник',  c:4,hp:1000,d:160,sp:0.85,r:40, t:'ground',tg:'building',ic:'🐗',pr:null},
-{id:'freeze', a:5,n:'Заморозка',c:4,hp:0,   d:0,  sp:0,   r:100,t:'spell', tg:'all',     ic:'❄️',pr:'❄️'},
-{id:'zap',    a:6,n:'Разряд',   c:2,hp:0,   d:80, sp:0,   r:100,t:'spell', tg:'all',     ic:'⚡',pr:'⚡'},
-{id:'fball',  a:6,n:'Огн.Шар',  c:4,hp:0,   d:250,sp:0,   r:80, t:'spell', tg:'all',     ic:'💥',pr:'💥'},
-{id:'pekka',  a:7,n:'ПЕККА',    c:7,hp:2500,d:500,sp:0.35,r:50, t:'ground',tg:'all',     ic:'🦾',pr:null},
-{id:'golem',  a:7,n:'Голем',    c:8,hp:3000,d:150,sp:0.25,r:40, t:'ground',tg:'building',ic:'🗿',pr:null},
-{id:'sparky', a:8,n:'Спарки',   c:6,hp:1000,d:800,sp:0.30,r:100,t:'ground',tg:'ground',  ic:'🔋',pr:'⚡'},
-{id:'miner',  a:8,n:'Шахтер',   c:3,hp:800, d:100,sp:0.75,r:40, t:'ground',tg:'all',     ic:'⛏️',pr:null},
-{id:'prin2',  a:9,n:'Принцесса',c:3,hp:150, d:90, sp:0.50,r:200,t:'ground',tg:'all',     ic:'👸',pr:'🔥'},
-{id:'bandit', a:9,n:'Бандитка', c:3,hp:750, d:160,sp:0.80,r:40, t:'ground',tg:'ground',  ic:'🥷',pr:null},
-{id:'lumber', a:9,n:'Дровосек', c:4,hp:990, d:200,sp:0.85,r:40, t:'ground',tg:'ground',  ic:'🪓',pr:null}
+{id:'spear_g',a:0,n:'Копейщики',c:2,hp:110, d:50, sp:0.70,r:120,t:'ground',tg:'all',     ic:'👺',pr:'🏹', rr:'c'},
+{id:'fire_s', a:0,n:'Огн.Духи', c:2,hp:90,  d:160,sp:0.90,r:40, t:'ground',tg:'all',     ic:'🔥',pr:null, rr:'c'},
+{id:'giant',  a:0,n:'Гигант',   c:5,hp:2000,d:100,sp:0.30,r:40, t:'ground',tg:'building',ic:'👹',pr:null, rr:'r'},
+{id:'arrows', a:0,n:'Стрелы',   c:3,hp:0,   d:150,sp:0,   r:150,t:'spell', tg:'all',     ic:'🏹',pr:'🏹', rr:'c'},
+{id:'archer', a:0,n:'Лучница',  c:3,hp:250, d:60, sp:0.60,r:140,t:'ground',tg:'all',     ic:'👱‍♀️',pr:'🏹', rr:'c'},
+{id:'minion', a:0,n:'Миньон',   c:3,hp:200, d:40, sp:0.75,r:40, t:'air',   tg:'all',     ic:'🦇',pr:'🟣', rr:'c'},
+{id:'knight', a:0,n:'Рыцарь',   c:3,hp:800, d:70, sp:0.50,r:40, t:'ground',tg:'all',     ic:'🤺',pr:null, rr:'c'},
+{id:'goblin', a:0,n:'Гоблин',   c:2,hp:150, d:40, sp:0.90,r:40, t:'ground',tg:'all',     ic:'😈',pr:null, rr:'c'},
+{id:'bomber', a:0,n:'Подрывник',c:3,hp:300, d:150,sp:0.55,r:100,t:'ground',tg:'ground',  ic:'💣',pr:'💣', rr:'c'},
+{id:'skel',   a:0,n:'Скелеты',  c:1,hp:50,  d:20, sp:0.75,r:40, t:'ground',tg:'all',     ic:'💀',pr:null, rr:'c'},
+{id:'valk',   a:1,n:'Валькирия',c:4,hp:1100,d:120,sp:0.50,r:50, t:'ground',tg:'all',     ic:'🧝‍♀️',pr:null, rr:'r'},
+{id:'musk',   a:1,n:'Мушкетер', c:4,hp:400, d:110,sp:0.50,r:150,t:'ground',tg:'all',     ic:'🎯',pr:'⚫', rr:'r'},
+{id:'drag',   a:2,n:'Дракончик',c:4,hp:800, d:80, sp:0.60,r:90, t:'air',   tg:'all',     ic:'🐉',pr:'🔥', rr:'e'},
+{id:'mpekka', a:2,n:'МиниПЕККА',c:4,hp:700, d:300,sp:0.70,r:40, t:'ground',tg:'all',     ic:'🤖',pr:null, rr:'r'},
+{id:'witch',  a:3,n:'Ведьма',   c:5,hp:500, d:60, sp:0.50,r:120,t:'ground',tg:'all',     ic:'🧙‍♀️',pr:'🟣', rr:'e'},
+{id:'prince', a:3,n:'Принц',    c:5,hp:1200,d:200,sp:0.80,r:50, t:'ground',tg:'all',     ic:'🤴',pr:null, rr:'e'},
+{id:'wizard', a:4,n:'Колдун',   c:5,hp:450, d:130,sp:0.50,r:130,t:'ground',tg:'all',     ic:'🧙‍♂️',pr:'🔥', rr:'r'},
+{id:'ball',   a:4,n:'Шар',      c:5,hp:1050,d:400,sp:0.40,r:40, t:'air',   tg:'building',ic:'🎈',pr:'💣', rr:'e'},
+{id:'hog',    a:5,n:'Всадник',  c:4,hp:1000,d:160,sp:0.85,r:40, t:'ground',tg:'building',ic:'🐗',pr:null, rr:'r'},
+{id:'freeze', a:5,n:'Заморозка',c:4,hp:0,   d:0,  sp:0,   r:100,t:'spell', tg:'all',     ic:'❄️',pr:'❄️', rr:'e'},
+{id:'zap',    a:6,n:'Разряд',   c:2,hp:0,   d:80, sp:0,   r:100,t:'spell', tg:'all',     ic:'⚡',pr:'⚡', rr:'c'},
+{id:'fball',  a:6,n:'Огн.Шар',  c:4,hp:0,   d:250,sp:0,   r:80, t:'spell', tg:'all',     ic:'💥',pr:'💥', rr:'r'},
+{id:'pekka',  a:7,n:'ПЕККА',    c:7,hp:2500,d:500,sp:0.35,r:50, t:'ground',tg:'all',     ic:'🦾',pr:null, rr:'e'},
+{id:'golem',  a:7,n:'Голем',    c:8,hp:3000,d:150,sp:0.25,r:40, t:'ground',tg:'building',ic:'🗿',pr:null, rr:'e'},
+{id:'sparky', a:8,n:'Спарки',   c:6,hp:1000,d:800,sp:0.30,r:100,t:'ground',tg:'ground',  ic:'🔋',pr:'⚡', rr:'l'},
+{id:'miner',  a:8,n:'Шахтер',   c:3,hp:800, d:100,sp:0.75,r:40, t:'ground',tg:'all',     ic:'⛏️',pr:null, rr:'l'},
+{id:'prin2',  a:9,n:'Принцесса',c:3,hp:150, d:90, sp:0.50,r:200,t:'ground',tg:'all',     ic:'👸',pr:'🔥', rr:'l'},
+{id:'bandit', a:9,n:'Бандитка', c:3,hp:750, d:160,sp:0.80,r:40, t:'ground',tg:'ground',  ic:'🥷',pr:null, rr:'l'},
+{id:'lumber', a:9,n:'Дровосек', c:4,hp:990, d:200,sp:0.85,r:40, t:'ground',tg:'ground',  ic:'🪓',pr:null, rr:'l'}
 ];
 const TSKINS=[{id:'ts1',n:'Стандарт',ic:'🏰',hm:1.0,col:'#7f8c8d'},{id:'ts2',n:'Крепость',ic:'🪨',hm:1.05,col:'#6d4c41'},{id:'ts3',n:'Кристалл',ic:'🔮',hm:1.1,col:'#8e24aa'}];
 const TTROOP=[{id:'tt1',n:'Лучница',ic:'👱‍♀️',d:50,sp:60,pr:'🏹',ra:0},{id:'tt2',n:'Канонир',ic:'🧨',d:150,sp:120,pr:'💣',ra:4},{id:'tt3',n:'Маг',ic:'🧙',d:80,sp:70,pr:'🔥',ra:4}];
@@ -616,11 +653,12 @@ let U=null,swapMode=false,swapId=null;
 let battleId=null,netListener=null;
 let isMP=false,isSD=false,isFriendly=false,isTut=false;
 let winChestPending=false,appStarted=false,loading=false;
-let navIdx=2,deckTab=0,mmTimer=null; // Установлен navIdx=2 (Бой) по умолчанию
+let navIdx=2,deckTab=0,mmTimer=null;
+let botTrophies=0, botMedalsHTML='';
 
 function hideCover(){
   const cover=document.getElementById('app-cover');
-  if(cover){cover.style.opacity='0';setTimeout(()=>cover.style.display='none',500);}
+  if(cover){cover.style.opacity='0';setTimeout(()=>cover.style.display='none',400);}
 }
 
 function startApp(){
@@ -676,7 +714,7 @@ function nav(id,idx){
     s.style.transform=i===idx?'translateX(0)':i<idx?'translateX(-100%)':'translateX(100%)';
     s.style.opacity=i===idx?'1':'0';
   });
-  const navMap=[0,1,2,3,4]; // ИСПРАВЛЕННЫЕ ИНДЕКСЫ: 0=Магаз, 1=Колода, 2=Бой, 3=Пасс, 4=Сет
+  const navMap=[0,1,2,3,4]; 
   document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('active',navMap[i]===idx));
   navIdx=idx;
   if(idx===5)renderStats();
@@ -710,7 +748,7 @@ function startTut(){
   ss('mainnav','display','none');ss('topbar','display','none');
   startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');
   notify('ОБУЧЕНИЕ: Уничтожь главную башню!','inf');
-  setTimeout(hideCover, 150); // Убираем ширму
+  setTimeout(hideCover, 150);
 }
 
 function migrate(u){
@@ -751,6 +789,39 @@ function genShop(){
   for(let i=0;i<3;i++){if(!av.length)break;const r=Math.floor(Math.random()*av.length);U.dailyEmotes.push(av[r]);av.splice(r,1);}
 }
 function arenaIdx(){let i=[...ARENAS].reverse().findIndex(a=>U.trophies>=a.th);return i!==-1?ARENAS.length-1-i:0;}
+
+/* ПРОФИЛЬ ИГРОКА */
+function openProfile() {
+  if(!U) return;
+  st('prof-name', U.nickname);
+  st('prof-tr', `🏆 ${U.trophies || 0}`);
+  const s = U.stats || {};
+  st('prof-matches', s.matches || 0);
+  st('prof-wins', s.wins || 0);
+
+  let fav = null; let maxScore = -1;
+  Object.keys(U.cards || {}).forEach(id => {
+    const c = U.cards[id];
+    const score = c.level * 1000 + c.power;
+    if(score > maxScore) { maxScore = score; fav = id; }
+  });
+  
+  const fc = document.getElementById('prof-fav');
+  if(fav && CARDS.find(x=>x.id===fav)){
+    const card = CARDS.find(x=>x.id===fav);
+    const data = U.cards[fav];
+    const isFoil = data.level >= 8;
+    fc.innerHTML = `<div class="ci rr-${card.rr} ${isFoil?'foil':''}" style="height:160px; width:110px; cursor:default;">
+      ${isFoil?'<div class="foil-fx"></div>':''}
+      <div class="clvl">Лвл ${data.level}</div>
+      <div class="cicon">${card.ic}</div>
+      <div class="cname">${card.n}</div>
+    </div>`;
+  } else {
+    fc.innerHTML = '<p style="color:rgba(255,255,255,.3); font-size:12px;">Нет карт</p>';
+  }
+  ss('m-profile','display','flex');
+}
 
 function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
 function skipReg(){ss('m-reg','display','none');U.isGuest=true;lw('clash_uid',U.uid);startUI();}
@@ -793,8 +864,8 @@ function startUI(){
   if(!U.dailyEmotes||!U.dailyEmotes.length)genShop();
   if(!U.dsp)U.dsp={};
   checkArena();checkMedals();updateUI();saveU();
-  nav('s-main',2); // Запуск сразу на вкладке "Бой" (индекс 2)
-  setTimeout(hideCover, 150); // Убираем ширму
+  nav('s-main',2);
+  setTimeout(hideCover, 150);
 }
 
 /* ЖЕЛЕЗОБЕТОННЫЙ ФИКС БД ОТ NaN */
@@ -893,9 +964,9 @@ function renderPassUI(){
     U.quests.forEach(q=>{
       if(q.cl)done++;const ok=q.pg>=q.tg;
       let btn=q.cl?`<span style="color:var(--ok);font-size:11px;font-weight:700;">✓</span>`:
-      ok?`<button class="pbtn ok" style="width:78px;margin:0;padding:5px;font-size:10px;" onclick="claimQ(${q.id})">Забрать</button>`:
-      `<button class="pbtn" style="width:78px;margin:0;padding:5px;background:#2a2d45;color:rgba(255,255,255,.2);font-size:10px;" disabled>Забрать</button>`;
-      qc.innerHTML+=`<div class="qcard"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;font-weight:600;">${q.desc}</span><span style="color:var(--ac);font-size:13px;font-weight:800;">${q.cr}👑</span></div><div class="qpb"><div class="qpbf" style="width:${(q.pg/q.tg)*100}%"></div></div><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:11px;color:rgba(255,255,255,.38);">${q.pg}/${q.tg}</span>${btn}</div></div>`;
+      ok?`<button class="pbtn ok" style="width:85px;margin:0;padding:6px;font-size:11px;" onclick="claimQ(${q.id})">Забрать</button>`:
+      `<button class="pbtn" style="width:85px;margin:0;padding:6px;background:#2a2d45;color:rgba(255,255,255,.2);font-size:11px;" disabled>Забрать</button>`;
+      qc.innerHTML+=`<div class="qcard"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:14px;font-weight:600;">${q.desc}</span><span style="color:var(--ac);font-size:14px;font-weight:800;">${q.cr}👑</span></div><div class="qpb"><div class="qpbf" style="width:${(q.pg/q.tg)*100}%"></div></div><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:12px;color:rgba(255,255,255,.38);">${q.pg}/${q.tg}</span>${btn}</div></div>`;
     });
     st('qbadge',`${done}/${U.quests.length}`);
   }
@@ -1013,13 +1084,13 @@ function renderShop(){
   U.dailyShop.forEach(id=>{
     const card=CARDS.find(c=>c.id===id);if(!card)return;
     const b=U.dsp[id]||0,left=2-b;
-    g.innerHTML+=`<div class="ci" style="height:155px;"><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div><div style="font-size:10px;color:rgba(255,255,255,.38);margin:3px 0;">+15 очков</div><div style="font-size:9px;color:var(--ac);">Ост.: ${left}</div>${left>0?`<button class="pbtn" style="padding:6px;font-size:10px;" onclick="buyPow('${id}')">200💰</button>`:`<button class="pbtn" style="padding:6px;font-size:10px;background:#2a2d45;color:rgba(255,255,255,.2);" disabled>Продано</button>`}</div>`;
+    g.innerHTML+=`<div class="ci rr-${card.rr}" style="height:155px; cursor:default;"><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div><div style="font-size:10px;color:rgba(255,255,255,.38);margin:3px 0;">+15 очков</div><div style="font-size:9px;color:var(--ac);">Ост.: ${left}</div>${left>0?`<button class="pbtn" style="padding:6px;font-size:10px;" onclick="buyPow('${id}')">200💰</button>`:`<button class="pbtn" style="padding:6px;font-size:10px;background:#2a2d45;color:rgba(255,255,255,.2);" disabled>Продано</button>`}</div>`;
   });
   const eg=document.getElementById('emote-grid');if(!eg||!U.dailyEmotes)return;eg.innerHTML='';
   if(!U.dailyEmotes.length){eg.innerHTML='<p style="color:rgba(255,255,255,.35);font-size:13px;text-align:center;grid-column:1/-1;">Все куплены</p>';return;}
   U.dailyEmotes.forEach(e=>{
     const owned=(U.emotes||[]).includes(e);
-    eg.innerHTML+=`<div class="ci" style="height:100px;"><div class="cicon">${e}</div>${owned?`<span style="color:var(--ok);font-size:11px;margin-top:auto;">✓</span>`:`<button class="pbtn" style="margin-top:auto;padding:6px;font-size:10px;" onclick="buyEmote('${e}')">100💎</button>`}</div>`;
+    eg.innerHTML+=`<div class="ci" style="height:100px; cursor:default;"><div class="cicon">${e}</div>${owned?`<span style="color:var(--ok);font-size:11px;margin-top:auto;">✓</span>`:`<button class="pbtn" style="margin-top:auto;padding:6px;font-size:10px;" onclick="buyEmote('${e}')">100💎</button>`}</div>`;
   });
 }
 function buyPow(id){
@@ -1066,7 +1137,8 @@ function renderDeck(){
   (U.deck||[]).forEach(id=>{
     const card=CARDS.find(x=>x.id===id);if(!card)return;
     const data=U.cards[id]||{level:1,power:0};const sel=swapMode&&swapId===id;
-    c.innerHTML+=`<div class="ci ${sel?'sel':''}" style="height:120px;justify-content:center;" onclick="deckClick('${id}')"><div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname" style="margin-top:6px;">${card.n}</div><div style="font-size:10px;color:var(--pu);margin-top:4px;">${card.c}💜</div></div>`;
+    const isFoil = data.level>=8;
+    c.innerHTML+=`<div class="ci rr-${card.rr} ${sel?'sel':''} ${isFoil?'foil':''}" style="height:130px;justify-content:center;" onclick="deckClick('${id}')">${isFoil?'<div class="foil-fx"></div>':''}<div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname" style="margin-top:6px;">${card.n}</div><div style="font-size:10px;color:var(--pu);margin-top:4px;">${card.c}💜</div></div>`;
   });
 }
 function renderColl(){
@@ -1076,11 +1148,12 @@ function renderColl(){
     const data=U.cards[card.id];
     if(data){
       const inD=(U.deck||[]).includes(card.id);const req=upReq(data.level),cost=upCost(data.level),maxed=data.level>=8;
-      let btn=maxed?`<button class="pbtn" style="background:#2a2d45;color:rgba(255,255,255,.18);font-size:9px;padding:5px;margin-top:4px;" disabled>МАКС</button>`:
-      data.power<req?`<button class="pbtn" style="background:#2a2d45;color:rgba(255,255,255,.18);font-size:9px;padding:5px;margin-top:4px;" disabled>Мало</button>`:
-      U.gold<cost?`<button class="pbtn dn" style="font-size:9px;padding:5px;margin-top:4px;" disabled>${cost}💰</button>`:
-      `<button class="pbtn ok" style="font-size:9px;padding:5px;margin-top:4px;" onclick="event.stopPropagation();upCard('${card.id}')">⬆ УЛУ.</button>`;
-      cu.innerHTML+=`<div class="ci ${inD?'sel':''}" style="height:180px;" onclick="${!inD?`collClick('${card.id}')`:''}">${inD?`<div style="position:absolute;top:3px;left:3px;background:var(--pr);font-size:8px;padding:2px 5px;border-radius:4px;font-weight:700;">В КОЛ.</div>`:''}<div class="cicon">${card.ic}</div><div class="clvl">Лвл ${data.level}</div><div class="cname">${card.n}</div><div class="cpb"><div class="cpbf" style="width:${Math.min(100,(data.power/req)*100)}%"></div></div><div class="cpt">${data.power}/${req}</div>${btn}</div>`;
+      const isFoil = maxed;
+      let btn=maxed?`<button class="pbtn" style="background:#2a2d45;color:rgba(255,255,255,.18);font-size:9px;padding:5px;margin-top:4px;z-index:10;" disabled>МАКС</button>`:
+      data.power<req?`<button class="pbtn" style="background:#2a2d45;color:rgba(255,255,255,.18);font-size:9px;padding:5px;margin-top:4px;z-index:10;" disabled>Мало</button>`:
+      U.gold<cost?`<button class="pbtn dn" style="font-size:9px;padding:5px;margin-top:4px;z-index:10;" disabled>${cost}💰</button>`:
+      `<button class="pbtn ok" style="font-size:9px;padding:5px;margin-top:4px;z-index:10;" onclick="event.stopPropagation();upCard('${card.id}')">⬆ УЛУ.</button>`;
+      cu.innerHTML+=`<div class="ci rr-${card.rr} ${inD?'sel':''} ${isFoil?'foil':''}" style="height:180px;" onclick="${!inD?`collClick('${card.id}')`:''}">${isFoil?'<div class="foil-fx"></div>':''}${inD?`<div style="position:absolute;top:3px;left:3px;background:var(--pr);font-size:8px;padding:2px 5px;border-radius:4px;font-weight:700;z-index:10;">В КОЛ.</div>`:''}<div class="cicon">${card.ic}</div><div class="clvl">Лвл ${data.level}</div><div class="cname">${card.n}</div><div class="cpb"><div class="cpbf" style="width:${Math.min(100,(data.power/req)*100)}%"></div></div><div class="cpt">${data.power}/${req}</div>${btn}</div>`;
     }else{
       const av=card.a<=ci;
       cl.innerHTML+=`<div class="ci locked"><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div><div style="font-size:18px;position:absolute;top:36%;z-index:5;">🔒</div><div style="position:absolute;bottom:4px;font-size:8px;color:var(--ac);">${av?'В ящиках':`А${card.a+1}`}</div></div>`;
@@ -1091,7 +1164,7 @@ function renderSpells(){
   const c=document.getElementById('ui-spells');if(!c)return;c.innerHTML='';
   const spells=CARDS.filter(card=>card.t==='spell'&&U.cards[card.id]);
   if(!spells.length){c.innerHTML='<p style="color:rgba(255,255,255,.35);font-size:13px;text-align:center;padding:20px;grid-column:1/-1;">Нет заклинаний</p>';return;}
-  spells.forEach(card=>{const data=U.cards[card.id]||{level:1};const inD=(U.deck||[]).includes(card.id);c.innerHTML+=`<div class="ci ${inD?'sel':''}" style="height:130px;justify-content:center;"><div class="cicon">${card.ic}</div><div class="clvl">Лвл ${data.level}</div><div class="cname">${card.n}</div><div style="font-size:10px;color:var(--pu);margin-top:4px;">${card.c}💜</div></div>`;});
+  spells.forEach(card=>{const data=U.cards[card.id]||{level:1};const inD=(U.deck||[]).includes(card.id);const isFoil = data.level>=8;c.innerHTML+=`<div class="ci rr-${card.rr} ${inD?'sel':''} ${isFoil?'foil':''}" style="height:130px;justify-content:center;">${isFoil?'<div class="foil-fx"></div>':''}<div class="cicon">${card.ic}</div><div class="clvl">Лвл ${data.level}</div><div class="cname">${card.n}</div><div style="font-size:10px;color:var(--pu);margin-top:4px;">${card.c}💜</div></div>`;});
 }
 function deckClick(id){if(swapMode){swapMode=false;swapId=null;updateUI();}else{swapMode=true;swapId=id;notify('Выбери карту снизу для замены','inf');updateUI();}}
 function collClick(id){if(swapMode&&swapId){const idx=U.deck.indexOf(swapId);if(idx!==-1){U.deck[idx]=id;swapMode=false;swapId=null;notify('Карта заменена!','ok');saveU();}}else notify('Сначала выбери карту в колоде','inf');}
@@ -1223,10 +1296,16 @@ function cancelMM(){if(mmTimer)clearTimeout(mmTimer);ss('mmov','display','none')
 function initBot(){
   isMP=false;battleId=null;
   botBanner=BANNERS[Math.floor(Math.random()*BANNERS.length)];
-  const names=['KingDestroyer','ArenaLord','ProGamer99','ZapQueen','GolemMaster','PekkaRush','GiantGoblin','SkelSpam'];
+  const names=['КиберКотлета','Пельмень','Нагибатор2000','ДедИнсайд','Крош','БархатныеТяги','ЧёткийПацан','Шлёпа'];
   botName=names[Math.floor(Math.random()*names.length)];
   botDeck=[...(U.deck||[])].sort(()=>Math.random()-.5);
   botElix=5;botCd=0;isBotFrozen=false;freezeCd=0;
+  
+  botTrophies = Math.max(0, (U.trophies||0) + Math.floor((Math.random() - 0.5) * 60));
+  const numMedals = Math.floor(Math.random() * 3);
+  const mArr = [...MEDALS].sort(()=>Math.random()-.5).slice(0, numMedals);
+  botMedalsHTML = mArr.map(m => `<span style="font-size:12px;">${m.ic}</span>`).join('');
+
   startBattle(botName,botBanner.s);
 }
 function initMP(bid,opUid,pIdx,friendly=false){
@@ -1262,7 +1341,7 @@ function startBattle(enemyName,enemyBanStyle){
       try {
         const cont=document.getElementById('cvs-c');if(!cont)return;
         cw=cont.clientWidth||window.innerWidth||360;
-        ch=cont.clientHeight||(window.innerHeight-160)||530;
+        ch=cont.clientHeight||(window.innerHeight-176)||530;
         canvas=document.getElementById('gc');
         if(canvas){canvas.width=cw;canvas.height=ch;ctx=canvas.getContext('2d');}
         elixir=5;ents=[];projs=[];parts=[];
@@ -1295,8 +1374,24 @@ function startBattle(enemyName,enemyBanStyle){
         const bE=document.getElementById('bban-e'),bP=document.getElementById('bban-p');
         const eqB=BANNERS.find(b=>b.id===(U.equippedBanner||'blue'))||BANNERS[0];
         const mH=(U.equippedMedals||[]).map(m=>{if(!m)return'';const med=MEDALS.find(x=>x.id===m);return med?`<span style="font-size:12px;">${med.ic}</span>`:''}).join('');
-        if(bE){bE.style.background=enemyBanStyle;bE.textContent=enemyName;bE.classList.remove('anim');}
-        if(bP){bP.style.background=eqB.s;bP.innerHTML=`<span style="display:flex;align-items:center;gap:3px;">${U.nickname} ${mH}</span>`;bP.classList.remove('anim');}
+        
+        if(bE){
+          bE.style.background=enemyBanStyle;
+          bE.classList.remove('anim');
+          const eN = document.getElementById('bban-e-name');
+          const eT = document.getElementById('bban-e-tr');
+          if(eN) eN.innerHTML = `${isMP?'Противник':botName} ${isMP?'':botMedalsHTML}`;
+          if(eT) eT.textContent = `🏆 ${isMP?'?':botTrophies}`;
+        }
+        if(bP){
+          bP.style.background=eqB.s;
+          bP.classList.remove('anim');
+          const pN = document.getElementById('bban-p-name');
+          const pT = document.getElementById('bban-p-tr');
+          if(pN) pN.innerHTML = `${U.nickname} ${mH}`;
+          if(pT) pT.textContent = `🏆 ${U.trophies||0}`;
+        }
+        
         requestAnimationFrame(()=>{if(bE)bE.classList.add('anim');if(bP)bP.classList.add('anim');});
 
         questProg('play',1);
@@ -1335,7 +1430,8 @@ function renderHand(){
   for(let i=0;i<4;i++){
     if(!bHand[i])continue;const ci=CARDS.find(c=>c.id===bHand[i]);if(!ci)continue;
     const data=U.cards[ci.id]||{level:1};const ok=elixir>=ci.c;
-    cont.innerHTML+=`<div class="gc ${ok?'can':'cant'}" data-i="${i}"><div class="ecost">${ci.c}</div><div class="gc-icon">${ci.ic}</div><div class="gc-name">${ci.n}</div><div style="color:var(--ac);font-size:8px;font-weight:800;font-family:'Orbitron',sans-serif;">Лвл ${data.level}</div></div>`;
+    const isFoil = data.level>=8;
+    cont.innerHTML+=`<div class="gc rr-${ci.rr} ${ok?'can':'cant'} ${isFoil?'foil':''}" data-i="${i}">${isFoil?'<div class="foil-fx"></div>':''}<div class="ecost">${ci.c}</div><div class="gc-icon">${ci.ic}</div><div class="gc-name">${ci.n}</div><div style="color:var(--ac);font-size:9px;font-weight:800;font-family:'Orbitron',sans-serif;position:relative;z-index:2;">Лвл ${data.level}</div></div>`;
   }
 }
 
@@ -1440,9 +1536,9 @@ function showEmote(id,str){const el=document.getElementById(id);if(!el)return;el
 
 function botAI(){
   if(isBotFrozen)return;
-  botElix=Math.min(10,botElix+0.008);botCd++;
+  botElix=Math.min(10,botElix+(isOvertime ? 0.016 : 0.008)); botCd++;
   const skill=Math.min(1,U.trophies/5000);
-  const delay=Math.max(175,420-skill*240);
+  const delay=Math.max(175,420-skill*240)/(isOvertime ? 2 : 1);
   if(botCd<delay||Math.random()>0.65+skill*0.3)return;
   if(Math.random()<0.1)botDeck.sort(()=>Math.random()-.5);
   let chosen=null;
@@ -1471,7 +1567,7 @@ function updateGame(){
   if(freezeCd>0){freezeCd--;if(freezeCd===0)isBotFrozen=false;}
   ents.forEach(e=>{if(e.frozen>0)e.frozen--;});
   towers.forEach(t=>{if(t.frozen>0)t.frozen--;});
-  if(elixir<10)elixir+=0.008;
+  if(elixir<10)elixir+=(isOvertime ? 0.016 : 0.008);
   updateElixUI();
   const left=Math.max(0,Math.ceil((bEndTime-Date.now())/1000));
   if(!isTieBreaker){
@@ -1482,7 +1578,9 @@ function updateGame(){
       const pt=towers.filter(t=>t.team===0).length,et=towers.filter(t=>t.team===1).length;
       if(!isOvertime){
         if(pt!==et){endBattle(pt>et);return;}
-        isOvertime=true;bEndTime=Date.now()+60000;notify('⏰ Доп. время!','inf');ss('btimer','color','#e8415a');
+        isOvertime=true;bEndTime=Date.now()+60000;
+        notify('⏰ Доп. время! Эликсир х2!','inf');
+        ss('btimer','color','#e8415a');
       }else{
         if(pt!==et){endBattle(pt>et);return;}
         isTieBreaker=true;notify('💀 Тай-брейк!','inf');
@@ -1673,7 +1771,7 @@ function endBattle(win){
   const pBan=BANNERS.find(b=>b.id===(U.equippedBanner||'blue'))||BANNERS[0];
   const eBan=botBanner||BANNERS[0];
   ss('en-color','background',eBan.s);ss('ep-color','background',pBan.s);
-  st('en-name',isMP?'Противник':botName);st('ep-name',U.nickname);
+  st('en-name-end',isMP?'Противник':botName);st('ep-name-end',U.nickname);
 
   try {
     if(!isTut&&U){
@@ -1717,7 +1815,7 @@ function exitBattle(){
     if(isTut){isTut=false;ss('m-nick','display','flex');}
     else{
       ss('topbar','display','flex');ss('mainnav','display','flex');
-      nav('s-main',2);updateUI(); // Индекс Боя = 2
+      nav('s-main',2);updateUI();
       if(winChestPending){winChestPending=false;setTimeout(()=>genChest('g'),600);}
     }
   });
@@ -1725,3 +1823,4 @@ function exitBattle(){
 </script>
 </body>
 </html>
+
