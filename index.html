@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -35,137 +34,137 @@ html, body {
 @keyframes seasonGlow{0%,100%{box-shadow:0 0 20px rgba(245,197,24,0.3)}50%{box-shadow:0 0 40px rgba(245,197,24,0.6)}}
 
 #app-cover {
-position: fixed; inset: 0; background: var(–bg); z-index: 19000;
-transition: opacity 0.4s ease; pointer-events: none;
+  position: fixed; inset: 0; background: var(--bg); z-index: 19000;
+  transition: opacity 0.4s ease; pointer-events: none;
 }
 #toast-c{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:88%;max-width:350px}
 .toast{background:rgba(232,65,90,.95);color:#fff;padding:13px 18px;border-radius:12px;font-size:14px;font-weight:700;animation:slideUp .3s forwards;text-align:center}
 .toast.ok{background:rgba(46,189,107,.95)}.toast.inf{background:rgba(61,155,233,.95)}
 #intro{position:fixed;inset:0;background:#000;z-index:20000;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none}
-#intro h1{font-family:‘Orbitron’,sans-serif;color:#fff;font-size:36px;font-weight:900;letter-spacing:3px;text-align:center}
+#intro h1{font-family:'Orbitron',sans-serif;color:#fff;font-size:36px;font-weight:900;letter-spacing:3px;text-align:center}
 #intro p{color:rgba(255,255,255,.3);font-size:13px;letter-spacing:5px;margin-top:10px;text-transform:uppercase}
 #loading{position:fixed;inset:0;background:radial-gradient(ellipse at top,#182540,#0a0d14);z-index:15000;display:none;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:90px}
-#loading h1{position:absolute;top:22%;font-family:‘Orbitron’,sans-serif;font-size:46px;font-weight:900;color:#fff;text-align:center;line-height:1.1}
-#loading h1 span{color:var(–ac)}
+#loading h1{position:absolute;top:22%;font-family:'Orbitron',sans-serif;font-size:46px;font-weight:900;color:#fff;text-align:center;line-height:1.1}
+#loading h1 span{color:var(--ac)}
 .lbar{width:260px;height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
-#lprog{height:100%;background:linear-gradient(90deg,var(–pr),var(–ac));width:0%;transition:width .2s;border-radius:4px}
+#lprog{height:100%;background:linear-gradient(90deg,var(--pr),var(--ac));width:0%;transition:width .2s;border-radius:4px}
 #ltxt{color:rgba(255,255,255,.4);font-size:12px;margin-top:14px;letter-spacing:2px}
-.topbar{position:fixed;top:0;left:0;width:100%;height:var(–top);background:rgba(18,19,26,.96);display:flex;justify-content:space-between;align-items:center;padding:0 14px;z-index:2000;border-bottom:1px solid var(–br);backdrop-filter:blur(8px)}
-.tstat{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;background:var(–panel);padding:7px 14px;border-radius:20px;border:1px solid var(–br)}
-nav{position:fixed;bottom:0;left:0;width:100%;height:var(–nav);background:rgba(18,19,26,.97);display:flex;justify-content:space-around;align-items:center;z-index:2000;border-top:1px solid var(–br);backdrop-filter:blur(8px);padding-bottom:env(safe-area-inset-bottom, 0);}
-.nb{padding:9px 4px;font-size:10px;text-align:center;cursor:pointer;opacity:.4;transition:.2s;text-transform:uppercase;color:var(–tx);font-weight:700;flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;letter-spacing:.4px}
-.nb.active{opacity:1;color:var(–pr)}.ni{font-size:24px;transition:.2s}
+.topbar{position:fixed;top:0;left:0;width:100%;height:var(--top);background:rgba(18,19,26,.96);display:flex;justify-content:space-between;align-items:center;padding:0 14px;z-index:2000;border-bottom:1px solid var(--br);backdrop-filter:blur(8px)}
+.tstat{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;background:var(--panel);padding:7px 14px;border-radius:20px;border:1px solid var(--br)}
+nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(18,19,26,.97);display:flex;justify-content:space-around;align-items:center;z-index:2000;border-top:1px solid var(--br);backdrop-filter:blur(8px);padding-bottom:env(safe-area-inset-bottom, 0);}
+.nb{padding:9px 4px;font-size:10px;text-align:center;cursor:pointer;opacity:.4;transition:.2s;text-transform:uppercase;color:var(--tx);font-weight:700;flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;letter-spacing:.4px}
+.nb.active{opacity:1;color:var(--pr)}.ni{font-size:24px;transition:.2s}
 .scr {
-display: block; width: 100%;
-position: absolute !important;
-top: var(–top) !important;
-bottom: var(–nav) !important;
-left: 0; right: 0; height: auto !important;
-background: var(–bg);
-overflow-y: auto !important;
-overflow-x: hidden !important;
--webkit-overflow-scrolling: touch;
-padding-top: 10px; padding-bottom: 25px;
-transition: transform .28s cubic-bezier(.4,0,.2,1), opacity .28s ease;
-opacity: 0; transform: translateX(100%); pointer-events: none; z-index: 1;
+  display: block; width: 100%;
+  position: absolute !important; 
+  top: var(--top) !important; 
+  bottom: var(--nav) !important; 
+  left: 0; right: 0; height: auto !important;
+  background: var(--bg);
+  overflow-y: auto !important; 
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 10px; padding-bottom: 25px;
+  transition: transform .28s cubic-bezier(.4,0,.2,1), opacity .28s ease;
+  opacity: 0; transform: translateX(100%); pointer-events: none; z-index: 1;
 }
 .scr.active{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2}
 .scr.past{transform:translateX(-100%);opacity:0;pointer-events:none}
 #s-main {
-overflow: hidden !important;
-display: flex !important;
-flex-direction: column;
-justify-content: space-evenly;
-align-items: center;
-padding: 5px 0 !important;
+  overflow: hidden !important; 
+  display: flex !important; 
+  flex-direction: column; 
+  justify-content: space-evenly; 
+  align-items: center; 
+  padding: 5px 0 !important; 
 }
 #arenabox {
-width: 92%; max-width: 440px; aspect-ratio: 16/9; max-height: 25vh;
-position: relative; border-radius: 18px; border: 1.5px solid rgba(255,255,255,.1);
-overflow: hidden; margin: 0 auto; flex-shrink: 1;
+  width: 92%; max-width: 440px; aspect-ratio: 16/9; max-height: 25vh;
+  position: relative; border-radius: 18px; border: 1.5px solid rgba(255,255,255,.1);
+  overflow: hidden; margin: 0 auto; flex-shrink: 1;
 }
 .arenaoverlay { position: absolute; inset: 0; background: linear-gradient(to bottom,rgba(0,0,0,.07),rgba(0,0,0,.62)); z-index: 1; }
 .arenacont { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.arenatit { font-family: ‘Orbitron’,sans-serif; color: #fff; font-size: 28px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,.8); text-align: center; margin: 0; }
+.arenatit { font-family: 'Orbitron',sans-serif; color: #fff; font-size: 28px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,.8); text-align: center; margin: 0; }
 .arenadesc { color: rgba(255,255,255,.8); font-size: 14px; font-weight: 700; margin-top: 6px; margin-bottom: 0; }
 #s-pass { overflow: hidden !important; padding: 0 !important; }
 #pass-wrap {
-position: absolute; top: 0; bottom: 0; left: 0; right: 0;
-width: 100%; height: 100%;
-overflow-y: auto; overflow-x: hidden;
--webkit-overflow-scrolling: touch; z-index: 1;
+  position: absolute; top: 0; bottom: 0; left: 0; right: 0;
+  width: 100%; height: 100%;
+  overflow-y: auto; overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; z-index: 1;
 }
 #pass-canvas { display: block; max-width: 100%; }
 #pass-layer { position: absolute; top: 0; left: 0; width: 100%; z-index: 5; pointer-events: none; }
 #pass-controls {
-position: absolute; top: 8px; left: 0; right: 0;
-display: flex; justify-content: space-between; align-items: center;
-padding: 0 13px; z-index: 200; pointer-events: none;
+  position: absolute; top: 8px; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 13px; z-index: 200; pointer-events: none;
 }
 #pass-controls > * { pointer-events: auto; }
 #qpanel {
-position: absolute; bottom: -2px; left: 0; right: 0;
-background: var(–panel); border-top: 1px solid var(–br);
-z-index: 3000; max-height: 65vh; overflow-y: auto;
-transform: translateY(105%); transition: transform .3s cubic-bezier(.4,0,.2,1);
-border-radius: 18px 18px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,.6);
+  position: absolute; bottom: -2px; left: 0; right: 0;
+  background: var(--panel); border-top: 1px solid var(--br);
+  z-index: 3000; max-height: 65vh; overflow-y: auto;
+  transform: translateY(105%); transition: transform .3s cubic-bezier(.4,0,.2,1);
+  border-radius: 18px 18px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,.6);
 }
 #qpanel.open { transform: translateY(0); }
 
 /* SEASON BLOCK */
 .season-block {
-width: 100%;
-padding: 28px 20px 20px;
-display: flex;
-flex-direction: column;
-align-items: center;
-background: linear-gradient(135deg, #0d1a0a 0%, #1a2e10 40%, #0a1f1a 100%);
-border-top: 2px solid rgba(46,189,107,0.4);
-position: relative;
-overflow: hidden;
+  width: 100%;
+  padding: 28px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #0d1a0a 0%, #1a2e10 40%, #0a1f1a 100%);
+  border-top: 2px solid rgba(46,189,107,0.4);
+  position: relative;
+  overflow: hidden;
 }
 .season-block::before {
-content: ‘’;
-position: absolute;
-inset: 0;
-background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(46,189,107,0.03) 20px, rgba(46,189,107,0.03) 40px);
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(46,189,107,0.03) 20px, rgba(46,189,107,0.03) 40px);
 }
 .season-label {
-font-family: ‘Orbitron’, sans-serif;
-font-size: 28px;
-font-weight: 900;
-letter-spacing: 6px;
-color: #fff;
-text-shadow: 0 0 20px rgba(46,189,107,0.8), 0 0 40px rgba(46,189,107,0.4);
-position: relative;
-z-index: 2;
-animation: seasonGlow 2s ease-in-out infinite;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(46,189,107,0.8), 0 0 40px rgba(46,189,107,0.4);
+  position: relative;
+  z-index: 2;
+  animation: seasonGlow 2s ease-in-out infinite;
 }
 .season-sub {
-font-size: 12px;
-color: rgba(255,255,255,0.4);
-letter-spacing: 4px;
-text-transform: uppercase;
-margin-top: 6px;
-position: relative;
-z-index: 2;
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  position: relative;
+  z-index: 2;
 }
 .season-icon-row {
-display: flex;
-gap: 12px;
-margin-top: 14px;
-font-size: 24px;
-position: relative;
-z-index: 2;
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+  font-size: 24px;
+  position: relative;
+  z-index: 2;
 }
 .season-bar {
-width: 80%;
-height: 3px;
-background: linear-gradient(90deg, transparent, rgba(46,189,107,0.7), transparent);
-margin-top: 16px;
-border-radius: 2px;
-position: relative;
-z-index: 2;
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(46,189,107,0.7), transparent);
+  margin-top: 16px;
+  border-radius: 2px;
+  position: relative;
+  z-index: 2;
 }
 
 .rr-c { border: 1.5px solid rgba(255,255,255,0.15) !important; }
@@ -175,82 +174,82 @@ z-index: 2;
 .foil { border-color: #f5c518 !important; overflow: hidden !important; box-shadow: 0 0 15px rgba(245,197,24,0.5) !important; }
 .foil-fx { position: absolute; top: -50%; bottom: -50%; width: 150%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); transform: rotate(25deg); animation: foilSweep 3s infinite ease-in-out; pointer-events: none; z-index: 5; }
 .rbubble { position: absolute; display: flex; flex-direction: column; align-items: center; cursor: pointer; transform: translate(-50%,-50%); pointer-events: auto; z-index: 10; }
-.rbubble .rib{width:56px;height:56px;border-radius:50%;background:var(–p2);border:2px solid var(–br);display:flex;align-items:center;justify-content:center;font-size:24px;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.rbubble.canclaim .rib{border-color:var(–ac);background:rgba(245,197,24,.15);box-shadow:0 0 12px rgba(245,197,24,.4)}
-.rbubble.claimed .rib{border-color:var(–ok);opacity:.5;font-size:20px}
+.rbubble .rib{width:56px;height:56px;border-radius:50%;background:var(--p2);border:2px solid var(--br);display:flex;align-items:center;justify-content:center;font-size:24px;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.rbubble.canclaim .rib{border-color:var(--ac);background:rgba(245,197,24,.15);box-shadow:0 0 12px rgba(245,197,24,.4)}
+.rbubble.claimed .rib{border-color:var(--ok);opacity:.5;font-size:20px}
 .rbubble .rlbl{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;white-space:nowrap;font-weight:700;text-align:center}
-.rbubble.canclaim .rlbl{color:var(–ac)}
+.rbubble.canclaim .rlbl{color:var(--ac)}
 .ov{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);z-index:4500;flex-direction:column;justify-content:center;align-items:center;backdrop-filter:blur(4px)}
-.mbox{width:92%;max-width:420px;background:var(–panel);border-radius:20px;border:1px solid var(–br);overflow:hidden;display:flex;flex-direction:column;max-height:88vh;animation:popIn .3s ease forwards;box-shadow:0 20px 60px rgba(0,0,0,.7)}
-.bigbtn{width:250px;height:64px;background:linear-gradient(145deg,#f5c518,#d4810a);border:none;border-radius:15px;color:#1a1000;font-family:‘Orbitron’,sans-serif;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.4);transition:.1s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px}
+.mbox{width:92%;max-width:420px;background:var(--panel);border-radius:20px;border:1px solid var(--br);overflow:hidden;display:flex;flex-direction:column;max-height:88vh;animation:popIn .3s ease forwards;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.bigbtn{width:250px;height:64px;background:linear-gradient(145deg,#f5c518,#d4810a);border:none;border-radius:15px;color:#1a1000;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.4);transition:.1s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px}
 .bigbtn:active{transform:translateY(5px);box-shadow:0 0 0}
 .bigbtn.sd{background:linear-gradient(145deg,#e8415a,#9d1828);color:#fff;font-size:14px;height:54px;margin-top:8px;box-shadow:0 5px 0 rgba(0,0,0,.4)}
-.pbtn{width:100%;padding:12px;border-radius:12px;border:none;background:var(–pr);color:#fff;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;transition:.15s;text-transform:uppercase;letter-spacing:.5px}
+.pbtn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--pr);color:#fff;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;transition:.15s;text-transform:uppercase;letter-spacing:.5px}
 .pbtn:active{transform:scale(.96)}.pbtn:disabled{background:#2a2d45;color:rgba(255,255,255,.2);cursor:not-allowed}
-.pbtn.ok{background:var(–ok)!important}.pbtn.dn{background:var(–dn)!important}
+.pbtn.ok{background:var(--ok)!important}.pbtn.dn{background:var(--dn)!important}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:11px;padding:13px}
-.ci{background:linear-gradient(155deg,#2a2d45,#1e2030);border-radius:14px;border:1.5px solid var(–br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;height:180px;cursor:pointer;transition:.2s}
+.ci{background:linear-gradient(155deg,#2a2d45,#1e2030);border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;height:180px;cursor:pointer;transition:.2s}
 .ci:active{transform:scale(.96)}.ci.locked{filter:grayscale(1) brightness(.4);height:120px;justify-content:center;pointer-events:none}
-.ci.sel{border-color:var(–ac) !important; box-shadow: 0 0 10px rgba(245,197,24,0.5) !important;}
+.ci.sel{border-color:var(--ac) !important; box-shadow: 0 0 10px rgba(245,197,24,0.5) !important;}
 .ci.fav-sel{border-color:#ff6b9d !important; box-shadow: 0 0 12px rgba(255,107,157,0.6) !important;}
 .cicon{font-size:38px;margin-bottom:4px;position:relative;z-index:2;}
 .cname{font-size:13px;font-weight:700;color:#fff;width:100%;line-height:1.2;text-align:center;position:relative;z-index:2;}
-.clvl{position:absolute;top:-8px;right:-8px;background:var(–bg);color:var(–ac);border:1.5px solid var(–ac);border-radius:8px;padding:3px 6px;font-size:10px;font-weight:900;font-family:‘Orbitron’,sans-serif;z-index:10;}
+.clvl{position:absolute;top:-8px;right:-8px;background:var(--bg);color:var(--ac);border:1.5px solid var(--ac);border-radius:8px;padding:3px 6px;font-size:10px;font-weight:900;font-family:'Orbitron',sans-serif;z-index:10;}
 .cpb{width:100%;height:8px;background:rgba(0,0,0,.4);border-radius:4px;overflow:hidden;margin-top:auto;margin-bottom:3px;position:relative;z-index:2;}
-.cpbf{height:100%;background:linear-gradient(90deg,var(–ok),#5ef09a);border-radius:4px;transition:width .3s}
+.cpbf{height:100%;background:linear-gradient(90deg,var(--ok),#5ef09a);border-radius:4px;transition:width .3s}
 .cpt{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px;position:relative;z-index:2;}
-.sec{background:rgba(0,0,0,.22);border-radius:15px;padding:11px;margin:11px 15px;border:1px solid var(–br)}
+.sec{background:rgba(0,0,0,.22);border-radius:15px;padding:11px;margin:11px 15px;border:1px solid var(--br)}
 .stit{text-align:center;color:rgba(255,255,255,.38);font-size:11px;margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px}
 .cslot{width:46px;height:46px;background:rgba(0,0,0,.3);border-radius:12px;border:1.5px dashed rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(255,255,255,.18);transition:.3s}
-.cslot.filled{border-style:solid;border-color:var(–ac);background:rgba(245,197,24,.1)}
-.mfbtn{flex:1;padding:11px 6px;background:var(–panel);border:1px solid var(–br);border-radius:13px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;font-size:13px;font-weight:700;transition:.15s;text-align:center}
+.cslot.filled{border-style:solid;border-color:var(--ac);background:rgba(245,197,24,.1)}
+.mfbtn{flex:1;padding:11px 6px;background:var(--panel);border:1px solid var(--br);border-radius:13px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;font-size:13px;font-weight:700;transition:.15s;text-align:center}
 .mfbtn:active{transform:scale(.97)}
-.dtabs{display:flex;border-bottom:1px solid var(–br)}
+.dtabs{display:flex;border-bottom:1px solid var(--br)}
 .dtab{flex:1;font-size:13px;font-weight:800;color:rgba(255,255,255,.4);cursor:pointer;transition:.2s;padding:14px 0;text-align:center;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid transparent}
-.dtab.active{color:#fff;border-bottom-color:var(–pr)}
-.qcard{background:var(–p2);border-radius:13px;padding:13px;border:1px solid var(–br);margin-bottom:10px}
+.dtab.active{color:#fff;border-bottom-color:var(--pr)}
+.qcard{background:var(--p2);border-radius:13px;padding:13px;border:1px solid var(--br);margin-bottom:10px}
 .qpb{width:100%;height:6px;background:rgba(0,0,0,.4);border-radius:3px;overflow:hidden;margin:8px 0 6px}
-.qpbf{height:100%;background:linear-gradient(90deg,var(–pr),var(–ac));border-radius:3px;transition:width .5s ease}
-.fbox{background:var(–panel);border:1px solid var(–br);border-radius:20px;width:92%;max-width:420px;display:flex;flex-direction:column;overflow:hidden;animation:popIn .3s ease forwards;max-height:88vh;box-shadow:0 20px 60px rgba(0,0,0,.7)}
-.finput{background:rgba(0,0,0,.4);color:#fff;border:1.5px solid var(–br);padding:13px 16px;border-radius:12px;width:100%;font-size:15px;outline:none;margin-bottom:12px;font-family:‘Exo 2’,sans-serif}
-.finput:focus{border-color:var(–pr)}
-.fbtn{background:var(–pr);color:#fff;border-radius:12px;border:none;padding:13px;font-weight:700;text-transform:uppercase;cursor:pointer;width:100%;margin-bottom:11px;font-size:13px}
+.qpbf{height:100%;background:linear-gradient(90deg,var(--pr),var(--ac));border-radius:3px;transition:width .5s ease}
+.fbox{background:var(--panel);border:1px solid var(--br);border-radius:20px;width:92%;max-width:420px;display:flex;flex-direction:column;overflow:hidden;animation:popIn .3s ease forwards;max-height:88vh;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.finput{background:rgba(0,0,0,.4);color:#fff;border:1.5px solid var(--br);padding:13px 16px;border-radius:12px;width:100%;font-size:15px;outline:none;margin-bottom:12px;font-family:'Exo 2',sans-serif}
+.finput:focus{border-color:var(--pr)}
+.fbtn{background:var(--pr);color:#fff;border-radius:12px;border:none;padding:13px;font-weight:700;text-transform:uppercase;cursor:pointer;width:100%;margin-bottom:11px;font-size:13px}
 .fbtn:active{transform:scale(.97)}
 .ftab{flex:1;text-align:center;padding:14px;cursor:pointer;font-weight:700;color:rgba(255,255,255,.4);font-size:12px;text-transform:uppercase;border-bottom:2px solid transparent;transition:.2s}
-.ftab.active{color:#fff;border-bottom-color:var(–pr);background:rgba(61,155,233,.07)}
-.fitem{display:flex;justify-content:space-between;align-items:center;background:var(–p2);padding:12px 14px;border-radius:13px;margin-bottom:10px;border:1px solid var(–br)}
-.ainput{width:100%;padding:14px;margin-bottom:13px;border-radius:12px;border:1.5px solid var(–br);background:rgba(0,0,0,.4);color:#fff;font-size:15px;outline:none;font-family:‘Exo 2’,sans-serif}
-.ainput:focus{border-color:var(–pr)}
-.scard{background:var(–p2);border-radius:15px;border:1px solid var(–br);padding:15px;margin-bottom:11px}
-.srow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(–br)}
+.ftab.active{color:#fff;border-bottom-color:var(--pr);background:rgba(61,155,233,.07)}
+.fitem{display:flex;justify-content:space-between;align-items:center;background:var(--p2);padding:12px 14px;border-radius:13px;margin-bottom:10px;border:1px solid var(--br)}
+.ainput{width:100%;padding:14px;margin-bottom:13px;border-radius:12px;border:1.5px solid var(--br);background:rgba(0,0,0,.4);color:#fff;font-size:15px;outline:none;font-family:'Exo 2',sans-serif}
+.ainput:focus{border-color:var(--pr)}
+.scard{background:var(--p2);border-radius:15px;border:1px solid var(--br);padding:15px;margin-bottom:11px}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--br)}
 .srow:last-child{border-bottom:none}.slbl{color:rgba(255,255,255,.5);font-size:13px}
-.sval{font-weight:800;font-size:15px;font-family:‘Orbitron’,sans-serif}
-.lbi{display:flex;align-items:center;background:var(–p2);padding:12px 14px;margin-bottom:7px;border-radius:13px;border:1px solid var(–br);animation:fadeIn .3s ease}
-.lbr{font-family:‘Orbitron’,sans-serif;font-size:15px;font-weight:900;width:30px;flex-shrink:0}
-.lbr.gold{color:var(–ac)}.lbr.silver{color:#aaa}.lbr.bronze{color:#c87d4a}
+.sval{font-weight:800;font-size:15px;font-family:'Orbitron',sans-serif}
+.lbi{display:flex;align-items:center;background:var(--p2);padding:12px 14px;margin-bottom:7px;border-radius:13px;border:1px solid var(--br);animation:fadeIn .3s ease}
+.lbr{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;width:30px;flex-shrink:0}
+.lbr.gold{color:var(--ac)}.lbr.silver{color:#aaa}.lbr.bronze{color:#c87d4a}
 .mslot{width:46px;height:46px;border-radius:50%;border:2px dashed rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.22);cursor:pointer;font-size:20px;transition:.2s}
-.mslot.filled{border:2px solid var(–ac);background:rgba(245,197,24,.08)}
+.mslot.filled{border:2px solid var(--ac);background:rgba(245,197,24,.08)}
 .mitem{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,#f5c518,#c87d0a);border:2px solid rgba(245,197,24,.3);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;filter:grayscale(1) brightness(.4);transition:.2s}
-.mitem.unl{filter:none}.mitem.eq{border-color:var(–ok);transform:scale(1.1)}
+.mitem.unl{filter:none}.mitem.eq{border-color:var(--ok);transform:scale(1.1)}
 .eslot{width:46px;height:46px;border-radius:12px;border:1.5px dashed rgba(255,255,255,.18);background:rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:.2s}
-.eslot.filled{border-color:var(–pr);background:rgba(61,155,233,.08)}
+.eslot.filled{border-color:var(--pr);background:rgba(61,155,233,.08)}
 #chest-ov{z-index:7000}
 .chestbox{font-size:120px;display:flex;align-items:center;justify-content:center;cursor:pointer;animation:pulse 1.5s infinite}
 .chestrev{display:none;flex-direction:column;align-items:center;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275)}
 .xpwrap{width:100%;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-top:4px}
-.xpfill{height:100%;background:linear-gradient(90deg,var(–pr),var(–pu));border-radius:3px;transition:width .5s ease}
+.xpfill{height:100%;background:linear-gradient(90deg,var(--pr),var(--pu));border-radius:3px;transition:width .5s ease}
 
 /* БОЙ */
 #bscr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease}
 #bscr.active{display:flex;opacity:1}
 #cvs-c{flex:1;width:100%;position:relative;overflow:hidden}
 canvas{display:block;width:100%;height:100%;touch-action:none}
-#btimer{position:absolute;top:12px;left:12px;z-index:2600;background:rgba(0,0,0,.65);border-radius:10px;padding:6px 14px;color:#fff;font-family:‘Orbitron’,sans-serif;font-size:18px;font-weight:900;pointer-events:none;backdrop-filter:blur(4px)}
-#bscore{position:absolute;top:12px;right:12px;z-index:2600;background:rgba(0,0,0,.65);border-radius:10px;padding:6px 14px;color:#fff;font-family:‘Orbitron’,sans-serif;font-size:18px;font-weight:900;pointer-events:none;backdrop-filter:blur(4px);display:flex;gap:5px;align-items:center}
+#btimer{position:absolute;top:12px;left:12px;z-index:2600;background:rgba(0,0,0,.65);border-radius:10px;padding:6px 14px;color:#fff;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;pointer-events:none;backdrop-filter:blur(4px)}
+#bscore{position:absolute;top:12px;right:12px;z-index:2600;background:rgba(0,0,0,.65);border-radius:10px;padding:6px 14px;color:#fff;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;pointer-events:none;backdrop-filter:blur(4px);display:flex;gap:5px;align-items:center}
 #emote-btn{position:absolute;bottom:185px;left:12px;width:40px;height:40px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);border-radius:50%;font-size:18px;display:flex;justify-content:center;align-items:center;z-index:2600;cursor:pointer;pointer-events:auto}
 #emote-panel{display:none;position:absolute;bottom:235px;left:12px;background:rgba(0,0,0,.82);border:1px solid rgba(255,255,255,.14);border-radius:15px;padding:9px;flex-direction:column;gap:7px;z-index:2600;animation:popIn .2s ease;pointer-events:auto}
 .ebubble{position:absolute;background:rgba(255,255,255,.94);border-radius:15px;padding:6px 12px;font-size:26px;z-index:2500;display:none;box-shadow:0 4px 10px rgba(0,0,0,.4)}
-#dghost{position:fixed;pointer-events:none;z-index:9000;width:76px;height:112px;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:2px solid var(–pr);display:none;flex-direction:column;align-items:center;justify-content:center;opacity:.88;transform:translate(-50%,-50%)}
+#dghost{position:fixed;pointer-events:none;z-index:9000;width:76px;height:112px;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:2px solid var(--pr);display:none;flex-direction:column;align-items:center;justify-content:center;opacity:.88;transform:translate(-50%,-50%)}
 #dg-icon{font-size:36px;pointer-events:none}
 #dg-name{font-size:10px;font-weight:700;color:rgba(255,255,255,.8);text-align:center;margin-top:3px;pointer-events:none}
 .bui{flex:0 0 176px;width:100%;height:176px;background:rgba(10,11,18,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 10px;border-top:1px solid rgba(255,255,255,.07);position:relative;z-index:10;box-sizing:border-box}
@@ -258,7 +257,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .elsegs{flex:1;display:flex;gap:3px;height:15px}
 .elseg{flex:1;border-radius:4px;background:rgba(255,255,255,.07);transition:background .12s}
 .elseg.on{background:#9b5de5}.elseg.half{background:rgba(155,93,229,.4)}
-.elcnt{font-family:‘Orbitron’,sans-serif;font-size:15px;font-weight:900;color:#c084fc;min-width:24px;text-align:right}
+.elcnt{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#c084fc;min-width:24px;text-align:right}
 .hand{display:flex;flex-direction:row;gap:10px;justify-content:center;align-items:center;width:100%;overflow:visible;height:116px}
 .gc{width:76px;height:112px;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,background .15s}
 .gc.can{border-color:rgba(61,155,233,.6);background:linear-gradient(155deg,#2e3550,#1e2540)}
@@ -266,30 +265,27 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .gc.flash{animation:flashRed .3s ease 3}
 .gc-icon{font-size:36px;line-height:1;margin-bottom:4px;pointer-events:none;position:relative;z-index:2;}
 .gc-name{color:rgba(255,255,255,.8);font-size:10px;font-weight:700;text-align:center;line-height:1.15;width:94%;pointer-events:none;position:relative;z-index:2;}
-.ecost{position:absolute;top:-8px;left:-8px;background:var(–pu);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;border:1.5px solid rgba(255,255,255,.22);z-index:10;color:#fff;font-family:‘Orbitron’,sans-serif;pointer-events:none}
+.ecost{position:absolute;top:-8px;left:-8px;background:var(--pu);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;border:1.5px solid rgba(255,255,255,.22);z-index:10;color:#fff;font-family:'Orbitron',sans-serif;pointer-events:none}
 #bend{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.96);z-index:9999;flex-direction:column;justify-content:center;align-items:center;opacity:0;transition:opacity .5s}
 #bend.active{display:flex;opacity:1}
-.ebanner{display:flex;align-items:center;width:92%;max-width:420px;margin:6px 0;background:var(–panel);border:1px solid var(–br);border-radius:15px;overflow:hidden;height:58px;animation:popIn .5s ease}
+.ebanner{display:flex;align-items:center;width:92%;max-width:420px;margin:6px 0;background:var(--panel);border:1px solid var(--br);border-radius:15px;overflow:hidden;height:58px;animation:popIn .5s ease}
 .ebc{width:16px;height:100%}.ebi{flex:1;padding:0 14px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px}
-.etro{font-size:18px;font-weight:900;font-family:‘Orbitron’,sans-serif}
-.etro.win{color:var(–ok)}.etro.lose{color:var(–dn)}.etro.tie{color:var(–ac)}
-.bban{position:absolute;width:260px;height:58px;display:flex;align-items:center;font-size:14px;font-weight:800;color:#fff;text-shadow:1px 1px 3px rgba(0,0,0,.8);z-index:2600;text-transform:uppercase;padding:0 18px;pointer-events:none;font-family:‘Exo 2’,sans-serif}
+.etro{font-size:18px;font-weight:900;font-family:'Orbitron',sans-serif}
+.etro.win{color:var(--ok)}.etro.lose{color:var(--dn)}.etro.tie{color:var(--ac)}
+.bban{position:absolute;width:260px;height:58px;display:flex;align-items:center;font-size:14px;font-weight:800;color:#fff;text-shadow:1px 1px 3px rgba(0,0,0,.8);z-index:2600;text-transform:uppercase;padding:0 18px;pointer-events:none;font-family:'Exo 2',sans-serif}
 .bban-e{top:55px;right:-320px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,14% 50%);justify-content:flex-end}
 .bban-p{bottom:165px;left:-320px;clip-path:polygon(0 0,100% 0,86% 50%,100% 100%,0 100%);justify-content:flex-start}
 .bban-e.anim{animation:slideBannerE 3s forwards}
 .bban-p.anim{animation:slideBannerP 3s forwards}
 #mmov{z-index:5500}
-.mmdot span{display:inline-block;width:10px;height:10px;background:var(–pr);border-radius:50%;margin:0 4px;animation:mmPulse .8s ease-in-out infinite}
+.mmdot span{display:inline-block;width:10px;height:10px;background:var(--pr);border-radius:50%;margin:0 4px;animation:mmPulse .8s ease-in-out infinite}
 .mmdot span:nth-child(2){animation-delay:.15s}.mmdot span:nth-child(3){animation-delay:.3s}
 
 /* Fav card badge */
 .fav-badge{position:absolute;top:-8px;left:-8px;background:#ff6b9d;color:#fff;border-radius:8px;padding:2px 6px;font-size:9px;font-weight:900;z-index:10;border:1.5px solid rgba(255,255,255,.3);}
 </style>
-
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-
 </head>
 <body>
 
@@ -300,31 +296,26 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <div id="loading"><h1>CLASH<br><span>ARENA</span></h1><div class="lbar"><div id="lprog"></div></div><div id="ltxt">ИНИЦИАЛИЗАЦИЯ...</div></div>
 
 <!-- ПРОФИЛЬ -->
-
 <div id="m-profile" class="ov" style="z-index:5500;">
   <div class="mbox" style="padding:24px; align-items:center; overflow-y:auto;">
     <div style="font-family:'Orbitron',sans-serif; font-size:22px; font-weight:900; color:var(--pr); margin-bottom:8px;">ПРОФИЛЬ</div>
     <h2 id="prof-name" style="font-size:20px; font-weight:800; margin-bottom:4px;">Игрок</h2>
     <div id="prof-tr" style="color:var(--ac); font-weight:900; font-size:16px; margin-bottom:16px; font-family:'Orbitron',sans-serif;">🏆 0</div>
-
-```
-<div class="sec" style="width:100%; margin:0 0 12px 0; padding:15px;">
-  <div class="stit">Любимая карта</div>
-  <div id="prof-fav" style="display:flex; justify-content:center; margin-bottom:10px;"></div>
-  <button class="pbtn" style="margin-top:4px;" onclick="openFavPicker()">🎯 ВЫБРАТЬ КАРТУ</button>
-</div>
-
-<div style="width:100%; display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px;"><span>Всего боёв:</span><b id="prof-matches">0</b></div>
-<div style="width:100%; display:flex; justify-content:space-between; margin-bottom:18px; font-size:14px;"><span>Побед:</span><b id="prof-wins" style="color:var(--ok);">0</b></div>
-
-<button class="pbtn" onclick="ss('m-profile','display','none')">ЗАКРЫТЬ</button>
-```
-
+    
+    <div class="sec" style="width:100%; margin:0 0 12px 0; padding:15px;">
+      <div class="stit">Любимая карта</div>
+      <div id="prof-fav" style="display:flex; justify-content:center; margin-bottom:10px;"></div>
+      <button class="pbtn" style="margin-top:4px;" onclick="openFavPicker()">🎯 ВЫБРАТЬ КАРТУ</button>
+    </div>
+    
+    <div style="width:100%; display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px;"><span>Всего боёв:</span><b id="prof-matches">0</b></div>
+    <div style="width:100%; display:flex; justify-content:space-between; margin-bottom:18px; font-size:14px;"><span>Побед:</span><b id="prof-wins" style="color:var(--ok);">0</b></div>
+    
+    <button class="pbtn" onclick="ss('m-profile','display','none')">ЗАКРЫТЬ</button>
   </div>
 </div>
 
 <!-- ФАВ КАРТА ПИКЕР -->
-
 <div id="m-favpick" class="ov" style="z-index:5600;">
   <div class="mbox">
     <div style="padding:18px 18px 10px; display:flex; justify-content:space-between; align-items:center;">
@@ -418,36 +409,33 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
         <p class="arenadesc" id="ui-adesc">Лужайка</p>
       </div>
     </div>
-
-```
-<div style="display:flex;align-items:center;justify-content:center;gap:8px;">
-  <p style="font-size:17px;font-weight:800; cursor:pointer; text-decoration:underline; text-decoration-color:rgba(255,255,255,.3);" id="ui-pname" onclick="openProfile()">Игрок</p>
-  <div id="um0" style="display:none;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#f5c518,#c87d0a);border:1.5px solid var(--ac);align-items:center;justify-content:center;font-size:11px;"></div>
-  <div id="um1" style="display:none;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#f5c518,#c87d0a);border:1.5px solid var(--ac);align-items:center;justify-content:center;font-size:11px;"></div>
-</div>
-
-<div style="width:92%;max-width:420px;">
-  <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.33);margin-bottom:4px;"><span>Ур. <span id="ui-lvl" style="color:var(--ac);font-weight:900;">1</span></span><span id="ui-xp">0/100 XP</span></div>
-  <div class="xpwrap"><div class="xpfill" id="ui-xpb" style="width:0%"></div></div>
-</div>
-
-<div style="display:flex;gap:8px;width:92%;max-width:440px;">
-  <div class="mfbtn" onclick="openFriends()">👥 Друзья <span id="ndot" style="display:none;background:var(--dn);width:8px;height:8px;border-radius:50%;margin-left:4px;"></span></div>
-  <div class="mfbtn" onclick="nav('s-stats',5)">📊 Статы</div>
-  <div class="mfbtn" onclick="nav('s-lb',6)">🏆 Топ</div>
-</div>
-
-<div style="background:var(--panel);border:1px solid var(--br);border-radius:15px;padding:13px 18px;width:92%;max-width:420px;display:flex;justify-content:space-between;align-items:center;">
-  <div><h4 style="color:var(--ac);margin-bottom:4px;font-size:14px;font-weight:800;">Ящики за победы</h4><p style="font-size:11px;color:rgba(255,255,255,.33);" id="ctimer">Обновится через...</p></div>
-  <div style="display:flex;gap:6px;" id="cslots"></div>
-</div>
-
-<div style="display:flex; flex-direction:column; align-items:center; width:100%;">
-  <button class="bigbtn" onclick="prepMM(false)">⚔️ В БОЙ</button>
-  <button class="bigbtn sd" onclick="prepMM(true)">☠️ ВНЕЗАПНАЯ СМЕРТЬ</button>
-</div>
-```
-
+    
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+      <p style="font-size:17px;font-weight:800; cursor:pointer; text-decoration:underline; text-decoration-color:rgba(255,255,255,.3);" id="ui-pname" onclick="openProfile()">Игрок</p>
+      <div id="um0" style="display:none;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#f5c518,#c87d0a);border:1.5px solid var(--ac);align-items:center;justify-content:center;font-size:11px;"></div>
+      <div id="um1" style="display:none;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#f5c518,#c87d0a);border:1.5px solid var(--ac);align-items:center;justify-content:center;font-size:11px;"></div>
+    </div>
+    
+    <div style="width:92%;max-width:420px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.33);margin-bottom:4px;"><span>Ур. <span id="ui-lvl" style="color:var(--ac);font-weight:900;">1</span></span><span id="ui-xp">0/100 XP</span></div>
+      <div class="xpwrap"><div class="xpfill" id="ui-xpb" style="width:0%"></div></div>
+    </div>
+    
+    <div style="display:flex;gap:8px;width:92%;max-width:440px;">
+      <div class="mfbtn" onclick="openFriends()">👥 Друзья <span id="ndot" style="display:none;background:var(--dn);width:8px;height:8px;border-radius:50%;margin-left:4px;"></span></div>
+      <div class="mfbtn" onclick="nav('s-stats',5)">📊 Статы</div>
+      <div class="mfbtn" onclick="nav('s-lb',6)">🏆 Топ</div>
+    </div>
+    
+    <div style="background:var(--panel);border:1px solid var(--br);border-radius:15px;padding:13px 18px;width:92%;max-width:420px;display:flex;justify-content:space-between;align-items:center;">
+      <div><h4 style="color:var(--ac);margin-bottom:4px;font-size:14px;font-weight:800;">Ящики за победы</h4><p style="font-size:11px;color:rgba(255,255,255,.33);" id="ctimer">Обновится через...</p></div>
+      <div style="display:flex;gap:6px;" id="cslots"></div>
+    </div>
+    
+    <div style="display:flex; flex-direction:column; align-items:center; width:100%;">
+      <button class="bigbtn" onclick="prepMM(false)">⚔️ В БОЙ</button>
+      <button class="bigbtn sd" onclick="prepMM(true)">☠️ ВНЕЗАПНАЯ СМЕРТЬ</button>
+    </div>
 </div>
 
 <div id="s-pass" class="scr" data-i="3">
@@ -733,18 +721,6 @@ const MEDALS=[
   {id:'m23',ic:'💯',d:'100 боёв'}
 ];
 
-// КАСТОМНЫЕ АРЕНЫ (фон поля боя)
-const CUSTOM_ARENAS=[
-  {id:'ca1', n:'Лужайка',    col1:'#3a6428', col2:'#2d5020', river:'#2472a4', cost:0,    type:'free'},
-  {id:'ca2', n:'Пустыня',    col1:'#c4a050', col2:'#a8843a', river:'#4a8090', cost:500,  type:'gold'},
-  {id:'ca3', n:'Снег',       col1:'#9ec8e0', col2:'#7ab0cc', river:'#6a90b0', cost:500,  type:'gold'},
-  {id:'ca4', n:'Вулкан',     col1:'#4a1008', col2:'#6a1810', river:'#e64a00', cost:1500, type:'gold'},
-  {id:'ca5', n:'Джунгли',    col1:'#1a4010', col2:'#253a18', river:'#2a7040', cost:30,   type:'gems'},
-  {id:'ca6', n:'Ночь',       col1:'#0a0d1e', col2:'#080b18', river:'#1a1060', cost:50,   type:'gems'},
-  {id:'ca7', n:'Океан',      col1:'#0a3060', col2:'#082040', river:'#0a70a0', cost:50,   type:'gems'},
-  {id:'ca8', n:'Космос',     col1:'#050510', col2:'#080820', river:'#300060', cost:100,  type:'gems'},
-];
-
 // БАТЛ ПАСС: 50 уровней (было 30)
 const PASS_R = Array.from({length:50}, (_,i) => {
   const c = (i+1)*8; // кроны начиная с 8 за уровень (итого 400 для 50 уровней)
@@ -882,10 +858,10 @@ function migrate(u){
   if(u.xp===undefined)u.xp=0;if(u.gold===undefined)u.gold=500;if(u.gems===undefined)u.gems=50;
   if(u.trophies===undefined)u.trophies=0;if(!u.crownsFromWins)u.crownsFromWins=0;
   // Любимая карта
-  if(!u.favoriteCard){const owned=Object.keys(u.cards||{});u.favoriteCard=owned.length>0?owned[0]:null;}
-  // Кастомная арена боя
-  if(!u.equippedBattleArena)u.equippedBattleArena='ca1';
-  if(!u.unlockedBattleArenas)u.unlockedBattleArenas=['ca1'];
+  if(!u.favoriteCard){
+    const owned=Object.keys(u.cards||{});
+    u.favoriteCard=owned.length>0?owned[0]:null;
+  }
   return u;
 }
 
@@ -996,16 +972,11 @@ function updateUI(){
   st('ui-lvl',lvl);st('ui-xp',`${cur}/${max} XP`);
   const xb=document.getElementById('ui-xpb');if(xb)xb.style.width=`${(cur/max)*100}%`;
 
-  // ФИКС АРЕНЫ: всегда по текущим кубкам (сброс при потере)
+  // ФИКС АРЕНЫ: правильный индекс
   const ci=arenaIdx();
   const ao=ARENAS[ci]||ARENAS[0];
   const ab=document.getElementById('arenabox');
   if(ab){
-    // Принудительно сбрасываем и ставим новый фон
-    ab.style.backgroundImage='none';
-    const img=new Image();
-    img.onload=()=>{if(ab)ab.style.backgroundImage=`url('${ao.img}')`;};
-    img.src=ao.img;
     ab.style.backgroundImage=`url('${ao.img}')`;
     ab.style.backgroundSize='cover';
     ab.style.backgroundPosition='center';
@@ -1211,63 +1182,51 @@ function renderPassMap(){
 
   // ---- БЛОК СЕЗОН 1 (внизу) ----
   const sy=BH*4;
+  // Фон сезона — тёмные джунгли с декором
   const gSeason=ctx.createLinearGradient(0,sy,0,sy+SEASON_H);
   gSeason.addColorStop(0,'#0a1f08');gSeason.addColorStop(1,'#050e04');
   ctx.fillStyle=gSeason;ctx.fillRect(0,sy,W,SEASON_H);
 
-  // Верхняя декоративная линия
+  // Декоративная полоса наверху блока сезона
   const gLine=ctx.createLinearGradient(0,sy,W,sy);
-  gLine.addColorStop(0,'rgba(46,189,107,0)');gLine.addColorStop(0.5,'rgba(46,189,107,0.8)');gLine.addColorStop(1,'rgba(46,189,107,0)');
+  gLine.addColorStop(0,'transparent');gLine.addColorStop(0.3,'rgba(46,189,107,0.8)');gLine.addColorStop(0.7,'rgba(46,189,107,0.8)');gLine.addColorStop(1,'transparent');
   ctx.fillStyle=gLine;ctx.fillRect(0,sy,W,2);
 
-  // Узор фона
-  ctx.fillStyle='rgba(46,189,107,0.03)';
+  // Сетка
+  ctx.fillStyle='rgba(46,189,107,0.04)';
   for(let i=0;i<W;i+=24)for(let j=0;j<SEASON_H;j+=24)
     if((Math.floor(i/24)+Math.floor(j/24))%2===0)ctx.fillRect(i,sy+j,24,24);
 
-  // Угловые листья — строго внутри блока
-  ctx.font='20px Arial';
-  ctx.textAlign='left';
-  ctx.fillText('🌿',6,sy+26);
-  ctx.textAlign='right';
-  ctx.fillText('🌿',W-6,sy+26);
-  ctx.textAlign='left';
-  ctx.fillText('🍃',6,sy+SEASON_H-8);
-  ctx.textAlign='right';
-  ctx.fillText('🍃',W-6,sy+SEASON_H-8);
+  // Угловые листья
+  ctx.font='22px Arial';
+  ctx.fillText('🌿',8,sy+30);ctx.fillText('🌿',W-30,sy+30);
+  ctx.fillText('🍃',8,sy+SEASON_H-15);ctx.fillText('🍃',W-22,sy+SEASON_H-15);
 
-  // Текст СЕЗОН 1 — адаптивный размер
+  // Текст СЕЗОН 1
+  ctx.font='bold 32px Orbitron, sans-serif';
   ctx.textAlign='center';
-  const titleFontSize=Math.min(30, W*0.085);
-  ctx.font=`bold ${titleFontSize}px sans-serif`;
   // Тень
-  ctx.fillStyle='rgba(0,0,0,0.7)';
-  ctx.fillText('СЕЗОН 1',W/2+2,sy+62+2);
-  // Градиент
-  const tg=ctx.createLinearGradient(0,sy+38,0,sy+65);
+  ctx.fillStyle='rgba(0,0,0,0.8)';
+  ctx.fillText('СЕЗОН 1',W/2+2,sy+68+2);
+  // Градиентный текст
+  const tg=ctx.createLinearGradient(0,sy+40,0,sy+70);
   tg.addColorStop(0,'#ffffff');tg.addColorStop(1,'#2ebd6b');
   ctx.fillStyle=tg;
-  ctx.fillText('СЕЗОН 1',W/2,sy+62);
+  ctx.fillText('СЕЗОН 1',W/2,sy+68);
 
-  // Подзаголовок — адаптивный, уменьшается чтобы влезть
-  const subText='ДЖУНГЛИ • СЕЗОННЫЙ ПРОПУСК';
-  const subFontSize=Math.min(11, W*0.028);
-  ctx.font=`${subFontSize}px sans-serif`;
-  ctx.fillStyle='rgba(255,255,255,0.4)';
-  ctx.fillText(subText,W/2,sy+82);
+  // Подзаголовок
+  ctx.font='12px Exo 2, sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.35)';
+  ctx.fillText('ДЖУНГЛИ • СЕЗОННЫЙ ПРОПУСК',W/2,sy+90);
 
-  // Разделитель
-  const bG=ctx.createLinearGradient(W/2-W*0.3,sy+93,W/2+W*0.3,sy+93);
-  bG.addColorStop(0,'rgba(46,189,107,0)');bG.addColorStop(0.5,'rgba(46,189,107,0.6)');bG.addColorStop(1,'rgba(46,189,107,0)');
-  ctx.fillStyle=bG;ctx.fillRect(W/2-W*0.3,sy+93,W*0.6,2);
+  // Декоративная полоса под текстом
+  const bG=ctx.createLinearGradient(W/2-80,sy+100,W/2+80,sy+100);
+  bG.addColorStop(0,'transparent');bG.addColorStop(0.5,'rgba(46,189,107,0.6)');bG.addColorStop(1,'transparent');
+  ctx.fillStyle=bG;ctx.fillRect(W/2-80,sy+100,160,2);
 
-  // Иконки — по центру, фиксированные
-  const icons=['🌴','🦜','🐊','🦋','🌺'];
-  const iconSpacing=W/6;
-  ctx.font='18px Arial';
-  icons.forEach((ic,idx)=>{
-    ctx.fillText(ic, W/2+(idx-2)*iconSpacing, sy+120);
-  });
+  // Иконки
+  ctx.font='20px Arial';
+  ctx.fillText('🌴  🦜  🐊  🦋  🌺',W/2,sy+130);
 
   ctx.textAlign='left';
 
@@ -1476,22 +1435,6 @@ function renderTower(){
   const sl=U.towerSkinLevel||1,upgG=sl*1000,upgGem=sl*50,ci=arenaIdx();
   c.innerHTML=`<div style="background:var(--p2);border-radius:15px;border:1px solid var(--br);padding:15px;margin-bottom:11px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;"><div><span style="font-size:22px;">🏰</span> <b style="color:var(--pr);">Башня -- Ур.${sl}</b></div><button class="pbtn ok" style="width:auto;padding:8px 12px;" onclick="upTower()">⬆ ${upgG}💰+${upgGem}💎</button></div><div style="display:flex;gap:9px;">${TSKINS.map(s=>{const own=(U.towerSkins||[]).includes(s.id),eq=U.equippedTowerSkin===s.id;return`<div style="flex:1;text-align:center;background:${eq?'rgba(61,155,233,.1)':'var(--panel)'};border:1.5px solid ${eq?'var(--pr)':'var(--br)'};border-radius:11px;padding:10px;cursor:${own?'pointer':'default'};${!own?'filter:grayscale(1) brightness(.4)':''};" onclick="${own?`eqTskin('${s.id}')`:''}">${s.ic}<div style="font-size:10px;margin-top:4px;color:${eq?'var(--pr)':'rgba(255,255,255,.38)'};">${s.n}</div>${eq?'<div style="font-size:10px;color:var(--ok);">✓</div>':''}</div>`;}).join('')}</div></div>
   <div style="background:var(--p2);border-radius:15px;border:1px solid var(--br);padding:15px;"><div style="margin-bottom:11px;"><span style="font-size:17px;">🏹</span> <b style="color:var(--ac);">Войска башен</b></div><div style="display:flex;gap:9px;flex-wrap:wrap;">${TTROOP.map(t=>{const own=(U.towerTroops||[]).includes(t.id),eq=U.equippedTowerTroop===t.id,av=ci>=t.ra;let btn=own?(eq?`<div style="color:var(--ok);font-size:10px;margin-top:4px;">✓ Активно</div>`:`<button class="pbtn" style="font-size:10px;padding:6px;margin:4px 0 0;" onclick="eqTroop('${t.id}')">Надеть</button>`):av?`<button class="pbtn" style="font-size:10px;padding:6px;margin:4px 0 0;background:var(--pu);" onclick="buyTroop('${t.id}')">1000💎</button>`:`<div style="color:rgba(255,255,255,.3);font-size:10px;margin-top:4px;">А${t.ra+1}</div>`;return`<div style="flex:1;min-width:85px;background:${eq?'rgba(245,197,24,.07)':'var(--panel)'};border:1.5px solid ${eq?'var(--ac)':'var(--br)'};border-radius:11px;padding:10px;text-align:center;">${t.ic}<div style="font-size:12px;font-weight:700;margin-top:4px;">${t.n}</div><div style="font-size:9px;color:rgba(255,255,255,.35);">⚔${t.d}🕒${t.sp}</div>${btn}</div>`;}).join('')}</div></div>`;
-
-
-  // Арены боя
-  const eqArId=U.equippedBattleArena||'ca1';
-  const eqAr=CUSTOM_ARENAS.find(a=>a.id===eqArId)||CUSTOM_ARENAS[0];
-  const arenaGrid=CUSTOM_ARENAS.map(ar=>{
-    const owned2=(U.unlockedBattleArenas||[]).includes(ar.id);
-    const isEq2=ar.id===eqArId;
-    let sub2='';
-    if(!owned2){sub2=ar.type==='gold'?`<div style="font-size:8px;color:var(--ac);margin-top:2px;">${ar.cost}💰</div>`:`<div style="font-size:8px;color:#7be0a8;margin-top:2px;">${ar.cost}💎</div>`;}
-    return `<div onclick="${owned2?`eqBattleArena('${ar.id}')`:`buyBattleArena('${ar.id}')`}" style="border-radius:10px;border:2px solid ${isEq2?'#fff':owned2?'rgba(255,255,255,.2)':'rgba(255,255,255,.07)'};background:linear-gradient(135deg,${ar.col1},${ar.col2});height:46px;display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;gap:1px;${!owned2?'opacity:0.55':''}"><div style="font-size:9px;color:#fff;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.9);">${ar.n}</div>${isEq2?'<div style="font-size:9px;color:#fff;">✓</div>':sub2}</div>`;
-  }).join('');
-  const arenaSec=document.createElement('div');
-  arenaSec.style.cssText='background:var(--p2);border-radius:15px;border:1px solid var(--br);padding:15px;margin-top:11px;';
-  arenaSec.innerHTML=`<div style="margin-bottom:10px;font-size:15px;font-weight:800;"><span style="font-size:18px;">🎮</span> <b style="color:var(--pr);">Арена боя</b></div><div style="width:100%;height:38px;border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,${eqAr.col1},${eqAr.col2});color:rgba(255,255,255,.8);font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,.15);">${eqAr.n}</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">${arenaGrid}</div>`;
-  c.appendChild(arenaSec);
 }
 function eqTskin(id){U.equippedTowerSkin=id;saveU();notify('Скин надет!','ok');}
 function eqTroop(id){U.equippedTowerTroop=id;saveU();notify('Войско сменено!','ok');}
@@ -1522,19 +1465,6 @@ function renderEmotes(){
 }
 function eqEmote(e){if(!U.equippedEmotes)U.equippedEmotes=[null,null,null];const i=U.equippedEmotes.indexOf(e);if(i!==-1)U.equippedEmotes[i]=null;else{const s=U.equippedEmotes.indexOf(null);if(s!==-1)U.equippedEmotes[s]=e;else{U.equippedEmotes.shift();U.equippedEmotes.push(e);}}saveU();}
 function unequipEmote(i){if(U.equippedEmotes)U.equippedEmotes[i]=null;saveU();}
-
-// ================== КАСТОМНАЯ АРЕНА БОЯ ==================
-
-function eqBattleArena(id){U.equippedBattleArena=id;saveU();notify('Арена сменена!','ok');}
-function buyBattleArena(id){
-  const ar=CUSTOM_ARENAS.find(a=>a.id===id);if(!ar)return;
-  if(ar.type==='free'){U.unlockedBattleArenas.push(id);U.equippedBattleArena=id;saveU();return;}
-  if(ar.type==='gold'){if(U.gold<ar.cost)return notify('Мало золота!');U.gold-=ar.cost;}
-  else if(ar.type==='gems'){if(U.gems<ar.cost)return notify('Мало гемов!');U.gems-=ar.cost;}
-  if(!U.unlockedBattleArenas)U.unlockedBattleArenas=[];
-  U.unlockedBattleArenas.push(id);U.equippedBattleArena=id;
-  saveU();notify('Арена куплена!','ok');
-}
 
 function renderStats(){
   const c=document.getElementById('ui-stats');if(!c||!U)return;
@@ -2044,17 +1974,10 @@ function updateGame(){
 function renderGame(){
   if(!ctx||!cw||!ch)return;
   ctx.clearRect(0,0,cw,ch);
-
-  // Кастомная арена боя
-  const bArena=CUSTOM_ARENAS.find(a=>a.id===(U&&U.equippedBattleArena||'ca1'))||CUSTOM_ARENAS[0];
-  const bgG=ctx.createLinearGradient(0,0,0,ch);
-  bgG.addColorStop(0,bArena.col1);bgG.addColorStop(1,bArena.col2);
-  ctx.fillStyle=bgG;ctx.fillRect(0,0,cw,ch);
+  ctx.fillStyle='#3a6428';ctx.fillRect(0,0,cw,ch);
   ctx.fillStyle='rgba(0,0,0,0.055)';for(let i=0;i<cw;i+=28)for(let j=0;j<ch;j+=28)if((Math.floor(i/28)+Math.floor(j/28))%2===0)ctx.fillRect(i,j,28,28);
   if(!isSD){
-    const riverColor=bArena.river||'#2472a4';
-    const rg=ctx.createLinearGradient(0,ch/2-23,0,ch/2+23);
-    rg.addColorStop(0,riverColor+'cc');rg.addColorStop(.5,riverColor);rg.addColorStop(1,riverColor+'cc');
+    const rg=ctx.createLinearGradient(0,ch/2-23,0,ch/2+23);rg.addColorStop(0,'#1a5e8a');rg.addColorStop(.5,'#2472a4');rg.addColorStop(1,'#1a5e8a');
     ctx.fillStyle=rg;ctx.fillRect(0,ch/2-24,cw,48);
     ctx.fillStyle='rgba(255,255,255,0.055)';for(let i=0;i<cw;i+=52)ctx.fillRect(i,ch/2-17,26,4);
     [cw*.25,cw*.75].forEach(bx=>{
@@ -2189,6 +2112,5 @@ function exitBattle(){
   });
 }
 </script>
-
 </body>
 </html>
