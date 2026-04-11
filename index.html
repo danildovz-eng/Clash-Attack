@@ -111,62 +111,6 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 }
 #qpanel.open { transform: translateY(0); }
 
-/* SEASON BLOCK */
-.season-block {
-  width: 100%;
-  padding: 28px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: linear-gradient(135deg, #0d1a0a 0%, #1a2e10 40%, #0a1f1a 100%);
-  border-top: 2px solid rgba(46,189,107,0.4);
-  position: relative;
-  overflow: hidden;
-}
-.season-block::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(46,189,107,0.03) 20px, rgba(46,189,107,0.03) 40px);
-}
-.season-label {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: 6px;
-  color: #fff;
-  text-shadow: 0 0 20px rgba(46,189,107,0.8), 0 0 40px rgba(46,189,107,0.4);
-  position: relative;
-  z-index: 2;
-  animation: seasonGlow 2s ease-in-out infinite;
-}
-.season-sub {
-  font-size: 12px;
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  margin-top: 6px;
-  position: relative;
-  z-index: 2;
-}
-.season-icon-row {
-  display: flex;
-  gap: 12px;
-  margin-top: 14px;
-  font-size: 24px;
-  position: relative;
-  z-index: 2;
-}
-.season-bar {
-  width: 80%;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(46,189,107,0.7), transparent);
-  margin-top: 16px;
-  border-radius: 2px;
-  position: relative;
-  z-index: 2;
-}
-
 .rr-c { border: 1.5px solid rgba(255,255,255,0.15) !important; }
 .rr-r { border: 1.5px solid #3d9be9 !important; box-shadow: inset 0 0 12px rgba(61,155,233,0.15); }
 .rr-e { border: 1.5px solid #9b5de5 !important; box-shadow: inset 0 0 12px rgba(155,93,229,0.15); }
@@ -239,7 +183,6 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 .xpwrap{width:100%;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-top:4px}
 .xpfill{height:100%;background:linear-gradient(90deg,var(--pr),var(--pu));border-radius:3px;transition:width .5s ease}
 
-/* БОЙ */
 #bscr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease}
 #bscr.active{display:flex;opacity:1}
 #cvs-c{flex:1;width:100%;position:relative;overflow:hidden}
@@ -280,8 +223,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #mmov{z-index:5500}
 .mmdot span{display:inline-block;width:10px;height:10px;background:var(--pr);border-radius:50%;margin:0 4px;animation:mmPulse .8s ease-in-out infinite}
 .mmdot span:nth-child(2){animation-delay:.15s}.mmdot span:nth-child(3){animation-delay:.3s}
-
-/* Fav card badge */
 .fav-badge{position:absolute;top:-8px;left:-8px;background:#ff6b9d;color:#fff;border-radius:8px;padding:2px 6px;font-size:9px;font-weight:900;z-index:10;border:1.5px solid rgba(255,255,255,.3);}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -295,34 +236,29 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <div id="intro"><h1>TERROV<br>STUDIO</h1><p>Game Development</p></div>
 <div id="loading"><h1>CLASH<br><span>ARENA</span></h1><div class="lbar"><div id="lprog"></div></div><div id="ltxt">ИНИЦИАЛИЗАЦИЯ...</div></div>
 
-<!-- ПРОФИЛЬ -->
 <div id="m-profile" class="ov" style="z-index:5500;">
   <div class="mbox" style="padding:24px; align-items:center; overflow-y:auto;">
     <div style="font-family:'Orbitron',sans-serif; font-size:22px; font-weight:900; color:var(--pr); margin-bottom:8px;">ПРОФИЛЬ</div>
     <h2 id="prof-name" style="font-size:20px; font-weight:800; margin-bottom:4px;">Игрок</h2>
     <div id="prof-tr" style="color:var(--ac); font-weight:900; font-size:16px; margin-bottom:16px; font-family:'Orbitron',sans-serif;">🏆 0</div>
-    
     <div class="sec" style="width:100%; margin:0 0 12px 0; padding:15px;">
       <div class="stit">Любимая карта</div>
       <div id="prof-fav" style="display:flex; justify-content:center; margin-bottom:10px;"></div>
       <button class="pbtn" style="margin-top:4px;" onclick="openFavPicker()">🎯 ВЫБРАТЬ КАРТУ</button>
     </div>
-    
     <div style="width:100%; display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px;"><span>Всего боёв:</span><b id="prof-matches">0</b></div>
     <div style="width:100%; display:flex; justify-content:space-between; margin-bottom:18px; font-size:14px;"><span>Побед:</span><b id="prof-wins" style="color:var(--ok);">0</b></div>
-    
     <button class="pbtn" onclick="ss('m-profile','display','none')">ЗАКРЫТЬ</button>
   </div>
 </div>
 
-<!-- ФАВ КАРТА ПИКЕР -->
 <div id="m-favpick" class="ov" style="z-index:5600;">
   <div class="mbox">
     <div style="padding:18px 18px 10px; display:flex; justify-content:space-between; align-items:center;">
       <span style="font-family:'Orbitron',sans-serif; font-size:16px; font-weight:900; color:#ff6b9d;">💖 ЛЮБИМАЯ КАРТА</span>
       <span onclick="ss('m-favpick','display','none')" style="font-size:22px; cursor:pointer; color:rgba(255,255,255,.4);">✕</span>
     </div>
-    <p style="font-size:12px; color:rgba(255,255,255,.4); text-align:center; padding:0 18px 10px;">Выбери карту — она будет показана в баннере боя</p>
+    <p style="font-size:12px; color:rgba(255,255,255,.4); text-align:center; padding:0 18px 10px;">Выбери карту -- она будет показана в баннере боя</p>
     <div class="grid" id="fav-pick-grid" style="overflow-y:auto; max-height:55vh;"></div>
     <button class="pbtn dn" style="margin:10px 18px 18px; width:calc(100% - 36px);" onclick="ss('m-favpick','display','none')">ОТМЕНА</button>
   </div>
@@ -334,12 +270,14 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <input type="text" id="tnick" class="ainput" placeholder="Никнейм" maxlength="16">
   <button class="pbtn" onclick="saveTutNick()">ПОЕХАЛИ ▶</button>
 </div></div></div>
+
 <div id="m-reg" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center;">
   <div style="font-family:'Orbitron',sans-serif;font-size:19px;font-weight:900;color:var(--ac);margin-bottom:8px;text-align:center;">СОХРАНИТЬ ПРОГРЕСС?</div>
   <div style="color:rgba(255,255,255,.4);font-size:13px;text-align:center;margin-bottom:16px;">Зарегистрируйтесь чтобы не потерять аккаунт</div>
   <button class="pbtn ok" onclick="openReg()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
   <button class="pbtn" style="background:#333;" onclick="skipReg()">Позже (Гость)</button>
 </div></div></div>
+
 <div id="m-regemail" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center;">
   <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px;">РЕГИСТРАЦИЯ</div>
   <input type="email" id="remail" class="ainput" placeholder="Email">
@@ -347,12 +285,14 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <button class="pbtn ok" onclick="submitReg()">ДАЛЕЕ</button>
   <button class="pbtn" style="background:#333;" onclick="ss('m-regemail','display','none')">Закрыть</button>
 </div></div></div>
+
 <div id="m-code" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center;">
   <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:8px;">КОД ИЗ ПИСЬМА</div>
   <div style="color:rgba(255,255,255,.4);font-size:13px;text-align:center;margin-bottom:14px;">Введите любые 4+ символа</div>
   <input type="text" id="rcode" class="ainput" placeholder="Код">
   <button class="pbtn ok" onclick="submitCode()">ПОДТВЕРДИТЬ</button>
 </div></div></div>
+
 <div id="m-login" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center;">
   <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px;">ВХОД</div>
   <input type="email" id="lemail" class="ainput" placeholder="Email">
@@ -409,29 +349,24 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
         <p class="arenadesc" id="ui-adesc">Лужайка</p>
       </div>
     </div>
-    
     <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
       <p style="font-size:17px;font-weight:800; cursor:pointer; text-decoration:underline; text-decoration-color:rgba(255,255,255,.3);" id="ui-pname" onclick="openProfile()">Игрок</p>
       <div id="um0" style="display:none;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#f5c518,#c87d0a);border:1.5px solid var(--ac);align-items:center;justify-content:center;font-size:11px;"></div>
       <div id="um1" style="display:none;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#f5c518,#c87d0a);border:1.5px solid var(--ac);align-items:center;justify-content:center;font-size:11px;"></div>
     </div>
-    
     <div style="width:92%;max-width:420px;">
       <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.33);margin-bottom:4px;"><span>Ур. <span id="ui-lvl" style="color:var(--ac);font-weight:900;">1</span></span><span id="ui-xp">0/100 XP</span></div>
       <div class="xpwrap"><div class="xpfill" id="ui-xpb" style="width:0%"></div></div>
     </div>
-    
     <div style="display:flex;gap:8px;width:92%;max-width:440px;">
       <div class="mfbtn" onclick="openFriends()">👥 Друзья <span id="ndot" style="display:none;background:var(--dn);width:8px;height:8px;border-radius:50%;margin-left:4px;"></span></div>
       <div class="mfbtn" onclick="nav('s-stats',5)">📊 Статы</div>
       <div class="mfbtn" onclick="nav('s-lb',6)">🏆 Топ</div>
     </div>
-    
     <div style="background:var(--panel);border:1px solid var(--br);border-radius:15px;padding:13px 18px;width:92%;max-width:420px;display:flex;justify-content:space-between;align-items:center;">
       <div><h4 style="color:var(--ac);margin-bottom:4px;font-size:14px;font-weight:800;">Ящики за победы</h4><p style="font-size:11px;color:rgba(255,255,255,.33);" id="ctimer">Обновится через...</p></div>
       <div style="display:flex;gap:6px;" id="cslots"></div>
     </div>
-    
     <div style="display:flex; flex-direction:column; align-items:center; width:100%;">
       <button class="bigbtn" onclick="prepMM(false)">⚔️ В БОЙ</button>
       <button class="bigbtn sd" onclick="prepMM(true)">☠️ ВНЕЗАПНАЯ СМЕРТЬ</button>
@@ -631,8 +566,6 @@ function notify(msg,tp='err'){
   setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},2500);
 }
 
-// ================== ДАННЫЕ ==================
-
 const ARENAS=[
   {name:'Лужайка',     th:0,    img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800&auto=format&fit=crop'},
   {name:'Пустыня',     th:600,  img:'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=800&auto=format&fit=crop'},
@@ -646,9 +579,7 @@ const ARENAS=[
   {name:'Гора',        th:4700, img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop'}
 ];
 
-// КАРТЫ: оригинальные + 3 новые для арены 0 + 2 для арены 4
 const CARDS=[
-  // АРЕНА 0 (оригинальные)
   {id:'spear_g',a:0,n:'Копейщики',  c:2,hp:110, d:50, sp:0.70,r:120,t:'ground',tg:'all',     ic:'👺',pr:'🏹',rr:'c'},
   {id:'fire_s', a:0,n:'Огн.Духи',   c:2,hp:90,  d:160,sp:0.90,r:40, t:'ground',tg:'all',     ic:'🔥',pr:null,rr:'c'},
   {id:'giant',  a:0,n:'Гигант',     c:5,hp:2000,d:100,sp:0.30,r:40, t:'ground',tg:'building',ic:'👹',pr:null,rr:'r'},
@@ -659,38 +590,27 @@ const CARDS=[
   {id:'goblin', a:0,n:'Гоблин',     c:2,hp:150, d:40, sp:0.90,r:40, t:'ground',tg:'all',     ic:'😈',pr:null,rr:'c'},
   {id:'bomber', a:0,n:'Подрывник',  c:3,hp:300, d:150,sp:0.55,r:100,t:'ground',tg:'ground',  ic:'💣',pr:'💣',rr:'c'},
   {id:'skel',   a:0,n:'Скелеты',    c:1,hp:50,  d:20, sp:0.75,r:40, t:'ground',tg:'all',     ic:'💀',pr:null,rr:'c'},
-  // АРЕНА 0 — НОВЫЕ 3 КАРТЫ
   {id:'wolf',   a:0,n:'Волк',       c:4,hp:700, d:90, sp:0.80,r:45, t:'ground',tg:'all',     ic:'🐺',pr:null,rr:'c'},
   {id:'brawler',a:0,n:'Боец',       c:3,hp:500, d:80, sp:0.65,r:40, t:'ground',tg:'all',     ic:'🥊',pr:null,rr:'c'},
   {id:'mushr',  a:0,n:'Гриб',       c:2,hp:80,  d:100,sp:0,   r:80, t:'spell', tg:'ground',  ic:'🍄',pr:'💥',rr:'c'},
-  // АРЕНА 1
   {id:'valk',   a:1,n:'Валькирия',  c:4,hp:1100,d:120,sp:0.50,r:50, t:'ground',tg:'all',     ic:'🧝‍♀️',pr:null,rr:'r'},
   {id:'musk',   a:1,n:'Мушкетер',   c:4,hp:400, d:110,sp:0.50,r:150,t:'ground',tg:'all',     ic:'🎯',pr:'⚫',rr:'r'},
-  // АРЕНА 2
   {id:'drag',   a:2,n:'Дракончик',  c:4,hp:800, d:80, sp:0.60,r:90, t:'air',   tg:'all',     ic:'🐉',pr:'🔥',rr:'e'},
   {id:'mpekka', a:2,n:'МиниПЕККА',  c:4,hp:700, d:300,sp:0.70,r:40, t:'ground',tg:'all',     ic:'🤖',pr:null,rr:'r'},
-  // АРЕНА 3
   {id:'witch',  a:3,n:'Ведьма',     c:5,hp:500, d:60, sp:0.50,r:120,t:'ground',tg:'all',     ic:'🧙‍♀️',pr:'🟣',rr:'e'},
   {id:'prince', a:3,n:'Принц',      c:5,hp:1200,d:200,sp:0.80,r:50, t:'ground',tg:'all',     ic:'🤴',pr:null,rr:'e'},
-  // АРЕНА 4
   {id:'wizard', a:4,n:'Колдун',     c:5,hp:450, d:130,sp:0.50,r:130,t:'ground',tg:'all',     ic:'🧙‍♂️',pr:'🔥',rr:'r'},
   {id:'ball',   a:4,n:'Шар',        c:5,hp:1050,d:400,sp:0.40,r:40, t:'air',   tg:'building',ic:'🎈',pr:'💣',rr:'e'},
-  // АРЕНА 4 — НОВЫЕ 2 КАРТЫ (5-я арена)
   {id:'phoenix',a:4,n:'Феникс',     c:4,hp:600, d:120,sp:0.65,r:80, t:'air',   tg:'all',     ic:'🦅',pr:'🔥',rr:'e'},
   {id:'trident',a:4,n:'Тритон',     c:5,hp:900, d:160,sp:0.55,r:130,t:'ground',tg:'all',     ic:'🔱',pr:'🌊',rr:'r'},
-  // АРЕНА 5
   {id:'hog',    a:5,n:'Всадник',    c:4,hp:1000,d:160,sp:0.85,r:40, t:'ground',tg:'building',ic:'🐗',pr:null,rr:'r'},
   {id:'freeze', a:5,n:'Заморозка',  c:4,hp:0,   d:0,  sp:0,   r:100,t:'spell', tg:'all',     ic:'❄️',pr:'❄️',rr:'e'},
-  // АРЕНА 6
   {id:'zap',    a:6,n:'Разряд',     c:2,hp:0,   d:80, sp:0,   r:100,t:'spell', tg:'all',     ic:'⚡',pr:'⚡',rr:'c'},
   {id:'fball',  a:6,n:'Огн.Шар',    c:4,hp:0,   d:250,sp:0,   r:80, t:'spell', tg:'all',     ic:'💥',pr:'💥',rr:'r'},
-  // АРЕНА 7
   {id:'pekka',  a:7,n:'ПЕККА',      c:7,hp:2500,d:500,sp:0.35,r:50, t:'ground',tg:'all',     ic:'🦾',pr:null,rr:'e'},
   {id:'golem',  a:7,n:'Голем',      c:8,hp:3000,d:150,sp:0.25,r:40, t:'ground',tg:'building',ic:'🗿',pr:null,rr:'e'},
-  // АРЕНА 8
   {id:'sparky', a:8,n:'Спарки',     c:6,hp:1000,d:800,sp:0.30,r:100,t:'ground',tg:'ground',  ic:'🔋',pr:'⚡',rr:'l'},
   {id:'miner',  a:8,n:'Шахтер',     c:3,hp:800, d:100,sp:0.75,r:40, t:'ground',tg:'all',     ic:'⛏️',pr:null,rr:'l'},
-  // АРЕНА 9
   {id:'prin2',  a:9,n:'Принцесса',  c:3,hp:150, d:90, sp:0.50,r:200,t:'ground',tg:'all',     ic:'👸',pr:'🔥',rr:'l'},
   {id:'bandit', a:9,n:'Бандитка',   c:3,hp:750, d:160,sp:0.80,r:40, t:'ground',tg:'ground',  ic:'🥷',pr:null,rr:'l'},
   {id:'lumber', a:9,n:'Дровосек',   c:4,hp:990, d:200,sp:0.85,r:40, t:'ground',tg:'ground',  ic:'🪓',pr:null,rr:'l'}
@@ -721,14 +641,12 @@ const MEDALS=[
   {id:'m23',ic:'💯',d:'100 боёв'}
 ];
 
-// БАТЛ ПАСС: 50 уровней (было 30)
 const PASS_R = Array.from({length:50}, (_,i) => {
-  const c = (i+1)*8; // кроны начиная с 8 за уровень (итого 400 для 50 уровней)
+  const c = (i+1)*8;
   if((i+1)%10===0) return {crowns:c, t:'chest', v:'m', ic:'✨', n:'МЕГА ЯЩИК'};
   if((i+1)%5===0)  return {crowns:c, t:'chest', v:'g', ic:'📦', n:'Ящик'};
   if(i%3===0)      return {crowns:c, t:'gold',  v:400+i*40, ic:'💰', n:`${400+i*40} Золота`};
   if(i%3===1)      return {crowns:c, t:'gems',  v:8+i,  ic:'💎', n:`${8+i} Гемов`};
-  // каждый 3-й — бонус карта/гемы
   return {crowns:c, t:'gems', v:15+i*2, ic:'💎', n:`${15+i*2} Гемов`};
 });
 
@@ -857,31 +775,36 @@ function migrate(u){
   if(!u.towerTroops)u.towerTroops=['tt1'];if(!u.equippedTowerTroop)u.equippedTowerTroop='tt1';
   if(u.xp===undefined)u.xp=0;if(u.gold===undefined)u.gold=500;if(u.gems===undefined)u.gems=50;
   if(u.trophies===undefined)u.trophies=0;if(!u.crownsFromWins)u.crownsFromWins=0;
-  // Любимая карта
   if(!u.favoriteCard){
     const owned=Object.keys(u.cards||{});
     u.favoriteCard=owned.length>0?owned[0]:null;
   }
+  // Поле для защиты арены: минимальные кубки = порог арены maxArena
+  if(u.minTrophies===undefined)u.minTrophies=0;
   return u;
 }
 
 function rstDate(){const now=new Date(),r=new Date();r.setHours(10,0,0,0);if(now<r)r.setDate(r.getDate()-1);return r.toDateString();}
-function genQuests(){return[
-  {id:0,tp:'play',   desc:'Сыграть 3 боя',     tg:3,pg:0,cr:5, cl:false},
-  {id:1,tp:'destroy',desc:'Уничтожить 3 башни', tg:3,pg:0,cr:5, cl:false},
-  {id:2,tp:'win',    desc:'Выиграть 2 боя',     tg:2,pg:0,cr:8, cl:false},
-  {id:3,tp:'play',   desc:'Сыграть 5 боёв',     tg:5,pg:0,cr:10,cl:false}
-];}
-function genShop(){
-  U.dailyShop=[];U.dsp={};
-  const owned=Object.keys(U.cards||{});
-  for(let i=0;i<3;i++)if(owned.length>0)U.dailyShop.push(owned[Math.floor(Math.random()*owned.length)]);
-  U.dailyEmotes=[];
-  let av=EMOTES.filter(e=>!(U.emotes||[]).includes(e));
-  for(let i=0;i<3;i++){if(!av.length)break;const r=Math.floor(Math.random()*av.length);U.dailyEmotes.push(av[r]);av.splice(r,1);}
+
+// ====== СЕЗОННЫЙ СБРОС КУБКОВ ======
+// Срабатывает 1-го числа каждого месяца, один раз
+// Кубки уменьшаются на 30%, но не ниже порога текущей (достигнутой) арены
+function checkSeasonReset(){
+  const now=new Date();
+  if(now.getDate()!==1)return; // только 1-е число
+  const resetKey=`sr_${now.getFullYear()}_${now.getMonth()}`;
+  if(ls('last_season_reset')===resetKey)return; // уже сбрасывали этот месяц
+  lw('last_season_reset',resetKey);
+  const currentTr=U.trophies||0;
+  const reduced=Math.floor(currentTr*0.7); // -30%
+  // Минимум -- порог арены которую игрок уже достиг (maxArena)
+  const arenaFloor=ARENAS[U.maxArena||0].th;
+  U.trophies=Math.max(reduced,arenaFloor);
+  // Обновляем minTrophies
+  U.minTrophies=ARENAS[U.maxArena||0].th;
+  notify(`📅 Сезонный сброс! Кубки: ${currentTr} → ${U.trophies} (арена сохранена)`,'inf');
 }
 
-// ПРАВИЛЬНЫЙ ИНДЕКС АРЕНЫ
 function arenaIdx(){
   const tr=U.trophies||0;
   let best=0;
@@ -889,8 +812,7 @@ function arenaIdx(){
   return best;
 }
 
-// ================== ПРОФИЛЬ И ЛЮБИМАЯ КАРТА ==================
-
+// ====== ПРОФИЛЬ ======
 function openProfile(){
   if(!U)return;
   st('prof-name',U.nickname);
@@ -952,8 +874,7 @@ function setFavCard(id){
   openProfile();
 }
 
-// ================== UI ==================
-
+// ====== UI ======
 function saveU(){
   if(!U)return;
   if(U.stats){
@@ -972,7 +893,6 @@ function updateUI(){
   st('ui-lvl',lvl);st('ui-xp',`${cur}/${max} XP`);
   const xb=document.getElementById('ui-xpb');if(xb)xb.style.width=`${(cur/max)*100}%`;
 
-  // ФИКС АРЕНЫ: правильный индекс
   const ci=arenaIdx();
   const ao=ARENAS[ci]||ARENAS[0];
   const ab=document.getElementById('arenabox');
@@ -1000,15 +920,34 @@ function startUI(){
   if(!U.quests)U.quests=genQuests();
   if(!U.dailyEmotes||!U.dailyEmotes.length)genShop();
   if(!U.dsp)U.dsp={};
+  // Сезонный сброс -- проверяем при каждом входе
+  checkSeasonReset();
   checkArena();checkMedals();updateUI();saveU();
   nav('s-main',2);
   setTimeout(hideCover,150);
+}
+
+function genQuests(){return[
+  {id:0,tp:'play',   desc:'Сыграть 3 боя',     tg:3,pg:0,cr:5, cl:false},
+  {id:1,tp:'destroy',desc:'Уничтожить 3 башни', tg:3,pg:0,cr:5, cl:false},
+  {id:2,tp:'win',    desc:'Выиграть 2 боя',     tg:2,pg:0,cr:8, cl:false},
+  {id:3,tp:'play',   desc:'Сыграть 5 боёв',     tg:5,pg:0,cr:10,cl:false}
+];}
+function genShop(){
+  U.dailyShop=[];U.dsp={};
+  const owned=Object.keys(U.cards||{});
+  for(let i=0;i<3;i++)if(owned.length>0)U.dailyShop.push(owned[Math.floor(Math.random()*owned.length)]);
+  U.dailyEmotes=[];
+  let av=EMOTES.filter(e=>!(U.emotes||[]).includes(e));
+  for(let i=0;i<3;i++){if(!av.length)break;const r=Math.floor(Math.random()*av.length);U.dailyEmotes.push(av[r]);av.splice(r,1);}
 }
 
 function checkArena(){
   const ci=arenaIdx();
   if(ci>U.maxArena){
     U.maxArena=ci;
+    // Обновляем минимальный порог кубков при достижении новой арены
+    U.minTrophies=ARENAS[ci].th;
     const uc=CARDS.filter(c=>c.a===ci);
     if(uc.length){
       st('unlock-name',ARENAS[ci].name);
@@ -1072,17 +1011,16 @@ function renderPassUI(){
   }
 }
 
-// ================== БАТЛ ПАСС КАРТА ==================
-
+// ====== БАТЛ ПАСС КАРТА ======
 function renderPassMap(){
   const wrap=document.getElementById('pass-wrap');if(!wrap)return;
   const canvas=document.getElementById('pass-canvas');if(!canvas)return;
   const layer=document.getElementById('pass-layer');if(!layer)return;
   const W=wrap.clientWidth||360;
 
-  // 4 биома: Лужайка, Снег, Саванна, Джунгли + блок СЕЗОН
-  const BH=480; // высота одного биома
-  const SEASON_H=180; // высота нижнего блока сезона
+  const BH=480;
+  // ИСПРАВЛЕНО: увеличенная высота сезон-блока чтобы текст помещался
+  const SEASON_H=240;
   const TOTAL=BH*4+SEASON_H+40;
 
   canvas.width=W;canvas.height=TOTAL;
@@ -1091,7 +1029,7 @@ function renderPassMap(){
   const ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,W,TOTAL);
 
-  // ---- БИОМ 1: ЛУЖАЙКА (y=0..BH) ----
+  // БИОМ 1: ЛУЖАЙКА
   const g1=ctx.createLinearGradient(0,0,0,BH);
   g1.addColorStop(0,'#2a5012');g1.addColorStop(1,'#386818');
   ctx.fillStyle=g1;ctx.fillRect(0,0,W,BH);
@@ -1102,7 +1040,7 @@ function renderPassMap(){
   for(let i=0;i<16;i++){const fx=25+Math.sin(i*1.9)*W*.35+W*.32,fy=35+i*24;ctx.fillText(i%3===0?'🌸':i%3===1?'🌼':'🌻',fx,fy);}
   [[W*.15,BH-60],[W*.8,BH-80]].forEach(([x,y])=>{ctx.fillStyle='#d44';ctx.beginPath();ctx.arc(x,y-10,10,Math.PI,0);ctx.fill();ctx.fillStyle='#e99';ctx.fillRect(x-3,y-10,6,14);});
 
-  // ---- БИОМ 2: СНЕГ (y=BH..BH*2) ----
+  // БИОМ 2: СНЕГ
   const y2=BH;
   const g2=ctx.createLinearGradient(0,y2,0,y2+BH);
   g2.addColorStop(0,'#9ec8e0');g2.addColorStop(1,'#c4e4f4');
@@ -1117,7 +1055,7 @@ function renderPassMap(){
   for(let i=0;i<22;i++){const fx=(i*71)%W,fy=y2+15+(i*19)%BH;ctx.fillText('❄',fx,fy);}
   ctx.font='18px Arial';ctx.fillText('🎁',W*.45,y2+130);ctx.fillText('⛄',W*.55,y2+340);
 
-  // ---- БИОМ 3: САВАННА (y=BH*2..BH*3) ----
+  // БИОМ 3: САВАННА
   const y3=BH*2;
   const g3=ctx.createLinearGradient(0,y3,0,y3+BH);
   g3.addColorStop(0,'#c4780a');g3.addColorStop(1,'#e89818');
@@ -1130,21 +1068,15 @@ function renderPassMap(){
   ctx.fillStyle='rgba(255,185,0,0.55)';ctx.beginPath();ctx.arc(W-25,y3+28,22,0,Math.PI*2);ctx.fill();
   ctx.font='18px Arial';ctx.fillText('🦒',W*.4,y3+80);ctx.fillText('🦁',W*.7,y3+320);ctx.fillText('🌵',W*.88,y3+200);
 
-  // ---- БИОМ 4: ДЖУНГЛИ (y=BH*3..BH*4) ----
+  // БИОМ 4: ДЖУНГЛИ
   const y4=BH*3;
   const g4=ctx.createLinearGradient(0,y4,0,y4+BH);
   g4.addColorStop(0,'#0d2b0a');g4.addColorStop(0.5,'#133a10');g4.addColorStop(1,'#1a4a15');
   ctx.fillStyle=g4;ctx.fillRect(0,y4,W,BH);
-
-  // Туман в джунглях
   ctx.fillStyle='rgba(100,200,80,0.06)';
   for(let i=0;i<W;i+=30)for(let j=0;j<BH;j+=30)
     if((Math.floor(i/30)+Math.floor(j/30))%2===0)ctx.fillRect(i,y4+j,30,30);
-
-  // Большие деревья джунглей
   [[25,y4+60],[W-30,y4+90],[W/2-20,y4+50],[W/2+40,y4+160],[15,y4+220],[W-20,y4+270],[W/2,y4+290],[30,y4+370],[W-35,y4+380]].forEach(([x,y])=>drawJungleTree(ctx,x,y));
-
-  // Лианы
   ctx.strokeStyle='rgba(30,120,15,0.5)';ctx.lineWidth=2;
   for(let i=0;i<6;i++){
     const lx=W*(0.15+i*0.14);
@@ -1152,44 +1084,41 @@ function renderPassMap(){
     for(let j=0;j<8;j++)j===0?ctx.moveTo(lx+Math.sin(j)*10,y4+j*50):ctx.lineTo(lx+Math.sin(j)*12,y4+j*50);
     ctx.stroke();
   }
-
-  // Цветы и растения
   ctx.font='14px Arial';
   const jungleItems=['🌺','🌿','🍃','🌸','🦋','🐸','🦜','🐊','🦎','🍀','🌴'];
   for(let i=0;i<18;i++){
-    const fx=12+Math.random()*0;// будем по формуле
-    const gx=((i*73+11)%W*.85)+W*0.07;
+    const gx=((i*73+11)%Math.floor(W*.85))+W*0.07;
     const gy=y4+25+(i*43)%BH;
     ctx.fillText(jungleItems[i%jungleItems.length],gx,gy);
   }
-
-  // Водопад
   const wfX=W*.72;
   const wfG=ctx.createLinearGradient(wfX,y4+100,wfX,y4+250);
   wfG.addColorStop(0,'rgba(80,180,255,0.8)');wfG.addColorStop(1,'rgba(60,140,220,0.3)');
   ctx.fillStyle=wfG;ctx.fillRect(wfX-8,y4+100,16,150);
   ctx.fillStyle='rgba(180,230,255,0.5)';ctx.beginPath();ctx.ellipse(wfX,y4+255,22,8,0,0,Math.PI*2);ctx.fill();
-
-  // Туман снизу у джунглей
   ctx.fillStyle='rgba(120,200,100,0.12)';
   ctx.fillRect(0,y4+BH-60,W,60);
 
-  // ---- ПУТЬ (дорожка через все биомы) ----
+  // ПУТЬ
   const rpos=rewardPos(W,BH*4);
   ctx.strokeStyle='rgba(245,197,24,0.5)';ctx.lineWidth=4;ctx.setLineDash([9,8]);
   ctx.beginPath();rpos.forEach((p,i)=>{i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);});
   ctx.stroke();ctx.setLineDash([]);
 
-  // ---- БЛОК СЕЗОН 1 (внизу) ----
+  // ====== БЛОК СЕЗОН 1 -- ИСПРАВЛЕН ======
   const sy=BH*4;
-  // Фон сезона — тёмные джунгли с декором
+
+  // Фон
   const gSeason=ctx.createLinearGradient(0,sy,0,sy+SEASON_H);
   gSeason.addColorStop(0,'#0a1f08');gSeason.addColorStop(1,'#050e04');
   ctx.fillStyle=gSeason;ctx.fillRect(0,sy,W,SEASON_H);
 
-  // Декоративная полоса наверху блока сезона
+  // Верхняя линия
   const gLine=ctx.createLinearGradient(0,sy,W,sy);
-  gLine.addColorStop(0,'transparent');gLine.addColorStop(0.3,'rgba(46,189,107,0.8)');gLine.addColorStop(0.7,'rgba(46,189,107,0.8)');gLine.addColorStop(1,'transparent');
+  gLine.addColorStop(0,'transparent');
+  gLine.addColorStop(0.3,'rgba(46,189,107,0.8)');
+  gLine.addColorStop(0.7,'rgba(46,189,107,0.8)');
+  gLine.addColorStop(1,'transparent');
   ctx.fillStyle=gLine;ctx.fillRect(0,sy,W,2);
 
   // Сетка
@@ -1197,40 +1126,53 @@ function renderPassMap(){
   for(let i=0;i<W;i+=24)for(let j=0;j<SEASON_H;j+=24)
     if((Math.floor(i/24)+Math.floor(j/24))%2===0)ctx.fillRect(i,sy+j,24,24);
 
-  // Угловые листья
-  ctx.font='22px Arial';
-  ctx.fillText('🌿',8,sy+30);ctx.fillText('🌿',W-30,sy+30);
-  ctx.fillText('🍃',8,sy+SEASON_H-15);ctx.fillText('🍃',W-22,sy+SEASON_H-15);
+  // Угловые листья -- отступ от краёв
+  ctx.font='18px Arial';ctx.textAlign='center';
+  ctx.fillText('🌿',20,sy+26);ctx.fillText('🌿',W-20,sy+26);
+  ctx.fillText('🍃',20,sy+SEASON_H-16);ctx.fillText('🍃',W-20,sy+SEASON_H-16);
 
-  // Текст СЕЗОН 1
-  ctx.font='bold 32px Orbitron, sans-serif';
+  // НАДПИСЬ «СЕЗОН 1» -- адаптивный размер, гарантированно помещается
+  const titleFontSize=Math.min(30,Math.floor(W/9));
+  ctx.font=`900 ${titleFontSize}px Orbitron, sans-serif`;
   ctx.textAlign='center';
   // Тень
-  ctx.fillStyle='rgba(0,0,0,0.8)';
-  ctx.fillText('СЕЗОН 1',W/2+2,sy+68+2);
-  // Градиентный текст
-  const tg=ctx.createLinearGradient(0,sy+40,0,sy+70);
-  tg.addColorStop(0,'#ffffff');tg.addColorStop(1,'#2ebd6b');
-  ctx.fillStyle=tg;
-  ctx.fillText('СЕЗОН 1',W/2,sy+68);
+  ctx.fillStyle='rgba(0,0,0,0.9)';
+  ctx.fillText('СЕЗОН 1',W/2+2,sy+72+2);
+  // Градиент
+  const tg2=ctx.createLinearGradient(0,sy+44,0,sy+74);
+  tg2.addColorStop(0,'#ffffff');tg2.addColorStop(1,'#2ebd6b');
+  ctx.fillStyle=tg2;
+  ctx.fillText('СЕЗОН 1',W/2,sy+72);
 
-  // Подзаголовок
-  ctx.font='12px Exo 2, sans-serif';
-  ctx.fillStyle='rgba(255,255,255,0.35)';
-  ctx.fillText('ДЖУНГЛИ • СЕЗОННЫЙ ПРОПУСК',W/2,sy+90);
+  // Подзаголовок -- маленький, адаптивный
+  const subFontSize=Math.max(9,Math.min(11,Math.floor(W/34)));
+  ctx.font=`${subFontSize}px Exo 2, sans-serif`;
+  ctx.fillStyle='rgba(255,255,255,0.38)';
+  ctx.fillText('ДЖУНГЛИ • СЕЗОННЫЙ ПРОПУСК',W/2,sy+96);
 
-  // Декоративная полоса под текстом
-  const bG=ctx.createLinearGradient(W/2-80,sy+100,W/2+80,sy+100);
-  bG.addColorStop(0,'transparent');bG.addColorStop(0.5,'rgba(46,189,107,0.6)');bG.addColorStop(1,'transparent');
-  ctx.fillStyle=bG;ctx.fillRect(W/2-80,sy+100,160,2);
+  // Горизонтальная линия под подзаголовком
+  const bw=Math.min(160,W*0.45);
+  const bg2=ctx.createLinearGradient(W/2-bw/2,sy+106,W/2+bw/2,sy+106);
+  bg2.addColorStop(0,'transparent');bg2.addColorStop(0.5,'rgba(46,189,107,0.55)');bg2.addColorStop(1,'transparent');
+  ctx.fillStyle=bg2;ctx.fillRect(W/2-bw/2,sy+106,bw,2);
 
   // Иконки
-  ctx.font='20px Arial';
-  ctx.fillText('🌴  🦜  🐊  🦋  🌺',W/2,sy+130);
+  ctx.font='17px Arial';
+  ctx.fillText('🌴  🦜  🐊  🦋  🌺',W/2,sy+136);
+
+  // Строка про сброс кубков
+  ctx.font=`10px Exo 2, sans-serif`;
+  ctx.fillStyle='rgba(255,255,255,0.22)';
+  ctx.fillText('Сброс кубков −30% • 1-е число каждого месяца',W/2,sy+164);
+
+  // Нижняя декоративная линия
+  const bg3=ctx.createLinearGradient(W/2-bw/2,sy+SEASON_H-20,W/2+bw/2,sy+SEASON_H-20);
+  bg3.addColorStop(0,'transparent');bg3.addColorStop(0.5,'rgba(46,189,107,0.3)');bg3.addColorStop(1,'transparent');
+  ctx.fillStyle=bg3;ctx.fillRect(W/2-bw/2,sy+SEASON_H-20,bw,1);
 
   ctx.textAlign='left';
 
-  // ---- НАГРАДЫ (кружки) ----
+  // НАГРАДЫ (кружки)
   layer.innerHTML='';
   rpos.forEach((pos,i)=>{
     const r=PASS_R[i];if(!r)return;
@@ -1274,22 +1216,14 @@ function drawTree(ctx,x,y,tp){
 }
 
 function drawJungleTree(ctx,x,y){
-  // Ствол
-  ctx.fillStyle='#3d2008';
-  ctx.fillRect(x-4,y-10,8,30);
-  // Корни
+  ctx.fillStyle='#3d2008';ctx.fillRect(x-4,y-10,8,30);
   ctx.strokeStyle='#3d2008';ctx.lineWidth=3;
   ctx.beginPath();ctx.moveTo(x-4,y+10);ctx.lineTo(x-14,y+22);ctx.stroke();
   ctx.beginPath();ctx.moveTo(x+4,y+10);ctx.lineTo(x+14,y+22);ctx.stroke();
-  // Крона
-  ctx.fillStyle='rgba(20,100,10,0.9)';
-  ctx.beginPath();ctx.ellipse(x,y-18,28,20,0,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='rgba(30,130,15,0.8)';
-  ctx.beginPath();ctx.ellipse(x-8,y-25,18,14,-.3,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(20,100,10,0.9)';ctx.beginPath();ctx.ellipse(x,y-18,28,20,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(30,130,15,0.8)';ctx.beginPath();ctx.ellipse(x-8,y-25,18,14,-.3,0,Math.PI*2);ctx.fill();
   ctx.beginPath();ctx.ellipse(x+10,y-22,16,13,.3,0,Math.PI*2);ctx.fill();
-  // Блики
-  ctx.fillStyle='rgba(80,200,50,0.2)';
-  ctx.beginPath();ctx.ellipse(x-3,y-28,8,5,-.5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(80,200,50,0.2)';ctx.beginPath();ctx.ellipse(x-3,y-28,8,5,-.5,0,Math.PI*2);ctx.fill();
 }
 
 function drawSnowman(ctx,x,y){
@@ -1302,8 +1236,7 @@ function drawSnowman(ctx,x,y){
   ctx.fillStyle='#555';ctx.fillRect(x-9,y-2,4,2);ctx.fillRect(x+5,y-2,4,2);
 }
 
-// ================== МАГАЗИН ==================
-
+// ====== МАГАЗИН ======
 function dailyGift(){
   const today=new Date().toDateString();if(U.lastGiftDate===today)return notify('Уже забрали сегодня!');
   U.lastGiftDate=today;const r=Math.random()<0.2?{t:'gems',v:15}:{t:'gold',v:300};
@@ -1361,8 +1294,7 @@ function nextChestItem(){
   else if(item.t==='banner'){if(!U.banners)U.banners=[];U.banners.push(item.bid);}
 }
 
-// ================== КОЛОДА ==================
-
+// ====== КОЛОДА ======
 function upCost(l){return l*800;}
 function upReq(l){return l*50;}
 function renderDeck(){
@@ -1370,8 +1302,7 @@ function renderDeck(){
   (U.deck||[]).forEach(id=>{
     const card=CARDS.find(x=>x.id===id);if(!card)return;
     const data=U.cards[id]||{level:1,power:0};const sel=swapMode&&swapId===id;
-    const isFoil=data.level>=8;
-    const isFav=U.favoriteCard===id;
+    const isFoil=data.level>=8;const isFav=U.favoriteCard===id;
     c.innerHTML+=`<div class="ci rr-${card.rr} ${sel?'sel':''} ${isFoil?'foil':''}" style="height:130px;justify-content:center;" onclick="deckClick('${id}')">${isFoil?'<div class="foil-fx"></div>':''}${isFav?'<div class="fav-badge">💖</div>':''}<div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname" style="margin-top:6px;">${card.n}</div><div style="font-size:10px;color:var(--pu);margin-top:4px;">${card.c}💜</div></div>`;
   });
 }
@@ -1403,19 +1334,16 @@ function renderSpells(){
 function deckClick(id){if(swapMode){swapMode=false;swapId=null;updateUI();}else{swapMode=true;swapId=id;notify('Выбери карту снизу для замены','inf');updateUI();}}
 function collClick(id){if(swapMode&&swapId){const idx=U.deck.indexOf(swapId);if(idx!==-1){U.deck[idx]=id;swapMode=false;swapId=null;notify('Карта заменена!','ok');saveU();}}else notify('Сначала выбери карту в колоде','inf');}
 
-// УЛУЧШЕНИЕ КАРТЫ: +0.05 к скорости
 function upCard(id){
   const data=U.cards[id];const cost=upCost(data.level),req=upReq(data.level);
   if(U.gold>=cost&&data.power>=req&&data.level<8){
     U.gold-=cost;data.power-=req;data.level++;
-    // +5% к скорости при улучшении (сохраняем в карте)
     if(data.spBonus===undefined)data.spBonus=0;
     data.spBonus+=0.05;
     checkMedals();saveU();notify(`${CARDS.find(c=>c.id===id).n} → Ур.${data.level}! +Скорость!`,'ok');
   }else notify('Не хватает монет или очков!');
 }
 
-// Получить реальную скорость карты с учётом бонуса от улучшений
 function getCardSp(cid){
   const card=CARDS.find(c=>c.id===cid);if(!card)return 0.5;
   const data=U&&U.cards&&U.cards[cid];
@@ -1428,8 +1356,7 @@ function changeNick(){
   U.gold-=5000;U.nickname=n;notify('Никнейм изменён!','ok');saveU();
 }
 
-// ================== БАШНЯ ==================
-
+// ====== БАШНЯ ======
 function renderTower(){
   const c=document.getElementById('ui-tower');if(!c)return;
   const sl=U.towerSkinLevel||1,upgG=sl*1000,upgGem=sl*50,ci=arenaIdx();
@@ -1491,8 +1418,7 @@ function loadLB(){
   }).catch(()=>{lb.innerHTML='<p style="text-align:center;color:var(--dn);">Ошибка загрузки</p>';});
 }
 
-// ================== АККАУНТ ==================
-
+// ====== АККАУНТ ======
 function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
 function skipReg(){ss('m-reg','display','none');U.isGuest=true;lw('clash_uid',U.uid);startUI();}
 function openReg(){ss('m-reg','display','none');ss('m-regemail','display','flex');}
@@ -1524,8 +1450,7 @@ function doLogin(){
 }
 function logout(){ld('clash_uid');location.reload();}
 
-// ================== ДРУЗЬЯ ==================
-
+// ====== ДРУЗЬЯ ======
 function openFriends(){ss('friends-ov','display','flex');fTab('add');fList();}
 function fTab(t){['add','notif','list'].forEach(x=>{document.getElementById('ft-'+x)?.classList.toggle('active',x===t);ss('fc-'+x,'display',x===t?'block':'none');});if(t==='list')fList();}
 function searchFriend(){
@@ -1559,8 +1484,7 @@ function fList(){
 function sendBReq(fuid){const bid=uid();db.ref(`battles/${bid}`).set({p1:U.uid,p2:fuid,state:'waiting'});db.ref(`users/${fuid}/notifications`).push({type:'battle_req',fromUid:U.uid,fromName:U.nickname,battleId:bid});notify('Приглашение отправлено!','ok');ss('friends-ov','display','none');doLoad('Ожидание друга…',()=>{db.ref(`battles/${bid}/state`).on('value',snap=>{if(snap.val()==='playing'){db.ref(`battles/${bid}/state`).off();initMP(bid,fuid,0,true);}});});}
 function accBattle(bid,key,fuid){rejNotif(key);db.ref(`battles/${bid}`).update({state:'playing'});ss('friends-ov','display','none');doLoad('Загрузка арены…',()=>{initMP(bid,fuid,1,true);});}
 
-// ================== БОЙ ==================
-
+// ====== БОЙ ======
 let elixir=5,bHand=[],towers=[],ents=[],projs=[],parts=[];
 let cw=0,ch=0;
 let botTimer=0,bEndTime=0,isOvertime=false,isTieBreaker=false;
@@ -1591,7 +1515,6 @@ function initBot(){
   const numMedals=Math.floor(Math.random()*3);
   const mArr=[...MEDALS].sort(()=>Math.random()-.5).slice(0,numMedals);
   botMedalsHTML=mArr.map(m=>`<span style="font-size:12px;">${m.ic}</span>`).join('');
-  // Случайная любимая карта бота
   const allBotCards=botDeck.map(id=>CARDS.find(c=>c.id===id)).filter(Boolean);
   botFavCard=allBotCards.length?allBotCards[Math.floor(Math.random()*allBotCards.length)]:null;
   startBattle(botName,botBanner.s);
@@ -1658,21 +1581,15 @@ function startBattle(enemyName,enemyBanStyle){
           ];
         }
 
-        // БАННЕРЫ В БОЮ + ЛЮБИМАЯ КАРТА
         const bE=document.getElementById('bban-e'),bP=document.getElementById('bban-p');
         const eqB=BANNERS.find(b=>b.id===(U.equippedBanner||'blue'))||BANNERS[0];
         const mH=(U.equippedMedals||[]).map(m=>{if(!m)return'';const med=MEDALS.find(x=>x.id===m);return med?`<span style="font-size:12px;">${med.ic}</span>`:''}).join('');
-
-        // Любимая карта игрока
         const myFavCard=U.favoriteCard?CARDS.find(c=>c.id===U.favoriteCard):null;
         const myFavIcon=myFavCard?myFavCard.ic:'';
-
-        // Любимая карта врага (бот или МП)
         const enFavIcon=botFavCard?botFavCard.ic:'';
 
         if(bE){
-          bE.style.background=enemyBanStyle;
-          bE.classList.remove('anim');
+          bE.style.background=enemyBanStyle;bE.classList.remove('anim');
           const eN=document.getElementById('bban-e-name');
           const eT=document.getElementById('bban-e-tr');
           const eF=document.getElementById('bban-e-fav');
@@ -1681,8 +1598,7 @@ function startBattle(enemyName,enemyBanStyle){
           if(eF)eF.textContent=isMP?'':enFavIcon;
         }
         if(bP){
-          bP.style.background=eqB.s;
-          bP.classList.remove('anim');
+          bP.style.background=eqB.s;bP.classList.remove('anim');
           const pN=document.getElementById('bban-p-name');
           const pT=document.getElementById('bban-p-tr');
           const pF=document.getElementById('bban-p-fav');
@@ -1692,17 +1608,14 @@ function startBattle(enemyName,enemyBanStyle){
         }
 
         requestAnimationFrame(()=>{if(bE)bE.classList.add('anim');if(bP)bP.classList.add('anim');});
-
         questProg('play',1);
-        renderHand();
-        setupDrag();
+        renderHand();setupDrag();
         if(bLoopId)cancelAnimationFrame(bLoopId);
         bLoopId=requestAnimationFrame(bLoop);
         setTimeout(()=>{bState='playing';bEndTime=Date.now()+(isTut?9999999:180000);},2500);
 
       }catch(inErr){console.error(inErr);notify('Сбой арены');exitBattle();}
     },150);
-
   }catch(e){console.error(e);notify('Ошибка старта!');exitBattle();}
 }
 
@@ -1723,8 +1636,7 @@ function updateElixUI(){
 }
 
 function renderHand(){
-  const cont=document.getElementById('hand');if(!cont)return;
-  cont.innerHTML='';
+  const cont=document.getElementById('hand');if(!cont)return;cont.innerHTML='';
   for(let i=0;i<4;i++){
     if(!bHand[i])continue;const ci=CARDS.find(c=>c.id===bHand[i]);if(!ci)continue;
     const data=U.cards[ci.id]||{level:1};const ok=elixir>=ci.c;
@@ -1746,13 +1658,8 @@ function setupDrag(){
     const idx=parseInt(target.dataset.i);
     const cid=bHand[idx];if(!cid)return;
     const card=CARDS.find(c=>c.id===cid);if(!card)return;
-    if(elixir<card.c){
-      target.classList.add('flash');setTimeout(()=>target.classList.remove('flash'),900);return;
-    }
-    if(card.t!=='spell'){
-      const my=ents.filter(en=>en.team===0&&en.cid===card.id).length;
-      if(my>=2){notify('Уже 2 таких на поле!');return;}
-    }
+    if(elixir<card.c){target.classList.add('flash');setTimeout(()=>target.classList.remove('flash'),900);return;}
+    if(card.t!=='spell'){const my=ents.filter(en=>en.team===0&&en.cid===card.id).length;if(my>=2){notify('Уже 2 таких на поле!');return;}}
     dragOn=true;dragIdx=idx;
     const cx=e.touches?e.touches[0].clientX:e.clientX;
     const cy=e.touches?e.touches[0].clientY:e.clientY;
@@ -1807,7 +1714,6 @@ function setupDrag(){
 function spawnCard(cid,team,x,y,lvl=1){
   const card=CARDS.find(c=>c.id===cid);if(!card)return;
   const spMult=isSD?1.5:1;const sm=1+(lvl-1)*0.4;
-  // Реальная скорость с учётом бонуса от улучшений (только для команды игрока)
   const baseSp=(team===0)?getCardSp(cid):card.sp;
   if(card.t==='spell'){
     if(cid==='freeze'){
@@ -2079,7 +1985,10 @@ function endBattle(win){
       }else if(win===false){
         st('en-tro',`+${gain}🏆`);document.getElementById('en-tro').className='etro win';
         st('ep-tro',`-${loss}🏆`);document.getElementById('ep-tro').className='etro lose';
-        U.trophies=Math.max(0,(U.trophies||0)-loss);U.xp=(U.xp||0)+xpG;U.gold=(U.gold||0)+goldG;
+        // ИСПРАВЛЕНО: кубки не опускаются ниже порога достигнутой арены
+        const arenaFloor=ARENAS[U.maxArena||0].th;
+        U.trophies=Math.max(arenaFloor,(U.trophies||0)-loss);
+        U.xp=(U.xp||0)+xpG;U.gold=(U.gold||0)+goldG;
       }else{
         st('en-tro','0🏆');document.getElementById('en-tro').className='etro tie';
         st('ep-tro','0🏆');document.getElementById('ep-tro').className='etro tie';
