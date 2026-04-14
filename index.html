@@ -8,6 +8,14 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Clash Arena</title>
+<link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js');
+    });
+  }
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root{--pr:#3d9be9;--bg:#12131a;--panel:#1e2030;--p2:#252840;--ac:#f5c518;--tx:#e8eaf0;--dn:#e8415a;--ok:#2ebd6b;--pu:#9b5de5;--top:60px;--nav:82px;--br:rgba(255,255,255,0.08)}
@@ -30,7 +38,7 @@ html,body{width:100vw!important;height:100vh!important;max-width:100vw;max-heigh
 @keyframes cloudFloat{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
 #app-cover{position:fixed;inset:0;background:var(--bg);z-index:19000;transition:opacity .4s ease;pointer-events:none}
 #toast-c{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:88%;max-width:350px}
-.toast{background:rgba(232,65,90,.95);color:#fff;padding:13px 18px;border-radius:12px;font-size:14px;font-weight:700;animation:slideUp .3s forwards;text-align:center}
+.toast{background:rgba(232,65,90,.95);color:#fff;padding:13px 18px;border-radius:12px;font-size:14px;font-weight:700;animation:slideUp .3s forwards;text-align:center;pointer-events:auto}
 .toast.ok{background:rgba(46,189,107,.95)}.toast.inf{background:rgba(61,155,233,.95)}
 #intro{position:fixed;inset:0;background:#000;z-index:20000;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none}
 #intro h1{font-family:'Orbitron',sans-serif;color:#fff;font-size:36px;font-weight:900;letter-spacing:3px;text-align:center}
