@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#12131a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -60,16 +60,18 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 #s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:15px;align-items:center;padding:15px 0 25px!important;overflow-y:auto!important;overflow-x:hidden!important}
 .grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;padding:13px;width:100%;max-width:500px;margin:0 auto}
 .ci{background:linear-gradient(155deg,#2a2d45,#1e2030);border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%;height:auto;aspect-ratio:1/1.3;cursor:pointer;transition:.2s}
-.cicon{font-size:10vw;max-font-size:42px;margin-bottom:4px;position:relative;z-index:2}
 @media (min-width: 450px) { .cicon { font-size: 38px; } }
-.cname{font-size:13px;font-weight:700;color:#fff;width:100%;line-height:1.2;text-align:center;position:relative;z-index:2}
-.clvl{position:absolute;top:-8px;right:-8px;background:var(--bg);color:var(--ac);border:1.5px solid var(--ac);border-radius:8px;padding:3px 6px;font-size:10px;font-weight:900;font-family:'Orbitron',sans-serif;z-index:10}
 .cpb{width:100%;height:8px;background:rgba(0,0,0,.4);border-radius:4px;overflow:hidden;margin-top:auto;margin-bottom:3px;position:relative;z-index:2}
 .cpbf{height:100%;background:linear-gradient(90deg,var(--ok),#5ef09a);border-radius:4px;transition:width .3s}
 .cpt{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px;position:relative;z-index:2}
 .ci.locked{filter:grayscale(1) brightness(.4);aspect-ratio:1/1;justify-content:center;pointer-events:none}
 .ci.sel{border-color:var(--ac)!important;box-shadow:0 0 10px rgba(245,197,24,0.5)!important}
 .ci.fav-sel{border-color:#ff6b9d!important;box-shadow:0 0 12px rgba(255,107,157,0.6)!important}
+html,body{width:100vw!important;height:100vh!important;max-width:100vw;max-height:100vh;background:var(--bg);color:var(--tx);overflow:hidden!important;position:fixed!important;top:0;left:0;right:0;bottom:0;-webkit-text-size-adjust:100%}
+
+.cicon{font-size:46px;margin-bottom:4px;position:relative;z-index:2}
+.cname{font-size:14px;font-weight:700;color:#fff;width:100%;line-height:1.2;text-align:center;position:relative;z-index:2}
+.clvl{position:absolute;top:-8px;right:-8px;background:var(--bg);color:var(--ac);border:1.5px solid var(--ac);border-radius:8px;padding:3px 6px;font-size:11px;font-weight:900;font-family:'Orbitron',sans-serif;z-index:10}
 
 .bigbtn{width:88vw;max-width:340px;height:9vh;min-height:64px;max-height:80px;background:linear-gradient(145deg,#f5c518,#d4810a);border:none;border-radius:15px;color:#1a1000;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.4);transition:.1s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px}
 .bigbtn:active{transform:translateY(5px);box-shadow:0 0 0}
@@ -1103,8 +1105,13 @@ function startSpectatorMatch(p1, p2) {
   bState='intro';isOvertime=false;isTieBreaker=false;isBotFrozen=false;freezeCd=0;dragOn=false;dragIdx=-1;
   
   const cont=document.getElementById('cvs-c');
-  cw=cont.clientWidth||window.innerWidth||360;
-  ch=cont.clientHeight||(window.innerHeight-176)||530;
+  const realW = cont.clientWidth || window.innerWidth || 360;
+  const realH = cont.clientHeight || (window.innerHeight - 176) || 530;
+  
+  // ФИКС МАСШТАБА: Жестко фиксируем внутреннюю ширину арены в 360 пикселей.
+  cw = 360; 
+  ch = Math.floor(360 * (realH / realW)); 
+  
   bCanvas=document.getElementById('gc');
   if(bCanvas){bCanvas.width=cw;bCanvas.height=ch;bCtx=bCanvas.getContext('2d');}
   ents=[];projs=[];parts=[];
@@ -1147,8 +1154,13 @@ try{if(!isTut&&U&&U.stats){U.stats.matches=(U.stats.matches||0)+1;if(isSD)U.stat
 setTimeout(()=>{
 try{
 const cont=document.getElementById('cvs-c');if(!cont)return;
-cw=cont.clientWidth||window.innerWidth||360;
-ch=cont.clientHeight||(window.innerHeight-176)||530;
+const realW = cont.clientWidth || window.innerWidth || 360;
+const realH = cont.clientHeight || (window.innerHeight - 176) || 530;
+
+// ФИКС МАСШТАБА
+cw = 360; 
+ch = Math.floor(360 * (realH / realW)); 
+
 bCanvas=document.getElementById('gc');
 if(bCanvas){bCanvas.width=cw;bCanvas.height=ch;bCtx=bCanvas.getContext('2d');}
 elixir=5;ents=[];projs=[];parts=[];
@@ -1205,27 +1217,6 @@ setTimeout(()=>{bState='playing';bEndTime=Date.now()+(isTut?9999999:180000);},25
 }catch(e){console.error(e);notify('Ошибка старта!');exitBattle();}
 }
 
-function updateElixUI(){
-const segs=document.getElementById('elsegs'),cnt=document.getElementById('elcnt');if(!segs)return;
-const filled=Math.floor(elixir),half=(elixir-filled)>=0.5;segs.innerHTML='';
-for(let i=0;i<10;i++){let cl='elseg';if(i<filled)cl+=' on';else if(i===filled&&half)cl+=' half';segs.innerHTML+=`<div class="${cl}"></div>`;}
-if(cnt)cnt.textContent=Math.floor(elixir);
-document.querySelectorAll('.gc').forEach(card=>{
-const i=parseInt(card.dataset.i);if(isNaN(i)||!bHand[i])return;
-const cdef=CARDS.find(c=>c.id===bHand[i]);if(!cdef)return;
-card.classList.toggle('can',elixir>=cdef.c);card.classList.toggle('cant',elixir<cdef.c);
-});
-}
-
-function renderHand(){
-const cont=document.getElementById('hand');if(!cont)return;cont.innerHTML='';
-for(let i=0;i<4;i++){
-if(!bHand[i])continue;const ci=CARDS.find(c=>c.id===bHand[i]);if(!ci)continue;
-const data=U.cards[ci.id]||{level:1};const isFoil=data.level>=8;
-cont.innerHTML+=`<div class="gc rr-${ci.rr} ${elixir>=ci.c?'can':'cant'} ${isFoil?'foil':''}" data-i="${i}">${isFoil?'<div class="foil-fx"></div>':''}<div class="ecost">${ci.c}</div><div class="gc-icon">${ci.ic}</div><div class="gc-name">${ci.n}</div><div style="color:var(--ac);font-size:9px;font-weight:800;position:relative;z-index:2">Лвл ${data.level}</div></div>`;
-}
-}
-
 function setupDrag(){
   const hand=document.getElementById('hand');if(!hand)return;
   const ghost=document.getElementById('dghost');
@@ -1252,7 +1243,12 @@ function setupDrag(){
     if(!dragOn)return;
     const cx=e.touches?e.touches[0].clientX:e.clientX,cy=e.touches?e.touches[0].clientY:e.clientY;
     if(ghost){ghost.style.left=cx+'px';ghost.style.top=cy+'px';}
-    if(bCanvas){const r=bCanvas.getBoundingClientRect();dragCX=cx-r.left;dragCY=cy-r.top;}
+    if(bCanvas){
+      const r=bCanvas.getBoundingClientRect();
+      // Пересчитываем координаты экрана в крупный масштаб канваса
+      dragCX=((e.touches?e.touches[0].clientX:e.clientX)-r.left) * (cw / r.width);
+      dragCY=((e.touches?e.touches[0].clientY:e.clientY)-r.top) * (ch / r.height);
+    }
     e.preventDefault();
   }
   
@@ -1261,19 +1257,20 @@ function setupDrag(){
     const idx=dragIdx;dragOn=false;dragIdx=-1;if(!bCanvas)return;
     
     const r=bCanvas.getBoundingClientRect();
-    let cx=(e.changedTouches?e.changedTouches[0].clientX:e.clientX)-r.left;
-    let cy=(e.changedTouches?e.changedTouches[0].clientY:e.clientY)-r.top;
+    const scaleX = cw / r.width;
+    const scaleY = ch / r.height;
     
-    // ФИКС 1: Смягчаем границы поля. Если отпустили палец на панели карт, ставим карту в самый низ арены
-    if(cy > ch && cy < ch + 200) cy = ch - 5; 
+    let cx=((e.changedTouches?e.changedTouches[0].clientX:e.clientX)-r.left) * scaleX;
+    let cy=((e.changedTouches?e.changedTouches[0].clientY:e.clientY)-r.top) * scaleY;
+    
+    if(cy > ch && cy < ch + (200 * scaleY)) cy = ch - 5; 
     if(cx < 0) cx = 5;
     if(cx > cw) cx = cw - 5;
     
-    if(cy<0||cy>ch||cx<0||cx>cw)return; // Ушла совсем за пределы экрана
+    if(cy<0||cy>ch||cx<0||cx>cw)return; 
     
     const cid=bHand[idx];if(!cid)return;const cardObj=CARDS.find(c=>c.id===cid);if(!cardObj)return;
     
-    // Считаем красную зону
     let minY=(cardObj.t==='spell')?0:ch/2+15;
     if(cardObj.t!=='spell'&&!isSD){
       const eLT=towers.find(t=>t.team===1&&t.type==='pri'&&t.x<cw/2);
@@ -1289,7 +1286,6 @@ function setupDrag(){
       elixir=Math.max(0,elixir-cardObj.c);
       const used=bHand.splice(idx,1)[0];bHand.push(used);renderHand();
     } else {
-      // ФИКС 2: Выводим уведомление, чтобы игрок понимал ошибку
       notify('Нельзя ставить войска на вражеской половине!', 'err');
     }
   }
@@ -1297,6 +1293,28 @@ function setupDrag(){
   h2.addEventListener('touchstart',startD,{passive:false});h2.addEventListener('mousedown',startD);
   document.addEventListener('touchmove',moveD,{passive:false});document.addEventListener('mousemove',moveD);
   document.addEventListener('touchend',endD);document.addEventListener('mouseup',endD);
+}
+
+
+function updateElixUI(){
+const segs=document.getElementById('elsegs'),cnt=document.getElementById('elcnt');if(!segs)return;
+const filled=Math.floor(elixir),half=(elixir-filled)>=0.5;segs.innerHTML='';
+for(let i=0;i<10;i++){let cl='elseg';if(i<filled)cl+=' on';else if(i===filled&&half)cl+=' half';segs.innerHTML+=`<div class="${cl}"></div>`;}
+if(cnt)cnt.textContent=Math.floor(elixir);
+document.querySelectorAll('.gc').forEach(card=>{
+const i=parseInt(card.dataset.i);if(isNaN(i)||!bHand[i])return;
+const cdef=CARDS.find(c=>c.id===bHand[i]);if(!cdef)return;
+card.classList.toggle('can',elixir>=cdef.c);card.classList.toggle('cant',elixir<cdef.c);
+});
+}
+
+function renderHand(){
+const cont=document.getElementById('hand');if(!cont)return;cont.innerHTML='';
+for(let i=0;i<4;i++){
+if(!bHand[i])continue;const ci=CARDS.find(c=>c.id===bHand[i]);if(!ci)continue;
+const data=U.cards[ci.id]||{level:1};const isFoil=data.level>=8;
+cont.innerHTML+=`<div class="gc rr-${ci.rr} ${elixir>=ci.c?'can':'cant'} ${isFoil?'foil':''}" data-i="${i}">${isFoil?'<div class="foil-fx"></div>':''}<div class="ecost">${ci.c}</div><div class="gc-icon">${ci.ic}</div><div class="gc-name">${ci.n}</div><div style="color:var(--ac);font-size:9px;font-weight:800;position:relative;z-index:2">Лвл ${data.level}</div></div>`;
+}
 }
 
 function spawnCard(cid,team,x,y,lvl=1){
