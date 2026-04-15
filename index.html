@@ -52,7 +52,6 @@ html,body{width:100vw!important;height:100dvh!important;max-width:100vw;max-heig
 .topbar{position:fixed;top:0;left:0;width:100%;height:var(--top);padding-top:env(safe-area-inset-top);background:rgba(18,19,26,.96);display:flex;justify-content:space-between;align-items:center;padding-left:14px;padding-right:14px;z-index:2000;border-bottom:1px solid var(--br);backdrop-filter:blur(8px)}
 .tstat{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;background:var(--panel);padding:7px 12px;border-radius:20px;border:1px solid var(--br)}
 
-/* ИСПРАВЛЕНИЕ: Увеличены кнопки в лобби, убрана лишняя пустота */
 nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(18,19,26,.97);display:flex;justify-content:space-around;align-items:center;z-index:2000;border-top:1px solid var(--br);backdrop-filter:blur(8px);padding-bottom:env(safe-area-inset-bottom,0)}
 .nb{padding:6px 4px;font-size:11px;text-align:center;cursor:pointer;opacity:.4;transition:.2s;text-transform:uppercase;color:var(--tx);font-weight:700;flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;letter-spacing:.3px}
 .nb.active{opacity:1;color:var(--pr)}.ni{font-size:26px;transition:.2s}
@@ -80,16 +79,16 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 .bigbtn:active{transform:translateY(5px);box-shadow:0 0 0}
 .bigbtn.sd{background:linear-gradient(145deg,#e8415a,#9d1828);color:#fff;font-size:14px;height:7.5vh;min-height:54px;margin-top:8px;box-shadow:0 5px 0 rgba(0,0,0,.4)}
 
-#bscr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease;touch-action:none;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+/* ИСПРАВЛЕНИЕ: Убрал padding-top и padding-bottom у экрана боя, чтобы не сжимать арену дважды! */
+#bscr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease;touch-action:none}
 #bscr.active{display:flex;opacity:1}
-#cvs-c{flex:1;width:100%;position:relative;overflow:hidden;margin-top:env(safe-area-inset-top)}
+/* Canvas сам растягивается на оставшееся место, никаких margin! */
+#cvs-c{flex:1;width:100%;position:relative;overflow:hidden;}
 canvas{display:block;width:100%;height:100%;touch-action:none}
 
-/* ИСПРАВЛЕНИЕ: Убрана черная линия (border-top), бесшовный фон */
 .bui{flex:0 0 auto;width:100%;min-height:170px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 10px calc(10px + env(safe-area-inset-bottom));position:relative;z-index:10;box-sizing:border-box}
 .hand{display:flex;flex-direction:row;gap:8px;justify-content:center;align-items:center;width:100%;overflow:visible;}
 
-/* ИСПРАВЛЕНИЕ: Карты увеличены */
 .gc{width:23vw;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,background .15s}
 .gc.can{border-color:rgba(61,155,233,.6);background:linear-gradient(155deg,#2e3550,#1e2540)}
 .gc.cant{opacity:.45;border-color:rgba(232,65,90,.28)}
@@ -106,8 +105,8 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .elcnt{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#c084fc;min-width:24px;text-align:right}
 
 #arenabox{width:92%;max-width:440px;aspect-ratio:16/9;max-height:25vh;position:relative;border-radius:18px;border:1.5px solid rgba(255,255,255,.1);overflow:hidden;margin:0 auto;flex-shrink:1;cursor:pointer;}
-.arenaoverlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.07),rgba(0,0,0,.62));z-index:1}
-.arenacont{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.arenaoverlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.07),rgba(0,0,0,.62));z-index:1;pointer-events:none;}
+.arenacont{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;}
 .arenatit{font-family:'Orbitron',sans-serif;color:#fff;font-size:28px;font-weight:900;text-shadow:0 2px 10px rgba(0,0,0,.8);text-align:center;margin:0}
 .arenadesc{color:rgba(255,255,255,.8);font-size:14px;font-weight:700;margin-top:6px;margin-bottom:0}
 .sec{background:rgba(0,0,0,.22);border-radius:15px;padding:11px;margin:11px 15px;border:1px solid var(--br)}
@@ -156,13 +155,10 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .fbtn { width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--pr); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s; margin-top: 5px;}
 .fbtn:active { transform: scale(.97); }
 
-.pass-path { display: flex; flex-direction: column; padding: 20px; gap: 15px; position: relative; }
-.pass-node { display: flex; align-items: center; background: var(--p2); border: 1px solid var(--br); border-radius: 15px; padding: 10px; position: relative; z-index: 2; overflow: hidden;}
-.pass-lvl { width: 40px; height: 40px; background: rgba(0,0,0,.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-weight: 900; color: var(--ac); border: 2px solid var(--br); flex-shrink: 0; position: relative; z-index: 2;}
-.pass-reward { flex: 1; margin-left: 15px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2;}
-.pass-line { position: absolute; left: 40px; top: 0; bottom: 0; width: 2px; background: var(--br); z-index: 1; }
-
-#pass-wrap{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;z-index:1}
+/* ИСПРАВЛЕНИЕ: Восстановлен холст для карты боевого пропуска */
+#pass-wrap{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;z-index:1;background:linear-gradient(180deg, #12131a, #0a0b10);}
+#pass-canvas{display:block;max-width:100%;}
+#pass-layer{position:absolute;top:0;left:0;width:100%;z-index:5;pointer-events:none}
 #pass-controls{position:absolute;top:8px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 13px;z-index:200;pointer-events:none}
 #pass-controls>*{pointer-events:auto}
 #qpanel{position:absolute;bottom:-2px;left:0;right:0;background:var(--panel);border-top:1px solid var(--br);z-index:3000;max-height:65vh;overflow-y:auto;transform:translateY(105%);transition:transform .3s cubic-bezier(.4,0,.2,1);border-radius:18px 18px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.6)}
@@ -673,6 +669,7 @@ const getCB = (uid) => uid === 'FPTL777C' ? `<span class="creator-badge" title="
 const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9,GEM-P4M5,GEM-R7T6,GEM-W2Q1,GEM-N5H4,GEM-Y3Z2,GEM-F1G8,GEM-S6D7,GEM-V9B0,GEM-J2K3,GEM-L5P6,GEM-M8N9,GEM-C1X2,GEM-Z4V5,GEM-A7S8,GEM-D0F1,GEM-G3H4,GEM-J6K7,GEM-L9P0,GEM-Q2W3,GEM-E5R6,GEM-T8Y9,GEM-U1I2,GEM-O4P5,GEM-A7D8,GEM-F0G1,GEM-H3J4,GEM-K6L7,GEM-Z9X0,GEM-C2V3,GEM-B5N6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4,COIN-T5Y6,COIN-U7I8,COIN-O9P0,COIN-A1S2,COIN-D3F4,COIN-G5H6,COIN-J7K8,COIN-L9Z0,COIN-X1C2,COIN-V3B4,COIN-N5M6,COIN-Q7A8,COIN-W9S0,COIN-E1D2,COIN-R3F4,COIN-T5G6,COIN-Y7H8,COIN-U9J0,COIN-I1K2,COIN-O3L4,COIN-P5Z6,COIN-A7X8,COIN-S9C0,COIN-D1V2,COIN-F3B4,COIN-G5N6,COIN-H7M8,COIN-J9Q0,COIN-K1W2,COIN-L3E4,COIN-Z5R6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
+"CRWN-M1N2,CRWN-B3V4,CRWN-C5X6,CRWN-Z7A8,CRWN-S9D0,CRWN-F1G2,CRWN-H3J4,CRWN-K5L6,CRWN-P7O8,CRWN-I9U0,CRWN-Y1T2,CRWN-R3E4,CRWN-W5Q6,CRWN-M7B8,CRWN-V9C0,CRWN-X1Z2,CRWN-L3K4,CRWN-J5H6,CRWN-G7F8,CRWN-D9S0,CRWN-A1P2,CRWN-O3I4,CRWN-U5Y6,CRWN-T7R8,CRWN-E9W0,CRWN-Q1M2,CRWN-N3B4,CRWN-V5C6,CRWN-X7Z8,CRWN-L9J0,CRWN-H1G2,CRWN-F3D4,CRWN-S5A6,CRWN-P7U8".split(',').forEach(k=>PROMOS[k.trim()]={t:'crowns',v:10});
 
 const ARENAS=[
 {n:'Лужайка',     th:0,    img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800&auto=format&fit=crop',col:'#2ebd6b',em:'🌿'},
@@ -681,7 +678,10 @@ const ARENAS=[
 {n:'Дремучий лес',th:1500, img:'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=800&auto=format&fit=crop',col:'#27ae60',em:'🌲'},
 {n:'Ледниковый',  th:1900, img:'https://images.unsplash.com/photo-1518782358066-508b9fdf5585?q=80&w=800&auto=format&fit=crop',col:'#a0e8ff',em:'❄️'},
 {n:'Джунгли',     th:2400, img:'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=800&auto=format&fit=crop',col:'#1abc9c',em:'🌴'},
-{n:'Замок',       th:2800, img:'https://images.unsplash.com/photo-1505322022379-7c3353ee6291?q=80&w=800&auto=format&fit=crop',col:'#9b5de5',em:'🏰'}
+{n:'Замок',       th:2800, img:'https://images.unsplash.com/photo-1505322022379-7c3353ee6291?q=80&w=800&auto=format&fit=crop',col:'#9b5de5',em:'🏰'},
+{n:'Бамбук',      th:3300, img:'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=800&auto=format&fit=crop',col:'#2ebd6b',em:'🎋'},
+{n:'Глинозём',    th:3900, img:'https://images.unsplash.com/photo-1519969446452-bd8de56417fb?q=80&w=800&auto=format&fit=crop',col:'#c87d4a',em:'🪨'},
+{n:'Гора',        th:4700, img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop',col:'#e8eaf0',em:'⛰️'}
 ];
 
 const CARDS=[
@@ -802,6 +802,7 @@ setTimeout(()=>{if(prog)prog.style.width='80%';if(ltxt)ltxt.textContent=txt;},40
 setTimeout(()=>{if(prog)prog.style.width='100%';if(ltxt)ltxt.textContent='Готово!';setTimeout(()=>{try{if(cb)cb();}catch(e){console.error(e);startTut();}if(loader){loader.style.opacity='0';setTimeout(()=>{loader.style.display='none';loading=false;},300);}},200);},700);
 }
 
+// ИСПРАВЛЕНИЕ: Восстановлена удаленная функция initApp!
 function initApp(){
 const sid=ls('clash_uid');
 if(sid){
@@ -811,7 +812,6 @@ db.ref('users/'+sid).once('value').then(snap=>{if(done)return;done=true;clearTim
 }
 
 function startTut(){isTut=true;U=migrate({uid:genId(),nickname:'Новичок',trophies:0,gold:500,gems:50,isGuest:true,xp:0});ss('mainnav','display','none');ss('topbar','display','none');startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');notify('ОБУЧЕНИЕ: Уничтожь главную башню!','inf');setTimeout(hideCover,150);}
-
 function migrate(u){
 if(!u.cards)u.cards={};
 const base=['giant','arrows','archer','minion','knight','goblin','bomber','skel'];
@@ -984,6 +984,8 @@ if(idx===3)renderPassUI();
 if(idx===7)renderWorldMap();
 }
 function switchDeck(i){deckTab=i;['dt0','dt1','dt2'].forEach((id,j)=>document.getElementById(id)?.classList.toggle('active',j===i));document.getElementById('dslider').style.transform=`translateX(-${i*33.333}%)`;if(i===2)renderSpells();}
+
+// ИСПРАВЛЕНИЕ: Логика возврата карты в руку при сбросе ниже арены!
 function setupDrag(){
   const hand=document.getElementById('hand');if(!hand)return;
   const ghost=document.getElementById('dghost');
@@ -1029,17 +1031,15 @@ function setupDrag(){
     let cx=((e.changedTouches?e.changedTouches[0].clientX:e.clientX)-r.left) * scaleX;
     let cy=((e.changedTouches?e.changedTouches[0].clientY:e.clientY)-r.top) * scaleY;
     
-    // ИСПРАВЛЕНИЕ: Если отпустили карту ниже арены (в зоне UI) - отменяем действие (возврат в руку)
-    if(cy >= ch) {
-        return; 
+    // ГЛАВНОЕ ИСПРАВЛЕНИЕ: Если палец отпущен ниже самого поля (в зоне карт), отменяем высадку!
+    if(cy >= ch - 15) {
+      return; 
     }
-    // Защита от случайного смахивания шторки на iPhone
-    if(cy < 0 && cy > -50 * scaleY) cy = 5;
     
+    // Защита от вылета за верхний и боковые края
+    if(cy < 0) cy = 5;
     if(cx < 0) cx = 5;
     if(cx > cw) cx = cw - 5;
-    
-    if(cy<0||cy>ch||cx<0||cx>cw)return; 
     
     const cid=bHand[idx];if(!cid)return;const cardObj=CARDS.find(c=>c.id===cid);if(!cardObj)return;
     
@@ -1384,7 +1384,6 @@ setTimeout(()=>{bState='playing';bEndTime=Date.now()+(isTut?9999999:180000);},25
 },150);
 }catch(e){console.error(e);notify('Ошибка старта!');exitBattle();}
 }
-
 function updateElixUI(){
 const segs=document.getElementById('elsegs'),cnt=document.getElementById('elcnt');if(!segs)return;
 const filled=Math.floor(elixir),half=(elixir-filled)>=0.5;segs.innerHTML='';
@@ -1402,7 +1401,7 @@ const cont=document.getElementById('hand');if(!cont)return;cont.innerHTML='';
 for(let i=0;i<4;i++){
 if(!bHand[i])continue;const ci=CARDS.find(c=>c.id===bHand[i]);if(!ci)continue;
 const data=U.cards[ci.id]||{level:1};const isFoil=data.level>=8;
-cont.innerHTML+=`<div class="gc rr-${ci.rr} ${elixir>=ci.c?'can':'cant'} ${isFoil?'foil':''}" data-i="${i}">${isFoil?'<div class="foil-fx"></div>':''}<div class="ecost">${ci.c}</div><div class="gc-icon">${ci.ic}</div><div class="gc-name">${ci.n}</div><div style="color:var(--ac);font-size:9px;font-weight:800;position:relative;z-index:2">Лвл ${data.level}</div></div>`;
+cont.innerHTML+=`<div class="gc rr-${ci.rr} ${elixir>=ci.c?'can':'cant'} ${isFoil?'foil':''}" data-i="${i}">${isFoil?'<div class="foil-fx"></div>':''}<div class="ecost">${ci.c}</div><div class="gc-icon">${ci.ic}</div><div class="gc-name">${ci.n}</div><div style="color:var(--ac);font-size:11px;font-weight:800;position:relative;z-index:2;margin-top:2px;">Лвл ${data.level}</div></div>`;
 }
 }
 
