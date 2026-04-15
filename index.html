@@ -7,16 +7,24 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <title>Clash Arena</title>
 <link rel="manifest" href="manifest.json">
 <script>
+  // Принудительное удаление старых воркеров, чтобы игра всегда обновлялась
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      for(let registration of registrations) {
+        registration.unregister();
+      }
+    });
   }
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
-:root{--pr:#3d9be9;--bg:#12131a;--panel:#1e2030;--p2:#252840;--ac:#f5c518;--tx:#e8eaf0;--dn:#e8415a;--ok:#2ebd6b;--pu:#9b5de5;--top:calc(60px + env(safe-area-inset-top));--nav:calc(75px + env(safe-area-inset-bottom));--br:rgba(255,255,255,0.08)}
+:root{--pr:#3d9be9;--bg:#12131a;--panel:#1e2030;--p2:#252840;--ac:#f5c518;--tx:#e8eaf0;--dn:#e8415a;--ok:#2ebd6b;--pu:#9b5de5;--top:calc(60px + env(safe-area-inset-top));--nav:calc(65px + env(safe-area-inset-bottom));--br:rgba(255,255,255,0.08)}
 *{box-sizing:border-box;user-select:none;margin:0;padding:0;font-family:'Exo 2',sans-serif;-webkit-tap-highlight-color:transparent}
 
 html,body{width:100vw!important;height:100dvh!important;max-width:100vw;max-height:100dvh;background:var(--bg);color:var(--tx);overflow:hidden!important;position:fixed!important;top:0;left:0;right:0;bottom:0;-webkit-text-size-adjust:100%}
@@ -53,8 +61,8 @@ html,body{width:100vw!important;height:100dvh!important;max-width:100vw;max-heig
 .tstat{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;background:var(--panel);padding:7px 12px;border-radius:20px;border:1px solid var(--br)}
 
 nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(18,19,26,.97);display:flex;justify-content:space-around;align-items:center;z-index:2000;border-top:1px solid var(--br);backdrop-filter:blur(8px);padding-bottom:env(safe-area-inset-bottom,0)}
-.nb{padding:6px 4px;font-size:11px;text-align:center;cursor:pointer;opacity:.4;transition:.2s;text-transform:uppercase;color:var(--tx);font-weight:700;flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;letter-spacing:.3px}
-.nb.active{opacity:1;color:var(--pr)}.ni{font-size:26px;transition:.2s}
+.nb{padding:9px 4px;font-size:9px;text-align:center;cursor:pointer;opacity:.4;transition:.2s;text-transform:uppercase;color:var(--tx);font-weight:700;flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;letter-spacing:.3px}
+.nb.active{opacity:1;color:var(--pr)}.ni{font-size:22px;transition:.2s}
 
 .scr{display:block;width:100%;position:absolute!important;top:var(--top)!important;bottom:var(--nav)!important;left:0;right:0;height:auto!important;background:var(--bg);overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;padding-top:10px;padding-bottom:25px;transition:transform .28s cubic-bezier(.4,0,.2,1),opacity .28s ease;opacity:0;transform:translateX(100%);pointer-events:none;z-index:1}
 .scr.active{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2}
@@ -79,24 +87,19 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 .bigbtn:active{transform:translateY(5px);box-shadow:0 0 0}
 .bigbtn.sd{background:linear-gradient(145deg,#e8415a,#9d1828);color:#fff;font-size:14px;height:7.5vh;min-height:54px;margin-top:8px;box-shadow:0 5px 0 rgba(0,0,0,.4)}
 
-/* ИСПРАВЛЕНИЕ: Убрал padding-top и padding-bottom у экрана боя, чтобы не сжимать арену дважды! */
-#bscr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease;touch-action:none}
+#bscr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease;touch-action:none;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 #bscr.active{display:flex;opacity:1}
-/* Canvas сам растягивается на оставшееся место, никаких margin! */
-#cvs-c{flex:1;width:100%;position:relative;overflow:hidden;}
+#cvs-c{flex:1;width:100%;position:relative;overflow:hidden;margin-top:env(safe-area-inset-top)}
 canvas{display:block;width:100%;height:100%;touch-action:none}
-
-.bui{flex:0 0 auto;width:100%;min-height:170px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 10px calc(10px + env(safe-area-inset-bottom));position:relative;z-index:10;box-sizing:border-box}
+.bui{flex:0 0 auto;width:100%;min-height:160px;background:rgba(10,11,18,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 10px calc(10px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.07);position:relative;z-index:10;box-sizing:border-box}
 .hand{display:flex;flex-direction:row;gap:8px;justify-content:center;align-items:center;width:100%;overflow:visible;}
-
-.gc{width:23vw;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,background .15s}
+.gc{width:21vw;max-width:80px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,background .15s}
 .gc.can{border-color:rgba(61,155,233,.6);background:linear-gradient(155deg,#2e3550,#1e2540)}
 .gc.cant{opacity:.45;border-color:rgba(232,65,90,.28)}
 .gc.flash{animation:flashRed .3s ease 3}
-.gc-icon{font-size:9vw;margin-bottom:4px;pointer-events:none;position:relative;z-index:2}
-@media (min-width: 450px) { .gc-icon { font-size: 42px; } }
-.gc-name{color:rgba(255,255,255,.8);font-size:11px;font-weight:700;text-align:center;line-height:1.15;width:94%;pointer-events:none;position:relative;z-index:2}
-
+.gc-icon{font-size:8vw;margin-bottom:4px;pointer-events:none;position:relative;z-index:2}
+@media (min-width: 450px) { .gc-icon { font-size: 36px; } }
+.gc-name{color:rgba(255,255,255,.8);font-size:10px;font-weight:700;text-align:center;line-height:1.15;width:94%;pointer-events:none;position:relative;z-index:2}
 .ecost{position:absolute;top:-8px;left:-8px;background:var(--pu);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;border:1.5px solid rgba(255,255,255,.22);z-index:10;color:#fff;font-family:'Orbitron',sans-serif;pointer-events:none}
 .elwrap{width:85%;max-width:400px;display:flex;align-items:center;gap:5px;margin-bottom:12px;flex-shrink:0}
 .elsegs{flex:1;display:flex;gap:3px;height:15px}
@@ -105,8 +108,8 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .elcnt{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#c084fc;min-width:24px;text-align:right}
 
 #arenabox{width:92%;max-width:440px;aspect-ratio:16/9;max-height:25vh;position:relative;border-radius:18px;border:1.5px solid rgba(255,255,255,.1);overflow:hidden;margin:0 auto;flex-shrink:1;cursor:pointer;}
-.arenaoverlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.07),rgba(0,0,0,.62));z-index:1;pointer-events:none;}
-.arenacont{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;}
+.arenaoverlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.07),rgba(0,0,0,.62));z-index:1}
+.arenacont{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center}
 .arenatit{font-family:'Orbitron',sans-serif;color:#fff;font-size:28px;font-weight:900;text-shadow:0 2px 10px rgba(0,0,0,.8);text-align:center;margin:0}
 .arenadesc{color:rgba(255,255,255,.8);font-size:14px;font-weight:700;margin-top:6px;margin-bottom:0}
 .sec{background:rgba(0,0,0,.22);border-radius:15px;padding:11px;margin:11px 15px;border:1px solid var(--br)}
@@ -155,7 +158,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .fbtn { width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--pr); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s; margin-top: 5px;}
 .fbtn:active { transform: scale(.97); }
 
-/* ИСПРАВЛЕНИЕ: Восстановлен холст для карты боевого пропуска */
 #pass-wrap{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;z-index:1;background:linear-gradient(180deg, #12131a, #0a0b10);}
 #pass-canvas{display:block;max-width:100%;}
 #pass-layer{position:absolute;top:0;left:0;width:100%;z-index:5;pointer-events:none}
@@ -385,9 +387,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <button class="pbtn" style="width:auto;padding:9px 22px;border-radius:20px;margin:0;font-size:13px" onclick="toggleQ()">📋 ЗАДАНИЯ (<span id="qbadge">0/0</span>)</button>
     <div style="background:var(--panel);border:1px solid var(--br);border-radius:11px;padding:7px 11px;font-size:14px;font-weight:800">👑 <span id="ui-cr">0</span></div>
   </div>
-  <div id="pass-wrap">
-    <div id="pass-layer" class="pass-path"></div>
-  </div>
+  <div id="pass-wrap"><canvas id="pass-canvas"></canvas><div id="pass-layer"></div></div>
   <div id="qpanel">
     <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 18px 9px;border-bottom:1px solid var(--br)">
       <span style="font-weight:800;font-size:16px">📋 Задания</span>
@@ -573,11 +573,11 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 </div>
 
 <nav id="mainnav" style="display:none">
-  <div class="nb" onclick="nav('s-shop',0)"><span class="ni">🏪</span><span style="margin-top:2px;">Магазин</span></div>
-  <div class="nb" onclick="nav('s-deck',1)"><span class="ni">🃏</span><span style="margin-top:2px;">Колода</span></div>
-  <div class="nb active" onclick="nav('s-main',2)"><span class="ni">⚔️</span><span style="margin-top:2px;">Бой</span></div>
-  <div class="nb" onclick="nav('s-pass',3)"><span class="ni">👑</span><span style="margin-top:2px; color:var(--pr);">Пропуск</span></div>
-  <div class="nb" onclick="nav('s-set',4)"><span class="ni">⚙️</span><span style="margin-top:2px;">Настройки</span></div>
+  <div class="nb" onclick="nav('s-shop',0)"><span class="ni">🏪</span>Магазин</div>
+  <div class="nb" onclick="nav('s-deck',1)"><span class="ni">🃏</span>Колода</div>
+  <div class="nb active" onclick="nav('s-main',2)"><span class="ni">⚔️</span>Бой</div>
+  <div class="nb" onclick="nav('s-pass',3)"><span class="ni">👑</span>Пропуск</div>
+  <div class="nb" onclick="nav('s-set',4)"><span class="ni">⚙️</span>Настройки</div>
 </nav>
 <script>
 'use strict';
@@ -666,6 +666,7 @@ function playSfx(type){
 }
 
 const getCB = (uid) => uid === 'FPTL777C' ? `<span class="creator-badge" title="Creator">C</span>` : '';
+
 const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9,GEM-P4M5,GEM-R7T6,GEM-W2Q1,GEM-N5H4,GEM-Y3Z2,GEM-F1G8,GEM-S6D7,GEM-V9B0,GEM-J2K3,GEM-L5P6,GEM-M8N9,GEM-C1X2,GEM-Z4V5,GEM-A7S8,GEM-D0F1,GEM-G3H4,GEM-J6K7,GEM-L9P0,GEM-Q2W3,GEM-E5R6,GEM-T8Y9,GEM-U1I2,GEM-O4P5,GEM-A7D8,GEM-F0G1,GEM-H3J4,GEM-K6L7,GEM-Z9X0,GEM-C2V3,GEM-B5N6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4,COIN-T5Y6,COIN-U7I8,COIN-O9P0,COIN-A1S2,COIN-D3F4,COIN-G5H6,COIN-J7K8,COIN-L9Z0,COIN-X1C2,COIN-V3B4,COIN-N5M6,COIN-Q7A8,COIN-W9S0,COIN-E1D2,COIN-R3F4,COIN-T5G6,COIN-Y7H8,COIN-U9J0,COIN-I1K2,COIN-O3L4,COIN-P5Z6,COIN-A7X8,COIN-S9C0,COIN-D1V2,COIN-F3B4,COIN-G5N6,COIN-H7M8,COIN-J9Q0,COIN-K1W2,COIN-L3E4,COIN-Z5R6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
@@ -685,47 +686,47 @@ const ARENAS=[
 ];
 
 const CARDS=[
-{id:'spear_g',a:0,n:'Копейщики',  c:2,hp:110, d:50, sp:0.70,r:90, t:'ground',tg:'all',    ic:'👺',pr:'🏹',rr:'c'},
+{id:'spear_g',a:0,n:'Копейщики',  c:2,hp:110, d:50, sp:0.70,r:120,t:'ground',tg:'all',    ic:'👺',pr:'🏹',rr:'c'},
 {id:'fire_s', a:0,n:'Огн.Духи',   c:2,hp:90,  d:160,sp:0.90,r:40, t:'ground',tg:'all',    ic:'🔥',pr:null,rr:'c'},
 {id:'giant',  a:0,n:'Гигант',     c:5,hp:2000,d:100,sp:0.30,r:40, t:'ground',tg:'building',ic:'👹',pr:null,rr:'r'},
-{id:'arrows', a:0,n:'Стрелы',     c:3,hp:0,   d:150,sp:0,   r:120,t:'spell', tg:'all',    ic:'🏹',pr:'🏹',rr:'c'},
-{id:'archer', a:0,n:'Лучница',    c:3,hp:250, d:60, sp:0.60,r:100,t:'ground',tg:'all',    ic:'👱‍♀️',pr:'🏹',rr:'c'},
+{id:'arrows', a:0,n:'Стрелы',     c:3,hp:0,   d:150,sp:0,   r:150,t:'spell', tg:'all',    ic:'🏹',pr:'🏹',rr:'c'},
+{id:'archer', a:0,n:'Лучница',    c:3,hp:250, d:60, sp:0.60,r:140,t:'ground',tg:'all',    ic:'👱‍♀️',pr:'🏹',rr:'c'},
 {id:'minion', a:0,n:'Миньон',     c:3,hp:200, d:40, sp:0.75,r:40, t:'air',   tg:'all',    ic:'🦇',pr:'🟣',rr:'c'},
 {id:'knight', a:0,n:'Рыцарь',     c:3,hp:800, d:70, sp:0.50,r:40, t:'ground',tg:'all',    ic:'🤺',pr:null,rr:'c'},
 {id:'goblin', a:0,n:'Гоблин',     c:2,hp:150, d:40, sp:0.90,r:40, t:'ground',tg:'all',    ic:'😈',pr:null,rr:'c'},
-{id:'bomber', a:0,n:'Подрывник',  c:3,hp:300, d:150,sp:0.55,r:80, t:'ground',tg:'ground', ic:'💣',pr:'💣',rr:'c'},
+{id:'bomber', a:0,n:'Подрывник',  c:3,hp:300, d:150,sp:0.55,r:100,t:'ground',tg:'ground', ic:'💣',pr:'💣',rr:'c'},
 {id:'skel',   a:0,n:'Скелеты',    c:1,hp:50,  d:20, sp:0.75,r:40, t:'ground',tg:'all',    ic:'💀',pr:null,rr:'c'},
 {id:'wolf',   a:0,n:'Волк',       c:4,hp:700, d:90, sp:0.80,r:45, t:'ground',tg:'all',    ic:'🐺',pr:null,rr:'c'},
 {id:'brawler',a:0,n:'Боец',       c:3,hp:500, d:80, sp:0.65,r:40, t:'ground',tg:'all',    ic:'🥊',pr:null,rr:'c'},
 {id:'mushr',  a:0,n:'Гриб',       c:2,hp:80,  d:100,sp:0,   r:80, t:'spell', tg:'ground', ic:'🍄',pr:'💥',rr:'c'},
-{id:'healer', a:0,n:'Целитель',   c:3,hp:280, d:0,  sp:0.40,r:75, t:'ground',tg:'all',    ic:'💚',pr:null,rr:'r',heal:40},
+{id:'healer', a:0,n:'Целитель',   c:3,hp:280, d:0,  sp:0.40,r:90, t:'ground',tg:'all',    ic:'💚',pr:null,rr:'r',heal:40},
 {id:'gremlin',a:0,n:'Гремлин',    c:2,hp:100, d:30, sp:1.00,r:40, t:'ground',tg:'all',    ic:'👾',pr:null,rr:'c',multi:4},
 {id:'valk',   a:1,n:'Валькирия',  c:4,hp:1100,d:120,sp:0.50,r:50, t:'ground',tg:'all',    ic:'🧝‍♀️',pr:null,rr:'r'},
-{id:'musk',   a:1,n:'Мушкетер',   c:4,hp:400, d:110,sp:0.50,r:110,t:'ground',tg:'all',    ic:'🎯',pr:'⚫',rr:'r'},
-{id:'cannon', a:1,n:'Пушка',      c:4,hp:600, d:200,sp:0.20,r:110,t:'ground',tg:'all',    ic:'💥',pr:'💣',rr:'r'},
-{id:'drag',   a:2,n:'Дракончик',  c:4,hp:800, d:80, sp:0.60,r:80, t:'air',   tg:'all',    ic:'🐉',pr:'🔥',rr:'e'},
+{id:'musk',   a:1,n:'Мушкетер',   c:4,hp:400, d:110,sp:0.50,r:150,t:'ground',tg:'all',    ic:'🎯',pr:'⚫',rr:'r'},
+{id:'cannon', a:1,n:'Пушка',      c:4,hp:600, d:200,sp:0.20,r:170,t:'ground',tg:'all',    ic:'💥',pr:'💣',rr:'r'},
+{id:'drag',   a:2,n:'Дракончик',  c:4,hp:800, d:80, sp:0.60,r:90, t:'air',   tg:'all',    ic:'🐉',pr:'🔥',rr:'e'},
 {id:'mpekka', a:2,n:'МиниПЕККА',  c:4,hp:700, d:300,sp:0.70,r:40, t:'ground',tg:'all',    ic:'🤖',pr:null,rr:'r'},
 {id:'vampire',a:2,n:'Вампир',     c:4,hp:600, d:95, sp:0.70,r:45, t:'ground',tg:'all',    ic:'🧛',pr:null,rr:'e',lifeSteal:true},
-{id:'witch',  a:3,n:'Ведьма',     c:5,hp:500, d:60, sp:0.50,r:100,t:'ground',tg:'all',    ic:'🧙‍♀️',pr:'🟣',rr:'e'},
+{id:'witch',  a:3,n:'Ведьма',     c:5,hp:500, d:60, sp:0.50,r:120,t:'ground',tg:'all',    ic:'🧙‍♀️',pr:'🟣',rr:'e'},
 {id:'prince', a:3,n:'Принц',      c:5,hp:1200,d:200,sp:0.80,r:50, t:'ground',tg:'all',    ic:'🤴',pr:null,rr:'e'},
 {id:'berserker',a:3,n:'Берсерк',  c:4,hp:700, d:100,sp:0.60,r:45, t:'ground',tg:'all',    ic:'😤',pr:null,rr:'e',rageBelow:0.4},
-{id:'wizard', a:4,n:'Колдун',     c:5,hp:450, d:130,sp:0.50,r:100,t:'ground',tg:'all',    ic:'🧙‍♂️',pr:'🔥',rr:'r'},
+{id:'wizard', a:4,n:'Колдун',     c:5,hp:450, d:130,sp:0.50,r:130,t:'ground',tg:'all',    ic:'🧙‍♂️',pr:'🔥',rr:'r'},
 {id:'ball',   a:4,n:'Шар',        c:5,hp:1050,d:400,sp:0.40,r:40, t:'air',   tg:'building',ic:'🎈',pr:'💣',rr:'e'},
 {id:'phoenix',a:4,n:'Феникс',     c:4,hp:600, d:120,sp:0.65,r:80, t:'air',   tg:'all',    ic:'🦅',pr:'🔥',rr:'e'},
-{id:'trident',a:4,n:'Тритон',     c:5,hp:900, d:160,sp:0.55,r:110,t:'ground',tg:'all',    ic:'🔱',pr:'🌊',rr:'r'},
+{id:'trident',a:4,n:'Тритон',     c:5,hp:900, d:160,sp:0.55,r:130,t:'ground',tg:'all',    ic:'🔱',pr:'🌊',rr:'r'},
 {id:'troll',  a:4,n:'Тролль',     c:5,hp:1800,d:110,sp:0.30,r:45, t:'ground',tg:'all',    ic:'👹',pr:null,rr:'r',regen:true},
 {id:'hog',    a:5,n:'Всадник',    c:4,hp:1000,d:160,sp:0.85,r:40, t:'ground',tg:'building',ic:'🐗',pr:null,rr:'r'},
 {id:'freeze', a:5,n:'Заморозка',  c:4,hp:0,   d:0,  sp:0,   r:100,t:'spell', tg:'all',    ic:'❄️',pr:'❄️',rr:'e'},
-{id:'sniper', a:5,n:'Снайпер',    c:4,hp:180, d:220,sp:0.35,r:140,t:'ground',tg:'all',    ic:'🎯',pr:'⚫',rr:'e'},
+{id:'sniper', a:5,n:'Снайпер',    c:4,hp:180, d:220,sp:0.35,r:230,t:'ground',tg:'all',    ic:'🎯',pr:'⚫',rr:'e'},
 {id:'zap',    a:6,n:'Разряд',     c:2,hp:0,   d:80, sp:0,   r:100,t:'spell', tg:'all',    ic:'⚡',pr:'⚡',rr:'c'},
 {id:'fball',  a:6,n:'Огн.Шар',    c:4,hp:0,   d:250,sp:0,   r:80, t:'spell', tg:'all',    ic:'💥',pr:'💥',rr:'r'},
 {id:'lightning',a:6,n:'Молния',   c:3,hp:0,   d:500,sp:0,   r:60, t:'spell', tg:'all',    ic:'⚡',pr:'⚡',rr:'e'},
 {id:'pekka',  a:7,n:'ПЕККА',      c:7,hp:2500,d:500,sp:0.35,r:50, t:'ground',tg:'all',    ic:'🦾',pr:null,rr:'e'},
 {id:'golem',  a:7,n:'Голем',      c:8,hp:3000,d:150,sp:0.25,r:40, t:'ground',tg:'building',ic:'🗿',pr:null,rr:'e'},
-{id:'icedrag',a:7,n:'Лёд.Дракон', c:5,hp:900, d:90, sp:0.55,r:90, t:'air',   tg:'all',    ic:'🐲',pr:'❄️',rr:'e',freeze:true},
+{id:'icedrag',a:7,n:'Лёд.Дракон', c:5,hp:900, d:90, sp:0.55,r:100,t:'air',   tg:'all',    ic:'🐲',pr:'❄️',rr:'e',freeze:true},
 {id:'sparky', a:8,n:'Спарки',     c:6,hp:1000,d:800,sp:0.30,r:100,t:'ground',tg:'ground', ic:'🔋',pr:'⚡',rr:'l'},
 {id:'miner',  a:8,n:'Шахтер',     c:3,hp:800, d:100,sp:0.75,r:40, t:'ground',tg:'all',    ic:'⛏️',pr:null,rr:'l'},
-{id:'prin2',  a:9,n:'Принцесса',  c:3,hp:150, d:90, sp:0.50,r:140,t:'ground',tg:'all',    ic:'👸',pr:'🔥',rr:'l'},
+{id:'prin2',  a:9,n:'Принцесса',  c:3,hp:150, d:90, sp:0.50,r:200,t:'ground',tg:'all',    ic:'👸',pr:'🔥',rr:'l'},
 {id:'bandit', a:9,n:'Бандитка',   c:3,hp:750, d:160,sp:0.80,r:40, t:'ground',tg:'ground', ic:'🥷',pr:null,rr:'l'},
 {id:'lumber', a:9,n:'Дровосек',   c:4,hp:990, d:200,sp:0.85,r:40, t:'ground',tg:'ground', ic:'🪓',pr:null,rr:'l'}
 ];
@@ -802,7 +803,6 @@ setTimeout(()=>{if(prog)prog.style.width='80%';if(ltxt)ltxt.textContent=txt;},40
 setTimeout(()=>{if(prog)prog.style.width='100%';if(ltxt)ltxt.textContent='Готово!';setTimeout(()=>{try{if(cb)cb();}catch(e){console.error(e);startTut();}if(loader){loader.style.opacity='0';setTimeout(()=>{loader.style.display='none';loading=false;},300);}},200);},700);
 }
 
-// ИСПРАВЛЕНИЕ: Восстановлена удаленная функция initApp!
 function initApp(){
 const sid=ls('clash_uid');
 if(sid){
@@ -812,6 +812,7 @@ db.ref('users/'+sid).once('value').then(snap=>{if(done)return;done=true;clearTim
 }
 
 function startTut(){isTut=true;U=migrate({uid:genId(),nickname:'Новичок',trophies:0,gold:500,gems:50,isGuest:true,xp:0});ss('mainnav','display','none');ss('topbar','display','none');startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');notify('ОБУЧЕНИЕ: Уничтожь главную башню!','inf');setTimeout(hideCover,150);}
+
 function migrate(u){
 if(!u.cards)u.cards={};
 const base=['giant','arrows','archer','minion','knight','goblin','bomber','skel'];
@@ -836,7 +837,6 @@ if(u.minTrophies===undefined)u.minTrophies=0;
 if(!u.promos)u.promos=[];
 return u;
 }
-
 function checkDailyReset(){
 const k=dailyKey();if(U.lastDailyKey===k)return;
 U.lastDailyKey=k;U.winsToday=0;U.crownsFromWins=0;U.quests=genQuests();genShop();
@@ -891,7 +891,7 @@ st('ui-aname',`АРЕНА ${ci+1}`);st('ui-adesc',`${ao.n} (${ao.th}+ 🏆)`);
 const cs=document.getElementById('cslots');if(cs){cs.innerHTML='';for(let i=0;i<3;i++)cs.innerHTML+=`<div class="cslot ${i<U.winsToday?'filled':''}">${i<U.winsToday?'📦':'🔒'}</div>`;}
 for(let i=0;i<2;i++){const ms=document.getElementById(`um${i}`);if(!ms)continue;const mid=(U.equippedMedals&&U.equippedMedals[i])?U.equippedMedals[i]:null;if(mid){const m=MEDALS.find(x=>x.id===mid);ms.style.display='inline-flex';ms.textContent=m?m.ic:'';}else ms.style.display='none';}
 ss('guest-btns','display',U.isGuest?'block':'none');
-renderDeck();renderTower();renderColl();renderBanners();renderShop();renderPassUI();renderMedals();renderEmotes();
+renderDeck();renderTower();renderColl();renderBanners();renderShop();if(navIdx===3)renderPassUI();renderMedals();renderEmotes();
 }
 
 function startUI(){
@@ -930,6 +930,7 @@ saveU();renderPassUI();
 }
 function toggleQ(){document.getElementById('qpanel')?.classList.toggle('open');}
 
+// ВОЗВРАЩЕНИЕ ОРИГИНАЛЬНОГО ПРОПУСКА НА CANVAS
 function renderPassUI(){
   const qc=document.getElementById('ui-quests');let done=0;
   if(qc&&U.quests){
@@ -943,34 +944,57 @@ function renderPassUI(){
     st('qbadge',`${done}/${U.quests.length}`);
   }
 
-  const layer = document.getElementById('pass-layer');
-  if(layer) {
-     let html = '';
-     for(let i=0; i<PASS_R.length; i++){
-        const r = PASS_R[i];
-        const claimed = (U.passClaimed||[]).includes(i);
-        const canClaim = U.crowns >= r.crowns && !claimed;
-        const locked = U.crowns < r.crowns;
-        
-        let btn = claimed ? `<span style="color:var(--ok);font-size:11px;font-weight:700">✓ Забрано</span>` :
-                  canClaim ? `<button class="pbtn ok" style="width:auto;margin:0;padding:6px 12px;font-size:11px" onclick="claimPass(${i})">Забрать</button>` :
-                  `<span style="color:rgba(255,255,255,.3);font-size:11px;font-weight:700">Нужно ${r.crowns} 👑</span>`;
-        
-        let side = i % 2 === 0 ? 'row' : 'row-reverse';
-        
-        html += `<div class="pass-node" style="flex-direction:${side}; opacity:${locked ? 0.6 : 1}">
-           ${i < PASS_R.length-1 ? `<div class="pass-line"></div>` : ''}
-           <div class="pass-lvl" style="${claimed?'background:var(--ac);color:#000':''}">${i+1}</div>
-           <div class="pass-reward" style="flex-direction:${side}; text-align:${i%2===0?'left':'right'}">
-              <div style="font-size:28px">${r.ic}</div>
-              <div style="flex:1; padding: 0 15px">
-                 <div style="font-size:14px;font-weight:800;color:${r.t==='gold'?'var(--ac)':r.t==='gems'?'#7be0a8':'#fff'}">${r.n}</div>
-              </div>
-              ${btn}
-           </div>
-        </div>`;
-     }
-     layer.innerHTML = html;
+  const cvs=document.getElementById('pass-canvas'), lay=document.getElementById('pass-layer');
+  if(!cvs || !lay) return;
+  
+  const W = window.innerWidth || 360;
+  const H = PASS_R.length * 110; // Высота пути
+  cvs.width = W; cvs.height = H;
+  const ctx = cvs.getContext('2d');
+  
+  ctx.clearRect(0,0,W,H);
+  ctx.lineWidth = 14; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  
+  let pts = [];
+  for(let i=0; i<PASS_R.length; i++){
+    const y = H - (i * 110) - 60;
+    const px = Math.sin(i * 0.5) * (W * 0.3); // Извилистость
+    pts.push({x: W/2 + px, y});
+  }
+  
+  // Рисуем базовую линию
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  for(let i=1; i<pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)'; 
+  ctx.stroke();
+
+  // Рисуем заполненную линию (желтую)
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  for(let i=0; i<pts.length; i++){
+    if(U.crowns >= PASS_R[i].crowns) ctx.lineTo(pts[i].x, pts[i].y);
+  }
+  ctx.strokeStyle = '#f5c518'; 
+  ctx.stroke();
+
+  lay.innerHTML = '';
+  for(let i=0; i<PASS_R.length; i++){
+    const p = pts[i], r = PASS_R[i];
+    const claimed = (U.passClaimed||[]).includes(i);
+    const can = U.crowns >= r.crowns && !claimed;
+    const lock = U.crowns < r.crowns;
+    
+    let btn = claimed ? `<span style="color:var(--ok);font-size:10px;font-weight:700">✓ Забрано</span>` : 
+              can ? `<button class="pbtn ok" style="margin:0;padding:5px 10px;font-size:10px" onclick="claimPass(${i})">Забрать</button>` : 
+              `<span style="color:rgba(255,255,255,.3);font-size:10px">Нужно ${r.crowns} 👑</span>`;
+              
+    lay.innerHTML += `<div style="position:absolute;left:${p.x}px;top:${p.y}px;transform:translate(-50%,-50%);background:var(--panel);border:2px solid ${can?'var(--ok)':lock?'var(--br)':'var(--ac)'};border-radius:12px;padding:8px;text-align:center;width:120px;box-shadow:0 5px 15px rgba(0,0,0,.5);opacity:${lock?0.6:1}">
+      <div style="position:absolute;top:-10px;left:-10px;background:var(--bg);color:var(--ac);border:1px solid var(--ac);border-radius:50%;width:22px;height:22px;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif">${i+1}</div>
+      <div style="font-size:24px;margin-bottom:4px">${r.ic}</div>
+      <div style="font-size:11px;font-weight:800;color:#fff;margin-bottom:6px">${r.n}</div>
+      ${btn}
+    </div>`;
   }
 }
 
@@ -985,7 +1009,7 @@ if(idx===7)renderWorldMap();
 }
 function switchDeck(i){deckTab=i;['dt0','dt1','dt2'].forEach((id,j)=>document.getElementById(id)?.classList.toggle('active',j===i));document.getElementById('dslider').style.transform=`translateX(-${i*33.333}%)`;if(i===2)renderSpells();}
 
-// ИСПРАВЛЕНИЕ: Логика возврата карты в руку при сбросе ниже арены!
+// ИСПРАВЛЕНИЕ УПРАВЛЕНИЯ КАРТАМИ: Карта не ставится, если отпустить ее в зоне UI
 function setupDrag(){
   const hand=document.getElementById('hand');if(!hand)return;
   const ghost=document.getElementById('dghost');
@@ -1031,15 +1055,16 @@ function setupDrag(){
     let cx=((e.changedTouches?e.changedTouches[0].clientX:e.clientX)-r.left) * scaleX;
     let cy=((e.changedTouches?e.changedTouches[0].clientY:e.clientY)-r.top) * scaleY;
     
-    // ГЛАВНОЕ ИСПРАВЛЕНИЕ: Если палец отпущен ниже самого поля (в зоне карт), отменяем высадку!
-    if(cy >= ch - 15) {
-      return; 
+    // ГЛАВНЫЙ ФИКС: Если мы отпускаем карту в нижней трети (панель UI), просто возвращаем ее в руку
+    if(cy >= ch - 10) {
+      return; // Отмена действия, эликсир не тратится
     }
     
-    // Защита от вылета за верхний и боковые края
-    if(cy < 0) cy = 5;
+    if(cy < 0 && cy > -50 * scaleY) cy = 5;
     if(cx < 0) cx = 5;
     if(cx > cw) cx = cw - 5;
+    
+    if(cy<0||cy>ch||cx<0||cx>cw)return; 
     
     const cid=bHand[idx];if(!cid)return;const cardObj=CARDS.find(c=>c.id===cid);if(!cardObj)return;
     
@@ -1757,11 +1782,6 @@ function endBattle(win){
     ss('en-color','background','linear-gradient(135deg,#8b0000,#e8415a)');
     ss('ep-color','background','linear-gradient(135deg,#1a6eb5,#3d9be9)');
   }
-
-  if(isMP&&battleId){
-    db.ref(`battles/${battleId}`).remove();
-    if(netListener){db.ref(`battles/${battleId}/actions`).off('child_added',netListener);netListener=null;}
-  }
 }
 
 function exitBattle(){
@@ -1898,31 +1918,12 @@ const badge=document.getElementById('req-count'),dot=document.getElementById('nd
 if(badge){badge.textContent=n;badge.style.display=n>0?'inline':'none';}
 if(dot)dot.style.display=n>0?'block':'none';
 });
-if(_battleInvRef)_battleInvRef.off();
-_battleInvRef=db.ref(`users/${U.uid}/battleInvites`);
-_battleInvRef.on('child_added',snap=>{
-const inv=snap.val();if(!inv)return;const key=snap.key;
-const c=document.getElementById('toast-c');if(!c)return;
-const t=document.createElement('div');t.className='toast inf';
-t.style.cssText='display:flex;flex-direction:column;gap:8px;padding:14px 16px;cursor:default;pointer-events:auto;';
-t.innerHTML=`<div style="font-size:14px">⚔️ <b>${inv.name||'Игрок'}</b> вызывает на бой!</div><div style="display:flex;gap:8px"><button style="flex:1;background:var(--ok);color:#fff;border:none;border-radius:8px;padding:8px;font-weight:700;cursor:pointer;font-size:12px" onclick="acceptBattleInv('${inv.bid}','${key}','${inv.from}',this.closest('.toast'))">⚔️ Принять</button><button style="flex:1;background:var(--dn);color:#fff;border:none;border-radius:8px;padding:8px;font-weight:700;cursor:pointer;font-size:12px" onclick="declineBattleInv('${key}',this.closest('.toast'))">✗ Отказ</button></div>`;
-c.appendChild(t);setTimeout(()=>{if(t.parentNode){t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);}},25000);
-});
-}
-
-function acceptBattleInv(bid,key,fromUid,toastEl){
-db.ref(`users/${U.uid}/battleInvites/${key}`).remove();
-if(toastEl)toastEl.remove();
-db.ref(`battles/${bid}`).update({state:'playing'}).then(()=>doLoad('Загрузка боя…',()=>initMP(bid,fromUid,1,true)));
-}
-function declineBattleInv(key,toastEl){
-db.ref(`users/${U.uid}/battleInvites/${key}`).remove();
-if(toastEl){toastEl.style.opacity='0';toastEl.style.transition='opacity .3s';setTimeout(()=>toastEl.remove(),300);}
 }
 
 function openFriends(){if(!U)return;const myEl=document.getElementById('my-id-show');if(myEl)myEl.textContent=U.uid;ss('friends-ov','display','flex');fTab('list');}
 function fTab(t){['list','req','add'].forEach(x=>{document.getElementById('ft-'+x)?.classList.toggle('active',x===t);ss('fc-'+x,'display',x===t?'block':'none');});if(t==='list')renderFriendList();if(t==='req')renderFriendReqs();}
 
+// ИСПРАВЛЕНИЕ: Убрана кнопка вызова на дружеский бой (challengeFriend)
 function renderFriendList(){
 const c=document.getElementById('fc-list');if(!c||!U)return;
 c.innerHTML='<p style="color:rgba(255,255,255,.28);font-size:11px;margin-bottom:8px;text-align:center">Загрузка…</p>';
@@ -1935,7 +1936,8 @@ db.ref(`users/${U.uid}/friends`).once('value').then(fsnap => {
     snaps.forEach((snap,i)=>{
       if(!snap||!snap.exists())return;added++;
       const fr=snap.val(),fuid=friends[i],arI=ARENAS.findIndex(a=>a.th>(fr.trophies||0)),arN=arI>0?ARENAS[arI-1].n:'Лужайка';
-      c.innerHTML+=`<div class="friend-card"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${fr.nickname||'?'}</div> <div class="fc-sub">🏆 ${fr.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${fuid}</div> </div> <div class="fc-actions"> <button class="fc-btn blue" onclick="challengeFriend('${fuid}','${(fr.nickname||'').replace(/'/g,'').replace(/"/g,'')}')">⚔️</button> <button class="fc-btn red" onclick="removeFriend('${fuid}')">✕</button> </div> </div>`;
+      // Оставили только кнопку удаления
+      c.innerHTML+=`<div class="friend-card"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${fr.nickname||'?'}</div> <div class="fc-sub">🏆 ${fr.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${fuid}</div> </div> <div class="fc-actions"> <button class="fc-btn red" onclick="removeFriend('${fuid}')">✕ Удалить</button> </div> </div>`;
     });
     if(!added)c.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.38);font-size:13px;padding:20px">Нет друзей</p>';
   }).catch(()=>{c.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">Ошибка загрузки</p>';});
@@ -1982,18 +1984,6 @@ Promise.all([db.ref(`users/${U.uid}/friends/${fromUid}`).set(true),db.ref(`users
 function declineFriendReq(fromUid){db.ref(`users/${U.uid}/friendReqs/${fromUid}`).remove().then(()=>{notify('Запрос отклонён');renderFriendReqs();});}
 function removeFriend(fuid){if(!U.friends)return;delete U.friends[fuid];Promise.all([db.ref(`users/${U.uid}/friends/${fuid}`).remove(),db.ref(`users/${fuid}/friends/${U.uid}`).remove()]).then(()=>{saveU();renderFriendList();notify('Друг удалён');});}
 
-function challengeFriend(fuid,fname){
-const bid=genId();
-db.ref(`battles/${bid}`).set({p1:U.uid,p2:fuid,state:'waiting',ts:Date.now()});
-db.ref(`users/${fuid}/battleInvites/${bid}`).set({from:U.uid,name:U.nickname,bid,ts:Date.now()});
-notify(`Приглашение отправлено!`,'ok');
-ss('friends-ov','display','none');
-doLoad('Ожидаем ответа…',()=>{
-let accepted=false;const ref=db.ref(`battles/${bid}/state`);
-const timer=setTimeout(()=>{ref.off();if(!accepted){db.ref(`battles/${bid}`).remove();db.ref(`users/${fuid}/battleInvites/${bid}`).remove();notify('Друг не ответил на приглашение');}},35000);
-ref.on('value',snap=>{if(snap.val()==='playing'){accepted=true;clearTimeout(timer);ref.off();doLoad('Загрузка боя…',()=>initMP(bid,fuid,0,true));}});
-});
-}
 </script>
 </body>
 </html>
