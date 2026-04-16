@@ -605,32 +605,50 @@ const rb=document.getElementById('rl-btn');if(rb)rb.disabled=!can;
 const ct=document.getElementById('ctimer');if(ct)ct.textContent=`Обновится через ${cd}`;
 },1000);
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+// ИСПРАВЛЕНИЕ: Безопасный запуск звука (чтобы Safari не убивал игру на старте)
+let audioCtx = null;
 let sfxOn = true;
-function toggleSfx(){sfxOn=!sfxOn;const btn=document.getElementById('sfx-btn');if(btn)btn.textContent=`🔊 Озвучка: ${sfxOn?'ВКЛ':'ВЫКЛ'}`;if(sfxOn&&audioCtx.state==='suspended')audioCtx.resume();}
-document.addEventListener('click',()=>{if(sfxOn&&audioCtx.state==='suspended')audioCtx.resume();},{once:true});
+function initAudio() {
+  try {
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+  } catch(e) {}
+}
+function toggleSfx(){
+  sfxOn=!sfxOn;
+  const btn=document.getElementById('sfx-btn');
+  if(btn)btn.textContent=`🔊 Озвучка: ${sfxOn?'ВКЛ':'ВЫКЛ'}`;
+  if(sfxOn) initAudio();
+}
+document.addEventListener('click', initAudio, {once:true});
+document.addEventListener('touchstart', initAudio, {once:true});
+
 function playSfx(type){
-  if(!sfxOn||audioCtx.state==='suspended')return;
-  const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
-  osc.connect(gain);gain.connect(audioCtx.destination);
-  const now=audioCtx.currentTime;
-  if(type==='spawn'){
-    osc.type='sine';osc.frequency.setValueAtTime(400,now);osc.frequency.exponentialRampToValueAtTime(800,now+0.1);
-    gain.gain.setValueAtTime(0.1,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.1);
-    osc.start(now);osc.stop(now+0.1);
-  }else if(type==='hit'){
-    osc.type='square';osc.frequency.setValueAtTime(100,now);osc.frequency.exponentialRampToValueAtTime(50,now+0.1);
-    gain.gain.setValueAtTime(0.1,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.1);
-    osc.start(now);osc.stop(now+0.1);
-  }else if(type==='win'){
-    osc.type='triangle';osc.frequency.setValueAtTime(440,now);osc.frequency.setValueAtTime(554,now+0.1);osc.frequency.setValueAtTime(659,now+0.2);
-    gain.gain.setValueAtTime(0.1,now);gain.gain.linearRampToValueAtTime(0,now+0.4);
-    osc.start(now);osc.stop(now+0.4);
-  }else if(type==='lose'){
-    osc.type='sawtooth';osc.frequency.setValueAtTime(300,now);osc.frequency.exponentialRampToValueAtTime(100,now+0.5);
-    gain.gain.setValueAtTime(0.1,now);gain.gain.linearRampToValueAtTime(0,now+0.5);
-    osc.start(now);osc.stop(now+0.5);
-  }
+  if(!sfxOn)return;
+  initAudio();
+  if(!audioCtx || audioCtx.state==='suspended') return;
+  try {
+    const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+    osc.connect(gain);gain.connect(audioCtx.destination);
+    const now=audioCtx.currentTime;
+    if(type==='spawn'){
+      osc.type='sine';osc.frequency.setValueAtTime(400,now);osc.frequency.exponentialRampToValueAtTime(800,now+0.1);
+      gain.gain.setValueAtTime(0.1,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.1);
+      osc.start(now);osc.stop(now+0.1);
+    }else if(type==='hit'){
+      osc.type='square';osc.frequency.setValueAtTime(100,now);osc.frequency.exponentialRampToValueAtTime(50,now+0.1);
+      gain.gain.setValueAtTime(0.1,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.1);
+      osc.start(now);osc.stop(now+0.1);
+    }else if(type==='win'){
+      osc.type='triangle';osc.frequency.setValueAtTime(440,now);osc.frequency.setValueAtTime(554,now+0.1);osc.frequency.setValueAtTime(659,now+0.2);
+      gain.gain.setValueAtTime(0.1,now);gain.gain.linearRampToValueAtTime(0,now+0.4);
+      osc.start(now);osc.stop(now+0.4);
+    }else if(type==='lose'){
+      osc.type='sawtooth';osc.frequency.setValueAtTime(300,now);osc.frequency.exponentialRampToValueAtTime(100,now+0.5);
+      gain.gain.setValueAtTime(0.1,now);gain.gain.linearRampToValueAtTime(0,now+0.5);
+      osc.start(now);osc.stop(now+0.5);
+    }
+  } catch(e) {}
 }
 
 const getCB = (uid) => uid === 'FPTL777C' ? `<span class="creator-badge" title="Creator">C</span>` : '';
@@ -639,7 +657,6 @@ const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9,GEM-P4M5,GEM-R7T6,GEM-W2Q1,GEM-N5H4,GEM-Y3Z2,GEM-F1G8,GEM-S6D7,GEM-V9B0,GEM-J2K3,GEM-L5P6,GEM-M8N9,GEM-C1X2,GEM-Z4V5,GEM-A7S8,GEM-D0F1,GEM-G3H4,GEM-J6K7,GEM-L9P0,GEM-Q2W3,GEM-E5R6,GEM-T8Y9,GEM-U1I2,GEM-O4P5,GEM-A7D8,GEM-F0G1,GEM-H3J4,GEM-K6L7,GEM-Z9X0,GEM-C2V3,GEM-B5N6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4,COIN-T5Y6,COIN-U7I8,COIN-O9P0,COIN-A1S2,COIN-D3F4,COIN-G5H6,COIN-J7K8,COIN-L9Z0,COIN-X1C2,COIN-V3B4,COIN-N5M6,COIN-Q7A8,COIN-W9S0,COIN-E1D2,COIN-R3F4,COIN-T5G6,COIN-Y7H8,COIN-U9J0,COIN-I1K2,COIN-O3L4,COIN-P5Z6,COIN-A7X8,COIN-S9C0,COIN-D1V2,COIN-F3B4,COIN-G5N6,COIN-H7M8,COIN-J9Q0,COIN-K1W2,COIN-L3E4,COIN-Z5R6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
 
-// НОВЫЕ АРЕНЫ И ГРАДИЕНТЫ ДЛЯ ДИНАМИЧНОГО ФОНА ЛОББИ (Изображения больше не нужны, они не сломаются)
 const ARENAS=[
 {n:'Лужайка',     th:0,    bg:'radial-gradient(circle at top, #1e3c1a, #12131a)',col:'#2ebd6b',em:'🌿'},
 {n:'Пустыня',     th:600,  bg:'radial-gradient(circle at top, #4a2e00, #12131a)',col:'#e67e22',em:'🏜️'},
@@ -655,7 +672,6 @@ const ARENAS=[
 {n:'Арена боёв',  th:6800, bg:'radial-gradient(circle at top, #3a0a0f, #12131a)',col:'#e63946',em:'⚔️'}
 ];
 
-// УРОН ПОРЕЗАН В 2 РАЗА У ВСЕХ КАРТ + ДОБАВЛЕНО 10 НОВЫХ
 const CARDS=[
 {id:'spear_g',a:0,n:'Копейщики',  c:2,hp:110, d:25, sp:0.70,r:120,t:'ground',tg:'all',    ic:'👺',pr:'🏹',rr:'c'},
 {id:'fire_s', a:0,n:'Огн.Духи',   c:2,hp:90,  d:80, sp:0.90,r:40, t:'ground',tg:'all',    ic:'🔥',pr:null,rr:'c'},
@@ -695,7 +711,6 @@ const CARDS=[
 {id:'pekka',  a:7,n:'ПЕККА',      c:7,hp:2500,d:250,sp:0.35,r:50, t:'ground',tg:'all',    ic:'🦾',pr:null,rr:'e'},
 {id:'golem',  a:7,n:'Голем',      c:8,hp:3000,d:75, sp:0.25,r:40, t:'ground',tg:'building',ic:'🗿',pr:null,rr:'e'},
 {id:'icedrag',a:7,n:'Лёд.Дракон', c:5,hp:900, d:45, sp:0.55,r:100,t:'air',   tg:'all',    ic:'🐲',pr:'❄️',rr:'e',freeze:true},
-// НОВЫЕ КАРТЫ
 {id:'exec',   a:7,n:'Палач',      c:5,hp:1000,d:30, sp:0.40,r:110,t:'ground',tg:'all',    ic:'🪓',pr:'🪓',rr:'e'},
 {id:'bats',   a:7,n:'Мыши',       c:2,hp:100, d:15, sp:0.80,r:40, t:'air',   tg:'all',    ic:'🦇',pr:null,rr:'c',multi:4},
 {id:'ewiz',   a:8,n:'Громовержец',c:4,hp:600, d:40, sp:0.50,r:100,t:'ground',tg:'all',    ic:'🌩️',pr:'⚡',rr:'l',freezeOnHit:true},
@@ -712,174 +727,6 @@ const CARDS=[
 {id:'marcher',a:12,n:'Маг. Лучник',c:4,hp:450, d:50, sp:0.60,r:180,t:'ground',tg:'all',    ic:'🧝‍♂️',pr:'✨',rr:'l'},
 {id:'rghost', a:12,n:'Кор. Призрак',c:3,hp:1000,d:70,sp:0.60,r:40,t:'ground',tg:'ground', ic:'👻',pr:null,rr:'l'}
 ];
-
-const TSKINS=[{id:'ts1',n:'Стандарт',ic:'🏰',hm:1.0,col:'#7f8c8d'},{id:'ts2',n:'Крепость',ic:'🪨',hm:1.05,col:'#6d4c41'},{id:'ts3',n:'Кристалл',ic:'🔮',hm:1.1,col:'#8e24aa'}];
-// УРОН БАШЕН ПОРЕЗАН В 2 РАЗА
-const TTROOP=[{id:'tt1',n:'Лучница',ic:'👱‍♀️',d:25,sp:60,pr:'🏹',ra:0},{id:'tt2',n:'Канонир',ic:'🧨',d:75,sp:120,pr:'💣',ra:4},{id:'tt3',n:'Маг',ic:'🧙',d:40,sp:70,pr:'🔥',ra:4}];
-const BANNERS=[
-{id:'blue',s:'linear-gradient(135deg,#1a6eb5,#3d9be9)'},{id:'red',s:'linear-gradient(135deg,#8b0000,#e8415a)'},
-{id:'green',s:'linear-gradient(135deg,#0d5c2e,#2ebd6b)'},{id:'purple',s:'linear-gradient(135deg,#4a0080,#9b5de5)'},
-{id:'orange',s:'linear-gradient(135deg,#8c4000,#e67e22)'},{id:'dark',s:'linear-gradient(135deg,#0a0d14,#2c3e50)'},
-{id:'gold',s:'linear-gradient(135deg,#7d5900,#f5c518)'}
-];
-const EMOTES=['😂','😭','😡','🙄','🤩','😴','🥶','🤯','😱','😈','🤡','💩','👻','💀','👽','🤖','🎃','🐶','🐱','🐵','🦁','🐲','🤑','🥳','😎'];
-const MEDALS=[
-{id:'m1',ic:'⚔️',d:'Сыграть 1 бой'},{id:'m2',ic:'🏆',d:'1 Победа'},{id:'m3',ic:'👑',d:'10 Побед'},
-{id:'m4',ic:'🌟',d:'50 Побед'},{id:'m5',ic:'🔥',d:'100 Побед'},
-{id:'m6',ic:'🏜️',d:'Арена 2'},{id:'m7',ic:'❄️',d:'Арена 5'},{id:'m8',ic:'🌋',d:'Арена 10'},
-{id:'m9',ic:'💰',d:'10000 Золота'},{id:'m10',ic:'💎',d:'100 Гемов'},
-{id:'m11',ic:'🃏',d:'10 карт'},{id:'m12',ic:'🎴',d:'20 карт'},
-{id:'m13',ic:'⬆️',d:'Карта 2 ур.'},{id:'m14',ic:'⭐',d:'Карта 8 ур.'},
-{id:'m15',ic:'📜',d:'10 квестов'},{id:'m16',ic:'☠️',d:'5 боёв ВС'},{id:'m17',ic:'💀',d:'Победа ВС'},
-{id:'m18',ic:'🎭',d:'Купить смайлик'},{id:'m19',ic:'🤝',d:'Добавить друга'},
-{id:'m20',ic:'🧠',d:'1000 кубков'},{id:'m21',ic:'🏅',d:'Уровень 5'},{id:'m22',ic:'🎖️',d:'Уровень 10'},
-{id:'m23',ic:'💯',d:'100 боёв'}
-];
-const RL_PRIZES=[
-{ic:'💰',lbl:'300 Золота', tp:'gold',v:300, w:30},{ic:'💰',lbl:'600 Золота', tp:'gold',v:600, w:18},
-{ic:'💰',lbl:'1000 Золота',tp:'gold',v:1000,w:8}, {ic:'💎',lbl:'10 Гемов',  tp:'gems',v:10,  w:20},
-{ic:'💎',lbl:'25 Гемов',  tp:'gems',v:25,  w:10},{ic:'💎',lbl:'50 Гемов',  tp:'gems',v:50,  w:5},
-{ic:'📦',lbl:'Ящик',       tp:'chest',v:'g', w:10},{ic:'✨',lbl:'Маг.Ящик', tp:'chest',v:'m', w:3},
-{ic:'👑',lbl:'5 Корон',   tp:'crowns',v:5,  w:8}, {ic:'⚡',lbl:'30 Очков',  tp:'power',v:30, w:14},
-];
-const PASS_R=Array.from({length:50},(_,i)=>{
-const c=(i+1)*8;
-if((i+1)%10===0)return{crowns:c,t:'chest',v:'m',ic:'✨',n:'МЕГА ЯЩИК'};
-if((i+1)%5===0) return{crowns:c,t:'chest',v:'g',ic:'📦',n:'Ящик'};
-if(i%3===0)     return{crowns:c,t:'gold', v:400+i*40,ic:'💰',n:`${400+i*40} Золота`};
-if(i%3===1)     return{crowns:c,t:'gems', v:8+i,ic:'💎',n:`${8+i} Гемов`};
-return{crowns:c,t:'gems',v:15+i*2,ic:'💎',n:`${15+i*2} Гемов`};
-});
-const XP_T=[0,100,250,500,900,1500,2400,3700,5500,8000,12000];
-const getLevel=xp=>{let l=1;for(let i=1;i<XP_T.length;i++){if(xp>=XP_T[i])l=i+1;else break;}return Math.min(l,10);};
-const xpProg=xp=>{const l=getLevel(xp);if(l>=10)return{cur:XP_T[9],max:XP_T[9]};return{cur:xp-XP_T[l-1],max:XP_T[l]-XP_T[l-1]};};
-
-const FBC={apiKey:"AIzaSyDGOo6Y07l_9utgsaj6INMogMVnAhx1ZAo",authDomain:"battle-royale-b5084.firebaseapp.com",databaseURL:"https://battle-royale-b5084-default-rtdb.firebaseio.com",projectId:"battle-royale-b5084"};
-let db;
-try{if(typeof firebase!=='undefined'){firebase.initializeApp(FBC);db=firebase.database();}else throw 0;}
-catch(e){db={ref:()=>({once:()=>Promise.reject('offline'),set:()=>Promise.resolve(),update:()=>Promise.resolve(),on:()=>{},off:()=>{},push:()=>Promise.resolve({key:'mock'}),remove:()=>Promise.resolve(),orderByChild(){return this;},equalTo(){return this;}})}}
-
-function hideCover(){const c=document.getElementById('app-cover');if(c){c.style.opacity='0';setTimeout(()=>c.style.display='none',400);}}
-function startApp(){
-let appStarted = false;
-if(appStarted)return;appStarted=true;
-const intro=document.getElementById('intro'),loader=document.getElementById('loading');
-if(intro)intro.style.opacity='1';
-setTimeout(()=>{if(intro)intro.style.opacity='0';setTimeout(()=>{if(intro)intro.style.display='none';if(loader){loader.style.display='flex';setTimeout(()=>loader.style.opacity='1',10);}doLoad('Загрузка данных…',()=>initApp());},500);},1500);
-}
-if(document.readyState==='complete'||document.readyState==='interactive')setTimeout(startApp,80);
-else window.addEventListener('DOMContentLoaded',startApp);
-
-function doLoad(txt,cb){
-let loading = false;
-if(loading){try{cb&&cb();}catch(e){}return;}loading=true;
-const loader=document.getElementById('loading'),prog=document.getElementById('lprog'),ltxt=document.getElementById('ltxt');
-if(prog)prog.style.width='0%';if(ltxt)ltxt.textContent='Подключение…';
-if(loader){loader.style.display='flex';setTimeout(()=>loader.style.opacity='1',10);}
-setTimeout(()=>{if(prog)prog.style.width='45%';},150);
-setTimeout(()=>{if(prog)prog.style.width='80%';if(ltxt)ltxt.textContent=txt;},400);
-setTimeout(()=>{if(prog)prog.style.width='100%';if(ltxt)ltxt.textContent='Готово!';setTimeout(()=>{try{if(cb)cb();}catch(e){console.error(e);startTut();}if(loader){loader.style.opacity='0';setTimeout(()=>{loader.style.display='none';loading=false;},300);}},200);},700);
-}
-
-function initApp(){
-const sid=ls('clash_uid');
-if(sid){
-let done=false;const t=setTimeout(()=>{if(done)return;done=true;ld('clash_uid');startTut();},3500);
-db.ref('users/'+sid).once('value').then(snap=>{if(done)return;done=true;clearTimeout(t);if(snap.exists()){U=migrate(snap.val());startUI();listenRealtime();}else{ld('clash_uid');startTut();}}).catch(()=>{if(done)return;done=true;clearTimeout(t);ld('clash_uid');startTut();});
-}else startTut();
-}
-
-function startTut(){isTut=true;U=migrate({uid:genId(),nickname:'Новичок',trophies:0,gold:500,gems:50,isGuest:true,xp:0});ss('mainnav','display','none');ss('topbar','display','none');startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');notify('ОБУЧЕНИЕ: Уничтожь главную башню!','inf');setTimeout(hideCover,150);}
-
-function migrate(u){
-if(!u.cards)u.cards={};
-const base=['giant','arrows','archer','minion','knight','goblin','bomber','skel'];
-base.forEach(id=>{if(!u.cards[id])u.cards[id]={level:1,power:0};});
-if(!u.deck||u.deck.length<8)u.deck=[...base];
-u.deck=u.deck.filter(id=>CARDS.find(c=>c.id===id));
-while(u.deck.length<8){const ex=base.find(id=>!u.deck.includes(id));if(!ex)break;u.deck.push(ex);}
-if(!u.banners)u.banners=['blue'];if(!u.equippedBanner)u.equippedBanner='blue';
-if(u.winsToday===undefined)u.winsToday=0;if(!u.maxArena)u.maxArena=0;
-if(!u.friends)u.friends={};if(u.crowns===undefined)u.crowns=0;if(!u.passClaimed)u.passClaimed=[];
-if(!u.emotes)u.emotes=['😂','😭','😡'];if(!u.equippedEmotes)u.equippedEmotes=['😂','😭','😡'];
-if(!u.stats)u.stats={wins:0,matches:0,sdM:0,sdW:0,quests:0,towers:0};
-if(!u.medals)u.medals=[];if(!u.equippedMedals)u.equippedMedals=[null,null];
-if(u.isGuest===undefined)u.isGuest=false;
-if(!u.towerSkins)u.towerSkins=['ts1'];if(!u.equippedTowerSkin)u.equippedTowerSkin='ts1';
-if(!u.towerSkinLevel)u.towerSkinLevel=1;
-if(!u.towerTroops)u.towerTroops=['tt1'];if(!u.equippedTowerTroop)u.equippedTowerTroop='tt1';
-if(u.xp===undefined)u.xp=0;if(u.gold===undefined)u.gold=500;if(u.gems===undefined)u.gems=50;
-if(u.trophies===undefined)u.trophies=0;if(!u.crownsFromWins)u.crownsFromWins=0;
-if(!u.favoriteCard){const own=Object.keys(u.cards||{});u.favoriteCard=own.length>0?own[0]:null;}
-if(u.minTrophies===undefined)u.minTrophies=0;
-if(!u.promos)u.promos=[];
-return u;
-}
-
-function checkDailyReset(){
-const k=dailyKey();if(U.lastDailyKey===k)return;
-U.lastDailyKey=k;U.winsToday=0;U.crownsFromWins=0;U.quests=genQuests();genShop();
-}
-function arenaIdx(){const tr=U.trophies||0;let b=0;for(let i=0;i<ARENAS.length;i++){if(tr>=ARENAS[i].th)b=i;}return b;}
-
-function openProfile(){
-if(!U)return;
-document.getElementById('prof-name').innerHTML=`${U.nickname} ${getCB(U.uid)}`;
-st('prof-tr',`🏆 ${U.trophies||0}`);
-const s=U.stats||{};st('prof-matches',s.matches||0);st('prof-wins',s.wins||0);
-renderFavCard();ss('m-profile','display','flex');
-}
-function renderFavCard(){
-const fc=document.getElementById('prof-fav');if(!fc)return;
-const fav=U.favoriteCard;
-if(fav&&CARDS.find(x=>x.id===fav)&&U.cards[fav]){
-const card=CARDS.find(x=>x.id===fav),data=U.cards[fav],isFoil=data.level>=8;
-fc.innerHTML=`<div class="ci rr-${card.rr} ${isFoil?'foil':''}" style="height:160px;width:110px;cursor:default">${isFoil?'<div class="foil-fx"></div>':''}<div class="fav-badge">💖 FAV</div><div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div></div>`;
-}else fc.innerHTML='<p style="color:rgba(255,255,255,.3);font-size:12px">Нет карты</p>';
-}
-function openFavPicker(){
-const grid=document.getElementById('fav-pick-grid');if(!grid)return;grid.innerHTML='';
-Object.keys(U.cards||{}).forEach(id=>{
-const card=CARDS.find(c=>c.id===id);if(!card)return;
-const data=U.cards[id],isFav=U.favoriteCard===id,isFoil=data.level>=8;
-const div=document.createElement('div');div.className=`ci rr-${card.rr} ${isFav?'fav-sel':''} ${isFoil?'foil':''}`;div.style.height='145px';
-div.innerHTML=`${isFoil?'<div class="foil-fx"></div>':''}${isFav?'<div class="fav-badge">💖 FAV</div>':''}<div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div>`;
-div.onclick=()=>setFavCard(id);grid.appendChild(div);
-});
-ss('m-profile','display','none');ss('m-favpick','display','flex');
-}
-function setFavCard(id){U.favoriteCard=id;saveU();notify('Любимая карта выбрана!','ok');ss('m-favpick','display','none');openProfile();}
-
-function saveU(){
-if(!U)return;
-if(U.stats){['matches','wins','sdM','sdW','towers','quests'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
-['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
-if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
-updateUI();
-}
-
-function updateUI(){
-if(!U)return;
-st('ui-tr',U.trophies);st('ui-go',U.gold);st('ui-ge',U.gems);
-document.getElementById('ui-pname').innerHTML=`${U.nickname} ${getCB(U.uid)}`;
-st('ui-cr',U.crowns);st('ui-wins',U.crownsFromWins||0);st('ui-uid','ID: '+U.uid);
-const xp=U.xp||0,lvl=getLevel(xp);const{cur,max}=xpProg(xp);
-st('ui-lvl',lvl);st('ui-xp',`${cur}/${max} XP`);const xb=document.getElementById('ui-xpb');if(xb)xb.style.width=`${(cur/max)*100}%`;
-const ci=arenaIdx(),ao=ARENAS[ci]||ARENAS[0];
-const ab=document.getElementById('arenabox');
-if(ab){
-  // ИСПРАВЛЕНИЕ: Используем CSS градиенты вместо ссылок, которые ломаются!
-  ab.style.background=ao.bg; 
-}
-// ИСПРАВЛЕНИЕ: Плавно меняем фон лобби в цвет арены
-document.body.style.background = ao.bg;
-
-st('ui-aname',`АРЕНА ${ci+1}`);st('ui-adesc',`${ao.n} (${ao.th}+ 🏆)`);
-const cs=document.getElementById('cslots');if(cs){cs.innerHTML='';for(let i=0;i<3;i++)cs.innerHTML+=`<div class="cslot ${i<U.winsToday?'filled':''}">${i<U.winsToday?'📦':'🔒'}</div>`;}
-for(let i=0;i<2;i++){const ms=document.getElementById(`um${i}`);if(!ms)continue;const mid=(U.equippedMedals&&U.equippedMedals[i])?U.equippedMedals[i]:null;if(mid){const m=MEDALS.find(x=>x.id===mid);ms.style.display='inline-flex';ms.textContent=m?m.ic:'';}else ms.style.display='none';}
-ss('guest-btns','display',U.isGuest?'block':'none');
-renderDeck();renderTower();renderColl();renderBanners();renderShop();if(navIdx===3)renderPassUI();renderMedals();renderEmotes();
-}
 function startUI(){
 ss('topbar','display','flex');ss('mainnav','display','flex');
 checkDailyReset();if(!U.quests)U.quests=genQuests();if(!U.dailyEmotes||!U.dailyEmotes.length)genShop();if(!U.dsp)U.dsp={};
@@ -1109,7 +956,6 @@ function initDraft() {
 
 function genDraft() {
   if (draftStep >= 4) {
-    // Драфт окончен. Добиваем оставшиеся 4 карты рандомно
     let pool = CARDS.filter(c => c.a <= arenaIdx()).map(c => c.id);
     pool.sort(() => Math.random() - 0.5);
     
@@ -1124,11 +970,10 @@ function genDraft() {
     }
 
     ss('draft-ov', 'display', 'none');
-    prepMM(false, true); // Запускаем бой
+    prepMM(false, true); 
     return;
   }
 
-  // Выбираем 2 случайные карты для выбора
   let pool = CARDS.filter(c => c.a <= arenaIdx());
   let c1 = pool[Math.floor(Math.random() * pool.length)];
   let c2 = pool[Math.floor(Math.random() * pool.length)];
@@ -1151,7 +996,7 @@ function genDraft() {
 }
 
 function pickDraft(idx) {
-  playSfx('hit'); // Звук выбора
+  playSfx('hit'); 
   const myPick = draftChoices[idx];
   const enPick = draftChoices[idx === 0 ? 1 : 0];
   
@@ -1227,7 +1072,6 @@ function genChest(tp){
   const cnt=tp==='m'?5:3;
   for(let i=2;i<cnt;i++){
     const roll=Math.random();
-    // ЖЕСТКИЙ НЕРФ: Шанс новой карты теперь всего 4%
     if(roll<0.04){ 
       const lk=CARDS.filter(c=>!U.cards[c.id]&&c.a<=ci);
       if(lk.length){const nc=lk[Math.floor(Math.random()*lk.length)];cQ.push({t:'newcard',cid:nc.id,v:1,ic:nc.ic,tx:`НОВАЯ: ${nc.n}!`});}
@@ -1248,7 +1092,6 @@ function nextChestItem(){
   st('ci-icon',item.ic);st('ci-text',item.tx);st('ci-cnt','+'+item.v);
   if(rev){
     rev.style.display='flex';
-    // Перезапуск Гача-анимации
     document.querySelectorAll('.gacha-item').forEach(el => {
       el.style.animation = 'none';
       void el.offsetWidth; 
@@ -1432,7 +1275,6 @@ function specBotAI() {
   }
 }
 
-// === ИНТЕГРАЦИЯ ДРАФТА ===
 function prepMM(sd, draft = false){
 if (draft && !isDraft) { initDraft(); return; }
 
@@ -1442,11 +1284,10 @@ const ar = ARENAS[arenaIdx()], bgcol = pBan.s;
 
 st('mm-ic', sd ? '☠️' : draft ? '🃏' : '⚔️');
 st('mm-tit', sd ? 'ВНЕЗАПНАЯ СМЕРТЬ' : draft ? 'ДРАФТ' : 'ПОИСК');
-ss('mmov', 'background', `radial-gradient(ellipse at center, ${ar.col}33, ${bgcol})`);
+ss('mmov', 'background', `radial-gradient(ellipse at center, ${ar.col}33, transparent)`);
 ss('mmov', 'display', 'flex');
 
 mmTimer = setTimeout(() => {
-  // Умные никнеймы
   botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
   botTrophies = Math.max(0, U.trophies + Math.floor((Math.random() - .5) * 60));
   botBanner = BANNERS[Math.floor(Math.random() * BANNERS.length)];
@@ -1475,7 +1316,6 @@ function initMP(bid, oppId, team, isF) {
   setTimeout(() => prepMM(false, false), 1500);
 }
 
-// 60 FPS Engine
 function startBattle(enemyName,enemyBanStyle){
 try{
 document.querySelectorAll('.scr').forEach(s=>{s.classList.remove('active');s.style.opacity='0';});
@@ -1577,7 +1417,7 @@ cont.innerHTML+=`<div class="gc rr-${ci.rr} ${elixir>=ci.c?'can':'cant'} ${isFoi
 }
 
 function spawnCard(cid,team,x,y,lvl=1){
-if(isTieBreaker) return; // ИСПРАВЛЕНИЕ: В тай-брейке нельзя ставить карты!
+if(isTieBreaker) return; 
 const card=CARDS.find(c=>c.id===cid);if(!card)return;
 playSfx('spawn');
 const spMult=isSD?1.5:1,sm=1+(lvl-1)*0.4;
@@ -1620,7 +1460,6 @@ p.style.display='flex';
 function sendEmote(e){document.getElementById('emote-panel').style.display='none';showEmote('pe',e);if(isMP&&battleId)db.ref(`battles/${battleId}/emotes`).push({uid:U.uid,emote:e});}
 function showEmote(id,str){const el=document.getElementById(id);if(!el)return;el.textContent=str;el.style.display='block';el.style.animation='none';void el.offsetWidth;el.style.animation='emotePop 2.2s forwards';setTimeout(()=>el.style.display='none',2200);}
 
-// ИСПРАВЛЕНИЕ: Умный бот для высоких кубков (быстрее думает)
 function botAI(){
 if(isBotFrozen || isTieBreaker)return;
 botElix=Math.min(10,botElix+(isOvertime?0.016:0.008));botCd++;
@@ -1679,7 +1518,6 @@ isOvertime=true;bEndTime=Date.now()+60000;notify('⏰ Доп. время! Эли
 }else{if(pt!==et){endBattle(pt>et);return;}isTieBreaker=true;notify('💀 Тай-брейк!','inf');}
 }
 }else{
-// ИСПРАВЛЕНИЕ: ЖЕСТКИЙ ТАЙ БРЕЙК - x5 урон по ВСЕМ вышкам
 st('btimer','💀');
 towers.forEach(t => t.hp -= DRAIN * 5);
 if(Math.random()<.18)parts.push({x:Math.random()*cw,y:Math.random()*ch,t:18,max:18,col:'#e8415a'});
@@ -2073,7 +1911,7 @@ db.ref('users/'+id).once('value').then(snap=>{
 if(!snap.exists()){res.innerHTML='<p style="color:var(--dn);font-size:13px;text-align:center">❌ Игрок не найден</p>';return;}
 const u=snap.val(),arI=ARENAS.findIndex(a=>a.th>(u.trophies||0)),arN=arI>0?ARENAS[arI-1].n:'Лужайка';
 res.innerHTML=`<div class="friend-card"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${u.nickname||'?'}</div> <div class="fc-sub">🏆 ${u.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${id}</div> </div> <div class="fc-actions"> <button class="fc-btn green" onclick="sendFriendReq('${id}','${(u.nickname||'').replace(/'/g,'').replace(/"/g,'')}')">➕ Добавить</button> </div> </div>`;
-}).catch(()=>{res.innerHTML='<p style="color:var(--dn);font-size:13px;text-align:center">⚠️ Ошибка</p>';});
+}).catch(()=>{res.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">⚠️ Ошибка</p>';});
 }
 
 function sendFriendReq(toUid,name){
