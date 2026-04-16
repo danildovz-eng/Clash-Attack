@@ -59,7 +59,8 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 .nb{padding:4px;font-size:10px;text-align:center;cursor:pointer;opacity:.4;transition:.2s;text-transform:uppercase;color:var(--tx);font-weight:700;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;letter-spacing:.3px}
 .nb.active{opacity:1;color:var(--pr)}.ni{font-size:24px;transition:.2s}
 
-.scr{display:block;width:100%;position:absolute!important;top:var(--top)!important;bottom:var(--nav)!important;left:0;right:0;height:auto!important;background:var(--bg);overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;padding-top:10px;padding-bottom:0px;transition:transform .28s cubic-bezier(.4,0,.2,1),opacity .28s ease;opacity:0;transform:translateX(100%);pointer-events:none;z-index:1}
+/* ИСПРАВЛЕНИЕ: Убран padding-bottom, чтобы экраны прилегали плотно к навигации */
+.scr{display:block;width:100%;position:absolute!important;top:var(--top)!important;bottom:var(--nav)!important;left:0;right:0;height:auto!important;background:var(--bg);overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;padding-top:10px;padding-bottom:0!important;transition:transform .28s cubic-bezier(.4,0,.2,1),opacity .28s ease;opacity:0;transform:translateX(100%);pointer-events:none;z-index:1}
 .scr.active{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2}
 .scr.past{transform:translateX(-100%);opacity:0;pointer-events:none}
 
@@ -82,12 +83,11 @@ nav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(
 .bigbtn:active{transform:translateY(5px);box-shadow:0 0 0}
 .bigbtn.sd{background:linear-gradient(145deg,#e8415a,#9d1828);color:#fff;font-size:14px;height:7.5vh;min-height:54px;margin-top:8px;box-shadow:0 5px 0 rgba(0,0,0,.4)}
 
-#bscr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease;touch-action:none}
+#bscr{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease;touch-action:none;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 #bscr.active{display:flex;opacity:1}
 #cvs-c{flex:1;width:100%;position:relative;overflow:hidden;}
 canvas{display:block;width:100%;height:100%;touch-action:none}
-
-.bui{flex:0 0 auto;width:100%;min-height:140px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 10px calc(5px + env(safe-area-inset-bottom));position:relative;z-index:10;box-sizing:border-box}
+.bui{flex:0 0 auto;width:100%;min-height:140px;background:rgba(10,11,18,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 10px calc(5px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.07);position:relative;z-index:10;box-sizing:border-box}
 .hand{display:flex;flex-direction:row;gap:8px;justify-content:center;align-items:center;width:100%;overflow:visible;}
 
 .gc{width:23vw;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,background .15s}
@@ -156,8 +156,9 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .fbtn { width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--pr); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s; margin-top: 5px;}
 .fbtn:active { transform: scale(.97); }
 
-#pass-wrap{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;z-index:1;background:linear-gradient(180deg, #12131a, #0a0b10);}
-#pass-canvas{display:block;max-width:100%;}
+/* ИСПРАВЛЕНИЕ: Контейнер для прокрутки боевого пропуска - скроллится на телефонах */
+#pass-wrap{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;z-index:1;background:#0a0b10;}
+#pass-canvas{display:block;width:100%;}
 #pass-layer{position:absolute;top:0;left:0;width:100%;z-index:5;pointer-events:none}
 #pass-controls{position:absolute;top:8px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 13px;z-index:200;pointer-events:none}
 #pass-controls>*{pointer-events:auto}
@@ -383,8 +384,9 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <button class="pbtn" style="width:auto;padding:9px 22px;border-radius:20px;margin:0;font-size:13px" onclick="toggleQ()">📋 ЗАДАНИЯ (<span id="qbadge">0/0</span>)</button>
     <div style="background:var(--panel);border:1px solid var(--br);border-radius:11px;padding:7px 11px;font-size:14px;font-weight:800">👑 <span id="ui-cr">0</span></div>
   </div>
+  
   <div id="pass-wrap">
-    <div id="pass-map-container" style="position:relative; width:100%; min-height: 5500px;">
+    <div id="pass-map-container" style="position:relative; width:100%; min-height: 4000px;">
       <canvas id="pass-canvas" style="position:absolute; top:0; left:0; z-index:1; width:100%;"></canvas>
       <div id="pass-layer" style="position:absolute; top:0; left:0; width:100%; z-index:5;"></div>
       <div id="season-title-block" style="position:absolute; bottom:0; left:0; width:100%; padding:60px 20px 40px; text-align:center; z-index:10; background: linear-gradient(to top, rgba(13,92,46,1), rgba(13,92,46,0));">
@@ -393,6 +395,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       </div>
     </div>
   </div>
+
   <div id="qpanel">
     <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 18px 9px;border-bottom:1px solid var(--br)">
       <span style="font-weight:800;font-size:16px">📋 Задания</span>
@@ -675,7 +678,6 @@ const getCB = (uid) => uid === 'FPTL777C' ? `<span class="creator-badge" title="
 const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9,GEM-P4M5,GEM-R7T6,GEM-W2Q1,GEM-N5H4,GEM-Y3Z2,GEM-F1G8,GEM-S6D7,GEM-V9B0,GEM-J2K3,GEM-L5P6,GEM-M8N9,GEM-C1X2,GEM-Z4V5,GEM-A7S8,GEM-D0F1,GEM-G3H4,GEM-J6K7,GEM-L9P0,GEM-Q2W3,GEM-E5R6,GEM-T8Y9,GEM-U1I2,GEM-O4P5,GEM-A7D8,GEM-F0G1,GEM-H3J4,GEM-K6L7,GEM-Z9X0,GEM-C2V3,GEM-B5N6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4,COIN-T5Y6,COIN-U7I8,COIN-O9P0,COIN-A1S2,COIN-D3F4,COIN-G5H6,COIN-J7K8,COIN-L9Z0,COIN-X1C2,COIN-V3B4,COIN-N5M6,COIN-Q7A8,COIN-W9S0,COIN-E1D2,COIN-R3F4,COIN-T5G6,COIN-Y7H8,COIN-U9J0,COIN-I1K2,COIN-O3L4,COIN-P5Z6,COIN-A7X8,COIN-S9C0,COIN-D1V2,COIN-F3B4,COIN-G5N6,COIN-H7M8,COIN-J9Q0,COIN-K1W2,COIN-L3E4,COIN-Z5R6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
-"CRWN-M1N2,CRWN-B3V4,CRWN-C5X6,CRWN-Z7A8,CRWN-S9D0,CRWN-F1G2,CRWN-H3J4,CRWN-K5L6,CRWN-P7O8,CRWN-I9U0,CRWN-Y1T2,CRWN-R3E4,CRWN-W5Q6,CRWN-M7B8,CRWN-V9C0,CRWN-X1Z2,CRWN-L3K4,CRWN-J5H6,CRWN-G7F8,CRWN-D9S0,CRWN-A1P2,CRWN-O3I4,CRWN-U5Y6,CRWN-T7R8,CRWN-E9W0,CRWN-Q1M2,CRWN-N3B4,CRWN-V5C6,CRWN-X7Z8,CRWN-L9J0,CRWN-H1G2,CRWN-F3D4,CRWN-S5A6,CRWN-P7U8".split(',').forEach(k=>PROMOS[k.trim()]={t:'crowns',v:10});
 
 const ARENAS=[
 {n:'Лужайка',     th:0,    img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800&auto=format&fit=crop',col:'#2ebd6b',em:'🌿'},
@@ -841,7 +843,6 @@ if(u.minTrophies===undefined)u.minTrophies=0;
 if(!u.promos)u.promos=[];
 return u;
 }
-
 function checkDailyReset(){
 const k=dailyKey();if(U.lastDailyKey===k)return;
 U.lastDailyKey=k;U.winsToday=0;U.crownsFromWins=0;U.quests=genQuests();genShop();
@@ -948,12 +949,13 @@ function renderPassUI(){
     st('qbadge',`${done}/${U.quests.length}`);
   }
 
-  // ОГРОМНАЯ КАРТА БИОМОВ И ПРОПУСКА
-  const cvs=document.getElementById('pass-canvas'), lay=document.getElementById('pass-layer');
-  if(!cvs || !lay) return;
+  // ОГРОМНАЯ КАРТА БИОМОВ И ПРОПУСКА (Ужата до 4000px для iOS Safari)
+  const cvs=document.getElementById('pass-canvas'), lay=document.getElementById('pass-layer'), cont=document.getElementById('pass-map-container');
+  if(!cvs || !lay || !cont) return;
   
   const W = window.innerWidth || 360;
-  const H = 5500; // 50 уровней по 110px
+  const H = 4000; 
+  cont.style.minHeight = H + 'px';
   cvs.width = W; cvs.height = H;
   const ctx = cvs.getContext('2d');
   
@@ -961,23 +963,24 @@ function renderPassUI(){
 
   // Отрисовка биомов градиентами
   // Глубокие Джунгли (Верх)
-  let grd1 = ctx.createLinearGradient(0, 0, 0, 1800);
+  let grd1 = ctx.createLinearGradient(0, 0, 0, 1300);
   grd1.addColorStop(0, '#071f11'); grd1.addColorStop(1, '#0c381c');
-  ctx.fillStyle = grd1; ctx.fillRect(0, 0, W, 1800);
+  ctx.fillStyle = grd1; ctx.fillRect(0, 0, W, 1300);
   // Пустыня/Саванна (Центр)
-  let grd2 = ctx.createLinearGradient(0, 1800, 0, 3800);
+  let grd2 = ctx.createLinearGradient(0, 1300, 0, 2700);
   grd2.addColorStop(0, '#75400d'); grd2.addColorStop(1, '#a86616');
-  ctx.fillStyle = grd2; ctx.fillRect(0, 1800, W, 2000);
+  ctx.fillStyle = grd2; ctx.fillRect(0, 1300, W, 1400);
   // Обычные Джунгли (Низ)
-  let grd3 = ctx.createLinearGradient(0, 3800, 0, 5500);
+  let grd3 = ctx.createLinearGradient(0, 2700, 0, 4000);
   grd3.addColorStop(0, '#134d25'); grd3.addColorStop(1, '#176630');
-  ctx.fillStyle = grd3; ctx.fillRect(0, 3800, W, 1700);
+  ctx.fillStyle = grd3; ctx.fillRect(0, 2700, W, 1300);
 
   // Расчет точек пути
   let pts = [];
+  const yStep = (H - 250) / PASS_R.length;
   for(let i=0; i<PASS_R.length; i++){
-    const y = H - (i * 105) - 180; // Начинаем чуть выше баннера сезона
-    const px = Math.sin(i * 0.45) * (W * 0.35); // Извилистая дорога
+    const y = H - (i * yStep) - 150; 
+    const px = Math.sin(i * 0.45) * (W * 0.35); 
     pts.push({x: W/2 + px, y});
   }
 
@@ -989,20 +992,19 @@ function renderPassUI(){
   for(let i=0; i<90; i++) {
     let dy = Math.random() * H;
     let dx = Math.random() * W;
-    // Разбегаются от центральной линии, чтобы не закрывать дорогу
     if(Math.abs(dx - W/2) < 60) dx += (Math.random() > 0.5 ? 70 : -70);
     
     let ic = '';
-    if(dy > 3800) ic = decos[Math.floor(Math.random()*3)]; // Низ
-    else if(dy > 1800) ic = decos[3+Math.floor(Math.random()*3)]; // Центр
-    else ic = decos[6+Math.floor(Math.random()*3)]; // Верх
+    if(dy > 2700) ic = decos[Math.floor(Math.random()*3)]; 
+    else if(dy > 1300) ic = decos[3+Math.floor(Math.random()*3)]; 
+    else ic = decos[6+Math.floor(Math.random()*3)]; 
     
     ctx.globalAlpha = 0.5;
     ctx.fillText(ic, dx, dy);
   }
   ctx.globalAlpha = 1;
 
-  // Отрисовка базовой (незаполненной) дороги
+  // Отрисовка базовой дороги
   ctx.lineWidth = 20; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   ctx.beginPath();
   ctx.moveTo(pts[0].x, pts[0].y);
@@ -1022,7 +1024,7 @@ function renderPassUI(){
     }
   }
   if(filledAny) {
-    ctx.strokeStyle = '#e8415a'; // Красный ковер!
+    ctx.strokeStyle = '#e8415a'; 
     ctx.stroke();
   }
 
@@ -1055,7 +1057,6 @@ if(idx===5)renderStats();
 if(idx===6)loadLB();
 if(idx===3) {
   renderPassUI();
-  // При открытии скроллим в самый низ (к 1-му уровню)
   const pw = document.getElementById('pass-wrap');
   if(pw) setTimeout(()=> pw.scrollTop = pw.scrollHeight, 10);
 }
@@ -1092,6 +1093,8 @@ function setupDrag(){
     if(ghost){ghost.style.left=cx+'px';ghost.style.top=cy+'px';}
     if(bCanvas){
       const r=bCanvas.getBoundingClientRect();
+      // Защита от нулевого размера Canvas
+      if(r.width===0 || r.height===0) return;
       dragCX=((e.touches?e.touches[0].clientX:e.clientX)-r.left) * (cw / r.width);
       dragCY=((e.touches?e.touches[0].clientY:e.clientY)-r.top) * (ch / r.height);
     }
@@ -1103,6 +1106,7 @@ function setupDrag(){
     const idx=dragIdx;dragOn=false;dragIdx=-1;if(!bCanvas)return;
     
     const r=bCanvas.getBoundingClientRect();
+    if(r.width===0 || r.height===0) return;
     const scaleX = cw / r.width;
     const scaleY = ch / r.height;
     
@@ -1110,8 +1114,8 @@ function setupDrag(){
     let cy=((e.changedTouches?e.changedTouches[0].clientY:e.clientY)-r.top) * scaleY;
     
     // ГЛАВНЫЙ ФИКС: Если мы отпускаем карту в нижней трети (панель UI), просто возвращаем ее в руку
-    if(cy >= ch - 10) {
-      return; // Отмена действия, эликсир не тратится
+    if(cy >= ch - 15) {
+      return; 
     }
     
     if(cy < 0 && cy > -50 * scaleY) cy = 5;
@@ -1329,8 +1333,10 @@ function startSpectatorMatch(p1, p2) {
   bState='intro';isOvertime=false;isTieBreaker=false;isBotFrozen=false;freezeCd=0;dragOn=false;dragIdx=-1;
   
   const cont=document.getElementById('cvs-c');
-  const realW = cont.clientWidth || window.innerWidth || 360;
-  const realH = cont.clientHeight || (window.innerHeight - 176) || 530;
+  let realW = cont?.clientWidth || window.innerWidth || 360;
+  let realH = cont?.clientHeight || (window.innerHeight - 176) || 530;
+  if (realH < 100) realH = window.innerHeight > 300 ? window.innerHeight - 176 : 530;
+  if (realW < 100) realW = 360;
   
   cw = 360; 
   ch = Math.floor(360 * (realH / realW)); 
@@ -1406,8 +1412,11 @@ try{if(!isTut&&U&&U.stats){U.stats.matches=(U.stats.matches||0)+1;if(isSD)U.stat
 setTimeout(()=>{
 try{
 const cont=document.getElementById('cvs-c');if(!cont)return;
-const realW = cont.clientWidth || window.innerWidth || 360;
-const realH = cont.clientHeight || (window.innerHeight - 176) || 530;
+let realW = cont.clientWidth || window.innerWidth || 360;
+let realH = cont.clientHeight || (window.innerHeight - 176) || 530;
+// ИСПРАВЛЕНИЕ: Гарантированная защита от нулевой высоты при старте!
+if (realH < 100) realH = window.innerHeight > 300 ? window.innerHeight - 176 : 530;
+if (realW < 100) realW = 360;
 
 cw = 360; 
 ch = Math.floor(360 * (realH / realW)); 
@@ -1467,6 +1476,70 @@ setTimeout(()=>{bState='playing';bEndTime=Date.now()+(isTut?9999999:180000);},25
 },150);
 }catch(e){console.error(e);notify('Ошибка старта!');exitBattle();}
 }
+
+function updateElixUI(){
+const segs=document.getElementById('elsegs'),cnt=document.getElementById('elcnt');if(!segs)return;
+const filled=Math.floor(elixir),half=(elixir-filled)>=0.5;segs.innerHTML='';
+for(let i=0;i<10;i++){let cl='elseg';if(i<filled)cl+=' on';else if(i===filled&&half)cl+=' half';segs.innerHTML+=`<div class="${cl}"></div>`;}
+if(cnt)cnt.textContent=Math.floor(elixir);
+document.querySelectorAll('.gc').forEach(card=>{
+const i=parseInt(card.dataset.i);if(isNaN(i)||!bHand[i])return;
+const cdef=CARDS.find(c=>c.id===bHand[i]);if(!cdef)return;
+card.classList.toggle('can',elixir>=cdef.c);card.classList.toggle('cant',elixir<cdef.c);
+});
+}
+
+function renderHand(){
+const cont=document.getElementById('hand');if(!cont)return;cont.innerHTML='';
+for(let i=0;i<4;i++){
+if(!bHand[i])continue;const ci=CARDS.find(c=>c.id===bHand[i]);if(!ci)continue;
+const data=U.cards[ci.id]||{level:1};const isFoil=data.level>=8;
+cont.innerHTML+=`<div class="gc rr-${ci.rr} ${elixir>=ci.c?'can':'cant'} ${isFoil?'foil':''}" data-i="${i}">${isFoil?'<div class="foil-fx"></div>':''}<div class="ecost">${ci.c}</div><div class="gc-icon">${ci.ic}</div><div class="gc-name">${ci.n}</div><div style="color:var(--ac);font-size:11px;font-weight:800;position:relative;z-index:2;margin-top:2px;">Лвл ${data.level}</div></div>`;
+}
+}
+
+function spawnCard(cid,team,x,y,lvl=1){
+const card=CARDS.find(c=>c.id===cid);if(!card)return;
+playSfx('spawn');
+const spMult=isSD?1.5:1,sm=1+(lvl-1)*0.4;
+const baseSp=(team===0)?(card.sp+((U.cards[cid]&&U.cards[cid].spBonus)||0)):card.sp;
+if(card.t==='spell'){
+if(cid==='freeze'){
+ents.forEach(en=>{if(en.team!==team&&Math.hypot(en.x-x,en.y-y)<card.r)en.frozen=180;});
+towers.forEach(t=>{if(t.team!==team&&Math.hypot(t.x-x,t.y-y)<card.r)t.frozen=180;});
+if(!isMP&&team===0){isBotFrozen=true;freezeCd=180;}
+}else{
+towers.forEach(t=>{if(t.team!==team&&Math.hypot(t.x-x,t.y-y)<card.r)t.hp-=card.d*sm;});
+ents.forEach(en=>{if(en.team!==team&&Math.hypot(en.x-x,en.y-y)<card.r)en.hp-=card.d*sm;});
+}
+for(let i=0;i<8;i++)parts.push({x:x+(Math.random()-.5)*card.r*2,y:y+(Math.random()-.5)*card.r*2,t:25,max:25,col:cid==='freeze'?'#a0e8ff':cid==='zap'?'#f5e642':'#ff7e42'});
+projs.push({x,y:y-35,tx:x,ty:y,t:16,max:16,ic:card.pr||'💥'});
+}else{
+const cnt=(cid==='spear_g'||cid==='skel'||cid==='gremlin')?3:1;
+for(let i=0;i<cnt;i++){
+const ox=(i-Math.floor(cnt/2))*18;
+const eObj={id:Date.now()+Math.random()+i,cid:card.id,team,x:x+ox,y,
+hp:card.hp*sm,mhp:card.hp*sm,dmg:card.d*sm,sp:baseSp*spMult,
+r:card.r,tp:card.t,tg:card.tg,ic:card.ic,pr:card.pr,cd:0,state:'walk',frozen:0,wp:Math.random()*Math.PI*2};
+if(card.heal)eObj.healAmt=card.heal*sm;
+if(card.lifeSteal)eObj.lifeSteal=true;
+if(card.rageBelow)eObj.rageBelow=card.rageBelow;
+if(card.regen)eObj.regen=true;
+if(card.freeze)eObj.freezeOnHit=true;
+ents.push(eObj);
+}
+}
+}
+
+function toggleEmote(){
+if(bState!=='playing')return;const p=document.getElementById('emote-panel');
+if(p.style.display==='flex'){p.style.display='none';return;}
+p.innerHTML='';
+(U.equippedEmotes||[]).forEach(e=>{if(e)p.innerHTML+=`<div onclick="sendEmote('${e}')" style="font-size:24px;cursor:pointer;background:rgba(255,255,255,.1);border-radius:50%;width:42px;height:42px;display:flex;justify-content:center;align-items:center">${e}</div>`;});
+p.style.display='flex';
+}
+function sendEmote(e){document.getElementById('emote-panel').style.display='none';showEmote('pe',e);if(isMP&&battleId)db.ref(`battles/${battleId}/emotes`).push({uid:U.uid,emote:e});}
+function showEmote(id,str){const el=document.getElementById(id);if(!el)return;el.textContent=str;el.style.display='block';el.style.animation='none';void el.offsetWidth;el.style.animation='emotePop 2.2s forwards';setTimeout(()=>el.style.display='none',2200);}
 
 function botAI(){
 if(isBotFrozen)return;
@@ -1918,7 +1991,7 @@ if(dot)dot.style.display=n>0?'block':'none';
 function openFriends(){if(!U)return;const myEl=document.getElementById('my-id-show');if(myEl)myEl.textContent=U.uid;ss('friends-ov','display','flex');fTab('list');}
 function fTab(t){['list','req','add'].forEach(x=>{document.getElementById('ft-'+x)?.classList.toggle('active',x===t);ss('fc-'+x,'display',x===t?'block':'none');});if(t==='list')renderFriendList();if(t==='req')renderFriendReqs();}
 
-// ИСПРАВЛЕНИЕ: Полностью убраны все кнопки, кроме "Удалить"
+// ИСПРАВЛЕНИЕ: Полностью удален функционал вызова друзей
 function renderFriendList(){
 const c=document.getElementById('fc-list');if(!c||!U)return;
 c.innerHTML='<p style="color:rgba(255,255,255,.28);font-size:11px;margin-bottom:8px;text-align:center">Загрузка…</p>';
