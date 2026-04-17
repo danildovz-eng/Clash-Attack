@@ -561,7 +561,7 @@ function notify(msg,tp='err'){
   setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},2600);
 }
 
-// Глобальные переменные арены и драфта
+// ВОТ ОНИ! ПОТЕРЯННЫЕ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 let elixir=5,bHand=[],towers=[],ents=[],projs=[],parts=[];
 let cw=0,ch=0,bEndTime=0,isOvertime=false,isTieBreaker=false;
 let bLoopId=null,bState='stopped';
@@ -576,6 +576,13 @@ let specBot1={elix:5, cd:0, deck:[], name:''};
 let globalLbPlayers=[];
 
 let isDraft=false, draftStep=0, draftMyDeck=[], draftEnDeck=[], draftChoices=[];
+
+let U=null,swapMode=false,swapId=null;
+let battleId=null,netListener=null,_friendReqRef=null,_battleInvRef=null;
+let isMP=false,isSD=false,isFriendly=false,isTut=false;
+let winChestPending=false,appStarted=false,loading=false;
+let navIdx=2,deckTab=0,mmTimer=null;
+let botTrophies=0,botFavCard=null,botBanner=null,rlSpinning=false;
 
 const BOT_NAMES = ['Destroyer99', 'pro_gamer', 'DarkKnight', 'ShadowNinja', 'Alex2010', 'KingOfArena', 'GigaChad', 'PekkaLover', 'Toxic_Boy', 'NoobMaster', 'John_Doe', 'ClashGod', 'CyberDemon', 'GhostRider', 'AlphaWolf', 'DragonSlayer', 'TopTop', 'LoneSurvivor'];
 
@@ -605,7 +612,7 @@ const rb=document.getElementById('rl-btn');if(rb)rb.disabled=!can;
 const ct=document.getElementById('ctimer');if(ct)ct.textContent=`Обновится через ${cd}`;
 },1000);
 
-// ИСПРАВЛЕНИЕ: Безопасный запуск звука (чтобы Safari не убивал игру на старте)
+// ИСПРАВЛЕНИЕ ЗВУКА ДЛЯ АЙФОНОВ
 let audioCtx = null;
 let sfxOn = true;
 function initAudio() {
@@ -727,6 +734,169 @@ const CARDS=[
 {id:'marcher',a:12,n:'Маг. Лучник',c:4,hp:450, d:50, sp:0.60,r:180,t:'ground',tg:'all',    ic:'🧝‍♂️',pr:'✨',rr:'l'},
 {id:'rghost', a:12,n:'Кор. Призрак',c:3,hp:1000,d:70,sp:0.60,r:40,t:'ground',tg:'ground', ic:'👻',pr:null,rr:'l'}
 ];
+
+const TSKINS=[{id:'ts1',n:'Стандарт',ic:'🏰',hm:1.0,col:'#7f8c8d'},{id:'ts2',n:'Крепость',ic:'🪨',hm:1.05,col:'#6d4c41'},{id:'ts3',n:'Кристалл',ic:'🔮',hm:1.1,col:'#8e24aa'}];
+const TTROOP=[{id:'tt1',n:'Лучница',ic:'👱‍♀️',d:25,sp:60,pr:'🏹',ra:0},{id:'tt2',n:'Канонир',ic:'🧨',d:75,sp:120,pr:'💣',ra:4},{id:'tt3',n:'Маг',ic:'🧙',d:40,sp:70,pr:'🔥',ra:4}];
+const BANNERS=[
+{id:'blue',s:'linear-gradient(135deg,#1a6eb5,#3d9be9)'},{id:'red',s:'linear-gradient(135deg,#8b0000,#e8415a)'},
+{id:'green',s:'linear-gradient(135deg,#0d5c2e,#2ebd6b)'},{id:'purple',s:'linear-gradient(135deg,#4a0080,#9b5de5)'},
+{id:'orange',s:'linear-gradient(135deg,#8c4000,#e67e22)'},{id:'dark',s:'linear-gradient(135deg,#0a0d14,#2c3e50)'},
+{id:'gold',s:'linear-gradient(135deg,#7d5900,#f5c518)'}
+];
+const EMOTES=['😂','😭','😡','🙄','🤩','😴','🥶','🤯','😱','😈','🤡','💩','👻','💀','👽','🤖','🎃','🐶','🐱','🐵','🦁','🐲','🤑','🥳','😎'];
+const MEDALS=[
+{id:'m1',ic:'⚔️',d:'Сыграть 1 бой'},{id:'m2',ic:'🏆',d:'1 Победа'},{id:'m3',ic:'👑',d:'10 Побед'},
+{id:'m4',ic:'🌟',d:'50 Побед'},{id:'m5',ic:'🔥',d:'100 Побед'},
+{id:'m6',ic:'🏜️',d:'Арена 2'},{id:'m7',ic:'❄️',d:'Арена 5'},{id:'m8',ic:'🌋',d:'Арена 10'},
+{id:'m9',ic:'💰',d:'10000 Золота'},{id:'m10',ic:'💎',d:'100 Гемов'},
+{id:'m11',ic:'🃏',d:'10 карт'},{id:'m12',ic:'🎴',d:'20 карт'},
+{id:'m13',ic:'⬆️',d:'Карта 2 ур.'},{id:'m14',ic:'⭐',d:'Карта 8 ур.'},
+{id:'m15',ic:'📜',d:'10 квестов'},{id:'m16',ic:'☠️',d:'5 боёв ВС'},{id:'m17',ic:'💀',d:'Победа ВС'},
+{id:'m18',ic:'🎭',d:'Купить смайлик'},{id:'m19',ic:'🤝',d:'Добавить друга'},
+{id:'m20',ic:'🧠',d:'1000 кубков'},{id:'m21',ic:'🏅',d:'Уровень 5'},{id:'m22',ic:'🎖️',d:'Уровень 10'},
+{id:'m23',ic:'💯',d:'100 боёв'}
+];
+const RL_PRIZES=[
+{ic:'💰',lbl:'300 Золота', tp:'gold',v:300, w:30},{ic:'💰',lbl:'600 Золота', tp:'gold',v:600, w:18},
+{ic:'💰',lbl:'1000 Золота',tp:'gold',v:1000,w:8}, {ic:'💎',lbl:'10 Гемов',  tp:'gems',v:10,  w:20},
+{ic:'💎',lbl:'25 Гемов',  tp:'gems',v:25,  w:10},{ic:'💎',lbl:'50 Гемов',  tp:'gems',v:50,  w:5},
+{ic:'📦',lbl:'Ящик',       tp:'chest',v:'g', w:10},{ic:'✨',lbl:'Маг.Ящик', tp:'chest',v:'m', w:3},
+{ic:'👑',lbl:'5 Корон',   tp:'crowns',v:5,  w:8}, {ic:'⚡',lbl:'30 Очков',  tp:'power',v:30, w:14},
+];
+const PASS_R=Array.from({length:50},(_,i)=>{
+const c=(i+1)*8;
+if((i+1)%10===0)return{crowns:c,t:'chest',v:'m',ic:'✨',n:'МЕГА ЯЩИК'};
+if((i+1)%5===0) return{crowns:c,t:'chest',v:'g',ic:'📦',n:'Ящик'};
+if(i%3===0)     return{crowns:c,t:'gold', v:400+i*40,ic:'💰',n:`${400+i*40} Золота`};
+if(i%3===1)     return{crowns:c,t:'gems', v:8+i,ic:'💎',n:`${8+i} Гемов`};
+return{crowns:c,t:'gems',v:15+i*2,ic:'💎',n:`${15+i*2} Гемов`};
+});
+const XP_T=[0,100,250,500,900,1500,2400,3700,5500,8000,12000];
+const getLevel=xp=>{let l=1;for(let i=1;i<XP_T.length;i++){if(xp>=XP_T[i])l=i+1;else break;}return Math.min(l,10);};
+const xpProg=xp=>{const l=getLevel(xp);if(l>=10)return{cur:XP_T[9],max:XP_T[9]};return{cur:xp-XP_T[l-1],max:XP_T[l]-XP_T[l-1]};};
+
+const FBC={apiKey:"AIzaSyDGOo6Y07l_9utgsaj6INMogMVnAhx1ZAo",authDomain:"battle-royale-b5084.firebaseapp.com",databaseURL:"https://battle-royale-b5084-default-rtdb.firebaseio.com",projectId:"battle-royale-b5084"};
+let db;
+try{if(typeof firebase!=='undefined'){firebase.initializeApp(FBC);db=firebase.database();}else throw 0;}
+catch(e){db={ref:()=>({once:()=>Promise.reject('offline'),set:()=>Promise.resolve(),update:()=>Promise.resolve(),on:()=>{},off:()=>{},push:()=>Promise.resolve({key:'mock'}),remove:()=>Promise.resolve(),orderByChild(){return this;},equalTo(){return this;}})}}
+
+function hideCover(){const c=document.getElementById('app-cover');if(c){c.style.opacity='0';setTimeout(()=>c.style.display='none',400);}}
+function startApp(){
+if(appStarted)return;appStarted=true;
+const intro=document.getElementById('intro'),loader=document.getElementById('loading');
+if(intro)intro.style.opacity='1';
+setTimeout(()=>{if(intro)intro.style.opacity='0';setTimeout(()=>{if(intro)intro.style.display='none';if(loader){loader.style.display='flex';setTimeout(()=>loader.style.opacity='1',10);}doLoad('Загрузка данных…',()=>initApp());},500);},1500);
+}
+if(document.readyState==='complete'||document.readyState==='interactive')setTimeout(startApp,80);
+else window.addEventListener('DOMContentLoaded',startApp);
+
+function doLoad(txt,cb){
+if(loading){try{cb&&cb();}catch(e){}return;}loading=true;
+const loader=document.getElementById('loading'),prog=document.getElementById('lprog'),ltxt=document.getElementById('ltxt');
+if(prog)prog.style.width='0%';if(ltxt)ltxt.textContent='Подключение…';
+if(loader){loader.style.display='flex';setTimeout(()=>loader.style.opacity='1',10);}
+setTimeout(()=>{if(prog)prog.style.width='45%';},150);
+setTimeout(()=>{if(prog)prog.style.width='80%';if(ltxt)ltxt.textContent=txt;},400);
+setTimeout(()=>{if(prog)prog.style.width='100%';if(ltxt)ltxt.textContent='Готово!';setTimeout(()=>{try{if(cb)cb();}catch(e){console.error(e);startTut();}if(loader){loader.style.opacity='0';setTimeout(()=>{loader.style.display='none';loading=false;},300);}},200);},700);
+}
+
+function initApp(){
+const sid=ls('clash_uid');
+if(sid){
+let done=false;const t=setTimeout(()=>{if(done)return;done=true;ld('clash_uid');startTut();},3500);
+db.ref('users/'+sid).once('value').then(snap=>{if(done)return;done=true;clearTimeout(t);if(snap.exists()){U=migrate(snap.val());startUI();listenRealtime();}else{ld('clash_uid');startTut();}}).catch(()=>{if(done)return;done=true;clearTimeout(t);ld('clash_uid');startTut();});
+}else startTut();
+}
+
+function startTut(){isTut=true;U=migrate({uid:genId(),nickname:'Новичок',trophies:0,gold:500,gems:50,isGuest:true,xp:0});ss('mainnav','display','none');ss('topbar','display','none');startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');notify('ОБУЧЕНИЕ: Уничтожь главную башню!','inf');setTimeout(hideCover,150);}
+
+function migrate(u){
+if(!u.cards)u.cards={};
+const base=['giant','arrows','archer','minion','knight','goblin','bomber','skel'];
+base.forEach(id=>{if(!u.cards[id])u.cards[id]={level:1,power:0};});
+if(!u.deck||u.deck.length<8)u.deck=[...base];
+u.deck=u.deck.filter(id=>CARDS.find(c=>c.id===id));
+while(u.deck.length<8){const ex=base.find(id=>!u.deck.includes(id));if(!ex)break;u.deck.push(ex);}
+if(!u.banners)u.banners=['blue'];if(!u.equippedBanner)u.equippedBanner='blue';
+if(u.winsToday===undefined)u.winsToday=0;if(!u.maxArena)u.maxArena=0;
+if(!u.friends)u.friends={};if(u.crowns===undefined)u.crowns=0;if(!u.passClaimed)u.passClaimed=[];
+if(!u.emotes)u.emotes=['😂','😭','😡'];if(!u.equippedEmotes)u.equippedEmotes=['😂','😭','😡'];
+if(!u.stats)u.stats={wins:0,matches:0,sdM:0,sdW:0,quests:0,towers:0};
+if(!u.medals)u.medals=[];if(!u.equippedMedals)u.equippedMedals=[null,null];
+if(u.isGuest===undefined)u.isGuest=false;
+if(!u.towerSkins)u.towerSkins=['ts1'];if(!u.equippedTowerSkin)u.equippedTowerSkin='ts1';
+if(!u.towerSkinLevel)u.towerSkinLevel=1;
+if(!u.towerTroops)u.towerTroops=['tt1'];if(!u.equippedTowerTroop)u.equippedTowerTroop='tt1';
+if(u.xp===undefined)u.xp=0;if(u.gold===undefined)u.gold=500;if(u.gems===undefined)u.gems=50;
+if(u.trophies===undefined)u.trophies=0;if(!u.crownsFromWins)u.crownsFromWins=0;
+if(!u.favoriteCard){const own=Object.keys(u.cards||{});u.favoriteCard=own.length>0?own[0]:null;}
+if(u.minTrophies===undefined)u.minTrophies=0;
+if(!u.promos)u.promos=[];
+return u;
+}
+function checkDailyReset(){
+const k=dailyKey();if(U.lastDailyKey===k)return;
+U.lastDailyKey=k;U.winsToday=0;U.crownsFromWins=0;U.quests=genQuests();genShop();
+}
+function arenaIdx(){const tr=U.trophies||0;let b=0;for(let i=0;i<ARENAS.length;i++){if(tr>=ARENAS[i].th)b=i;}return b;}
+
+function openProfile(){
+if(!U)return;
+document.getElementById('prof-name').innerHTML=`${U.nickname} ${getCB(U.uid)}`;
+st('prof-tr',`🏆 ${U.trophies||0}`);
+const s=U.stats||{};st('prof-matches',s.matches||0);st('prof-wins',s.wins||0);
+renderFavCard();ss('m-profile','display','flex');
+}
+function renderFavCard(){
+const fc=document.getElementById('prof-fav');if(!fc)return;
+const fav=U.favoriteCard;
+if(fav&&CARDS.find(x=>x.id===fav)&&U.cards[fav]){
+const card=CARDS.find(x=>x.id===fav),data=U.cards[fav],isFoil=data.level>=8;
+fc.innerHTML=`<div class="ci rr-${card.rr} ${isFoil?'foil':''}" style="height:160px;width:110px;cursor:default">${isFoil?'<div class="foil-fx"></div>':''}<div class="fav-badge">💖 FAV</div><div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div></div>`;
+}else fc.innerHTML='<p style="color:rgba(255,255,255,.3);font-size:12px">Нет карты</p>';
+}
+function openFavPicker(){
+const grid=document.getElementById('fav-pick-grid');if(!grid)return;grid.innerHTML='';
+Object.keys(U.cards||{}).forEach(id=>{
+const card=CARDS.find(c=>c.id===id);if(!card)return;
+const data=U.cards[id],isFav=U.favoriteCard===id,isFoil=data.level>=8;
+const div=document.createElement('div');div.className=`ci rr-${card.rr} ${isFav?'fav-sel':''} ${isFoil?'foil':''}`;div.style.height='145px';
+div.innerHTML=`${isFoil?'<div class="foil-fx"></div>':''}${isFav?'<div class="fav-badge">💖 FAV</div>':''}<div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div>`;
+div.onclick=()=>setFavCard(id);grid.appendChild(div);
+});
+ss('m-profile','display','none');ss('m-favpick','display','flex');
+}
+function setFavCard(id){U.favoriteCard=id;saveU();notify('Любимая карта выбрана!','ok');ss('m-favpick','display','none');openProfile();}
+
+function saveU(){
+if(!U)return;
+if(U.stats){['matches','wins','sdM','sdW','towers','quests'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
+['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
+if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
+updateUI();
+}
+
+function updateUI(){
+if(!U)return;
+st('ui-tr',U.trophies);st('ui-go',U.gold);st('ui-ge',U.gems);
+document.getElementById('ui-pname').innerHTML=`${U.nickname} ${getCB(U.uid)}`;
+st('ui-cr',U.crowns);st('ui-wins',U.crownsFromWins||0);st('ui-uid','ID: '+U.uid);
+const xp=U.xp||0,lvl=getLevel(xp);const{cur,max}=xpProg(xp);
+st('ui-lvl',lvl);st('ui-xp',`${cur}/${max} XP`);const xb=document.getElementById('ui-xpb');if(xb)xb.style.width=`${(cur/max)*100}%`;
+const ci=arenaIdx(),ao=ARENAS[ci]||ARENAS[0];
+const ab=document.getElementById('arenabox');
+if(ab){
+  ab.style.background=ao.bg; 
+}
+document.body.style.background = ao.bg;
+
+st('ui-aname',`АРЕНА ${ci+1}`);st('ui-adesc',`${ao.n} (${ao.th}+ 🏆)`);
+const cs=document.getElementById('cslots');if(cs){cs.innerHTML='';for(let i=0;i<3;i++)cs.innerHTML+=`<div class="cslot ${i<U.winsToday?'filled':''}">${i<U.winsToday?'📦':'🔒'}</div>`;}
+for(let i=0;i<2;i++){const ms=document.getElementById(`um${i}`);if(!ms)continue;const mid=(U.equippedMedals&&U.equippedMedals[i])?U.equippedMedals[i]:null;if(mid){const m=MEDALS.find(x=>x.id===mid);ms.style.display='inline-flex';ms.textContent=m?m.ic:'';}else ms.style.display='none';}
+ss('guest-btns','display',U.isGuest?'block':'none');
+renderDeck();renderTower();renderColl();renderBanners();renderShop();if(navIdx===3)renderPassUI();renderMedals();renderEmotes();
+}
+
 function startUI(){
 ss('topbar','display','flex');ss('mainnav','display','flex');
 checkDailyReset();if(!U.quests)U.quests=genQuests();if(!U.dailyEmotes||!U.dailyEmotes.length)genShop();if(!U.dsp)U.dsp={};
