@@ -29,7 +29,7 @@ html, body {
   width: 100%; height: 100%;
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: var(--bg); color: var(--tx); overflow: hidden;
-  transition: background 0.8s ease; /* Плавная смена фона арен */
+  transition: background 0.8s ease;
 }
 
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -42,6 +42,7 @@ html, body {
 @keyframes flashRed{0%,100%{border-color:rgba(255,255,255,.12);background:rgba(42,45,69,1)}40%,70%{border-color:#e8415a;background:rgba(232,65,90,.2)}}
 @keyframes foilSweep{0%{left:-150%}30%{left:150%}100%{left:150%}}
 @keyframes gachaReveal{0%{transform:scale(0) rotateY(180deg);opacity:0}60%{transform:scale(1.3) rotateY(-20deg);opacity:1}100%{transform:scale(1) rotateY(0);opacity:1}}
+@keyframes mmPulse{from{transform:scale(0.9);opacity:0.8;}to{transform:scale(1.1);opacity:1;}}
 
 #app-cover{position:absolute;inset:0;background:var(--bg);z-index:19000;transition:opacity .4s ease;pointer-events:none}
 #toast-c{position:absolute;top:calc(70px + var(--safe-top));left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:88%;max-width:350px}
@@ -70,7 +71,7 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 
 #s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:15px;align-items:center;padding:15px 0 15px!important;overflow-y:auto;overflow-x:hidden}
 .grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;padding:13px;width:100%;max-width:500px;margin:0 auto}
-.ci{background:linear-gradient(155deg,rgba(42,45,69,0.9),rgba(30,32,48,0.9));border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%;height:auto;aspect-ratio:1/1.3;cursor:pointer;transition:.2s;box-shadow: 0 4px 10px rgba(0,0,0,0.3)}
+.ci{background:linear-gradient(155deg,rgba(42,45,69,0.9),rgba(30,32,48,0.9));border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%;height:auto;aspect-ratio:1/1.3;cursor:pointer;transition:.2s;box-shadow: 0 4px 10px rgba(0,0,0,0.3); overflow:hidden;}
 .cicon { font-size: 40px; margin-bottom: 4px; position: relative; z-index: 2; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 @media (min-width: 450px) { .cicon { font-size: 48px; } }
 .cpb{width:100%;height:8px;background:rgba(0,0,0,.6);border-radius:4px;overflow:hidden;margin-top:auto;margin-bottom:3px;position:relative;z-index:2}
@@ -87,21 +88,46 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 .bigbtn.sd{background:linear-gradient(145deg,#e8415a,#9d1828);color:#fff;font-size:15px;height:7.5vh;min-height:54px;box-shadow:0 6px 0 #6b0f1a, 0 10px 20px rgba(0,0,0,0.4)}
 .bigbtn.dr{background:linear-gradient(145deg,#9b5de5,#5e2a99);color:#fff;font-size:15px;height:7.5vh;min-height:54px;box-shadow:0 6px 0 #3a1466, 0 10px 20px rgba(0,0,0,0.4)}
 
+/* --- Battle UI Classes --- */
 #bscr{display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:#000;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease;touch-action:none;padding-top:var(--safe-top);padding-bottom:var(--safe-bot)}
 #bscr.active{display:flex;opacity:1}
 #cvs-c{flex:1;width:100%;position:relative;overflow:hidden;}
 canvas{display:block;width:100%;height:100%;touch-action:none}
 
+.bban {position:absolute; top:calc(15px + var(--safe-top)); padding:10px 15px; border-radius:12px; z-index:10; background:rgba(0,0,0,0.85); border:2px solid rgba(255,255,255,0.2); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 4px 15px rgba(0,0,0,0.6); display:flex; flex-direction:column;}
+.bban.anim {transform:translateX(0) !important;}
+.bban-e {right:-250px; border-top-right-radius:0; border-bottom-right-radius:0; transform:translateX(250px); align-items:flex-end;}
+.bban-p {left:-250px; border-top-left-radius:0; border-bottom-left-radius:0; transform:translateX(-250px); align-items:flex-start;}
+
+#btimer {position:absolute; top:calc(20px + var(--safe-top)); left:50%; transform:translateX(-50%); font-family:'Orbitron',sans-serif; font-size:26px; font-weight:900; color:#fff; z-index:10; text-shadow:0 2px 6px #000, 0 0 10px rgba(0,0,0,0.8);}
+#bscore {position:absolute; top:calc(55px + var(--safe-top)); left:50%; transform:translateX(-50%); font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; z-index:10; background:rgba(0,0,0,0.6); padding:4px 15px; border-radius:15px; border:1px solid rgba(255,255,255,0.1);}
+
+/* --- Emote Classes --- */
+#emote-btn {position:absolute; bottom:160px; left:15px; font-size:28px; width:48px; height:48px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.3); border-radius:50%; display:flex; justify-content:center; align-items:center; z-index:20; cursor:pointer; backdrop-filter:blur(5px); box-shadow:0 4px 10px rgba(0,0,0,0.4);}
+#emote-panel {position:absolute; bottom:220px; left:15px; display:none; flex-direction:column; gap:10px; background:rgba(0,0,0,0.7); padding:10px; border-radius:25px; z-index:20; border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(5px);}
+.ebubble {position:absolute; background:#fff; padding:10px; border-radius:15px; font-size:28px; z-index:15; display:none; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.6));}
+.ebubble::after {content:''; position:absolute; bottom:-10px; left:15px; border-width:10px 10px 0; border-style:solid; border-color:#fff transparent transparent;}
+
+/* --- End Battle Classes --- */
+#bend {display:none; position:absolute; inset:0; background:rgba(0,0,0,0.9); z-index:30; flex-direction:column; align-items:center; justify-content:center; opacity:0; transition:opacity 0.4s ease; padding:20px;}
+#bend.active {display:flex; opacity:1;}
+.ebanner {display:flex; align-items:center; background:var(--panel); border:1px solid var(--br); border-radius:15px; overflow:hidden; width:90%; max-width:340px; margin-bottom:12px; box-shadow:0 8px 20px rgba(0,0,0,0.6);}
+.ebc {width:18px; height:65px;}
+.ebi {flex:1; padding:12px 15px; display:flex; justify-content:space-between; align-items:center; font-weight:800; font-size:15px; color:#fff;}
+.etro {font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; text-shadow:0 2px 4px rgba(0,0,0,0.5);}
+.etro.win {color:var(--ok);}
+.etro.lose {color:var(--dn);}
+.etro.tie {color:#ccc;}
+
+/* --- Deck & In-Game Hand --- */
 .bui{flex:0 0 auto;width:100%;min-height:140px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 10px calc(5px + var(--safe-bot));position:relative;z-index:10;box-sizing:border-box}
 .hand{display:flex;flex-direction:row;gap:8px;justify-content:center;align-items:center;width:100%;overflow:visible;}
-
-.gc{width:23vw;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,transform .15s}
+.gc{width:23vw;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,transform .15s; overflow:hidden;}
 .gc.can{border-color:rgba(61,155,233,.8);background:linear-gradient(155deg,#2e3550,#1e2540);box-shadow:0 0 10px rgba(61,155,233,0.3)}
 .gc.cant{opacity:.45;border-color:rgba(232,65,90,.28)}
 .gc.flash{animation:flashRed .3s ease 3}
 .gc-icon{font-size:10vw;margin-bottom:4px;pointer-events:none;position:relative;z-index:2;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.6))}
 .gc-name{color:rgba(255,255,255,.9);font-size:10px;font-weight:800;text-align:center;line-height:1.15;width:94%;pointer-events:none;position:relative;z-index:2}
-
 .ecost{position:absolute;top:-8px;left:-8px;background:var(--pu);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #fff;z-index:10;color:#fff;font-family:'Orbitron',sans-serif;pointer-events:none;box-shadow:0 2px 5px rgba(0,0,0,0.5)}
 .elwrap{width:85%;max-width:400px;display:flex;align-items:center;gap:5px;margin-bottom:8px;flex-shrink:0}
 .elsegs{flex:1;display:flex;gap:3px;height:16px}
@@ -109,6 +135,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .elseg.on{background:#c084fc;box-shadow:0 0 6px #c084fc}.elseg.half{background:rgba(192,132,252,.5)}
 .elcnt{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#eab308;min-width:26px;text-align:right;text-shadow:0 1px 3px rgba(0,0,0,0.8)}
 
+/* --- Misc UI --- */
 #arenabox{width:92%;max-width:440px;aspect-ratio:16/9;max-height:25vh;position:relative;border-radius:18px;border:2px solid rgba(255,255,255,.2);overflow:hidden;margin:0 auto;flex-shrink:1;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,0.5)}
 .arenaoverlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1),rgba(0,0,0,.7));z-index:1;pointer-events:none;}
 .arenacont{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;}
@@ -124,23 +151,70 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .dtab{flex:1;font-size:14px;font-weight:800;color:rgba(255,255,255,.4);cursor:pointer;transition:.2s;padding:16px 0;text-align:center;text-transform:uppercase;letter-spacing:1px;border-bottom:3px solid transparent}
 .dtab.active{color:#fff;border-bottom-color:var(--pr);text-shadow:0 0 8px rgba(61,155,233,0.5)}
 
+/* Rarity & Foils */
 .rr-c{border:1.5px solid rgba(255,255,255,0.2)!important}
 .rr-r{border:1.5px solid #3d9be9!important;box-shadow:inset 0 0 15px rgba(61,155,233,0.2)}
 .rr-e{border:1.5px solid #9b5de5!important;box-shadow:inset 0 0 15px rgba(155,93,229,0.2)}
 .rr-l{border:1.5px solid #f5c518!important;box-shadow:inset 0 0 20px rgba(245,197,24,0.3)}
-.foil{border-color:#f5c518!important;overflow:hidden!important;box-shadow:0 0 20px rgba(245,197,24,0.6)!important}
+.foil{border-color:#f5c518!important;box-shadow:0 0 20px rgba(245,197,24,0.6)!important}
+.foil-fx {position:absolute; inset:0; background:linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.4) 40%, rgba(245,197,24,0.5) 50%, rgba(255,255,255,0.4) 60%, transparent 80%); background-size: 200% 200%; animation: foilSweep 3s infinite linear; z-index:1; pointer-events:none;}
+.fav-badge {position:absolute; bottom:5px; left:50%; transform:translateX(-50%); background:rgba(232,65,90,0.9); font-size:9px; font-weight:800; padding:2px 6px; border-radius:6px; z-index:10; color:#fff; white-space:nowrap; border:1px solid rgba(255,255,255,0.3);}
+.fav-sel {border-color:#e8415a !important; box-shadow:0 0 15px rgba(232,65,90,0.6) !important;}
 
+/* Modal Overlay & Buttons */
 .ov{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:4500;flex-direction:column;justify-content:center;align-items:center;backdrop-filter:blur(6px)}
 .mbox{width:92%;max-width:420px;background:var(--bg);border-radius:22px;border:1px solid var(--br);overflow:hidden;display:flex;flex-direction:column;max-height:88vh;animation:popIn .3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;box-shadow:0 25px 50px rgba(0,0,0,.8)}
 .pbtn{width:100%;padding:14px;border-radius:14px;border:none;background:var(--pr);color:#fff;font-size:14px;font-weight:800;cursor:pointer;margin-top:10px;transition:.15s;text-transform:uppercase;letter-spacing:1px;box-shadow:0 4px 10px rgba(0,0,0,0.3)}
 .pbtn:active{transform:scale(.96)}.pbtn:disabled{background:#2a2d45;color:rgba(255,255,255,.2);cursor:not-allowed;box-shadow:none}
 .pbtn.ok{background:var(--ok)!important}.pbtn.dn{background:var(--dn)!important}
+.finput, .ainput {width:100%; padding:14px; border-radius:12px; border:1px solid var(--br); background:rgba(0,0,0,0.3); color:#fff; font-size:15px; margin-bottom:12px; outline:none;}
+.finput:focus, .ainput:focus {border-color:var(--pr);}
 
-/* АНИМАЦИИ ДРАФТА И СУНДУКОВ */
+/* Chests & Gacha Animation */
 .gacha-item { animation: gachaReveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 .draft-card { width:120px; height:160px; background:linear-gradient(155deg,#2a2d45,#1e2030); border-radius:15px; border:2px solid var(--br); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; box-shadow:0 10px 20px rgba(0,0,0,0.5); }
 .draft-card:hover { transform:scale(1.05); box-shadow:0 15px 30px rgba(0,0,0,0.7); }
 .draft-mini { width:40px; height:40px; border-radius:8px; border:1px solid var(--br); display:flex; justify-content:center; align-items:center; font-size:20px; background:rgba(0,0,0,0.5); }
+.chestbox {font-size:120px; display:flex; justify-content:center; align-items:center; cursor:pointer; animation:pulse 1.5s infinite; text-shadow:0 0 30px rgba(245,197,24,0.6);}
+.chestrev {display:none; flex-direction:column; align-items:center; justify-content:center; perspective:1000px;}
+
+/* XP & Medals & Stats */
+.xpwrap {width:100%; height:14px; background:rgba(255,255,255,0.1); border-radius:7px; overflow:hidden; box-shadow:inset 0 2px 5px rgba(0,0,0,0.5); margin-bottom:10px;}
+.xpfill {height:100%; background:linear-gradient(90deg, #3d9be9, #9b5de5); transition:width 0.3s ease;}
+.mslot, .eslot {width:55px; height:55px; background:rgba(0,0,0,0.4); border:2px dashed rgba(255,255,255,0.3); border-radius:15px; display:flex; justify-content:center; align-items:center; font-size:28px; color:rgba(255,255,255,0.2); cursor:pointer; transition:0.3s;}
+.mslot.filled, .eslot.filled {border-style:solid; border-color:var(--ac); background:rgba(245,197,24,0.15); box-shadow:inset 0 0 10px rgba(245,197,24,0.2);}
+.mitem {width:50px; height:50px; display:flex; justify-content:center; align-items:center; font-size:26px; opacity:0.3; cursor:default; border-radius:12px; transition:0.2s;}
+.mitem.unl {opacity:1; cursor:pointer; background:rgba(255,255,255,0.05);}
+.mitem.unl.eq {border:2px solid var(--ok); background:rgba(46,189,107,0.15);}
+.scard {background:var(--p2); border-radius:15px; border:1px solid var(--br); padding:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3);}
+.srow {display:flex; justify-content:space-between; align-items:center; padding:10px 8px; border-bottom:1px solid rgba(255,255,255,0.05);}
+.srow:last-child {border-bottom:none;}
+.slbl {font-size:14px; color:rgba(255,255,255,0.6); font-weight:600;}
+.sval {font-size:15px; font-weight:800; color:#fff;}
+.qcard {background:var(--p2); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--br); box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+
+/* Leaderboard */
+.lbi {display:flex; align-items:center; background:var(--p2); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--br); box-shadow:0 4px 8px rgba(0,0,0,0.2);}
+.lbr {font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; color:rgba(255,255,255,0.3); width:35px; text-align:center;}
+.lbr.gold {color:#f5c518; text-shadow:0 0 10px rgba(245,197,24,0.6);}
+.lbr.silver {color:#e0e0e0; text-shadow:0 0 10px rgba(224,224,224,0.6);}
+.lbr.bronze {color:#cd7f32; text-shadow:0 0 10px rgba(205,127,50,0.6);}
+
+/* Friends Module */
+.fbox {width:92%; max-width:440px; max-height:85vh; background:var(--bg); border-radius:22px; border:1px solid var(--br); display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.8);}
+.ftab {flex:1; text-align:center; padding:12px 0; font-size:13px; font-weight:800; color:rgba(255,255,255,0.4); border-bottom:3px solid transparent; cursor:pointer; text-transform:uppercase; transition:0.2s;}
+.ftab.active {color:#fff; border-bottom-color:var(--pr); text-shadow:0 0 8px rgba(61,155,233,0.5);}
+.friend-card {background:var(--p2); border:1px solid var(--br); border-radius:14px; padding:14px; margin-bottom:12px; display:flex; align-items:center; gap:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+.fc-info {flex:1;}
+.fc-name {font-weight:800; font-size:15px; color:#fff; margin-bottom:2px;}
+.fc-sub {font-size:12px; color:rgba(255,255,255,0.4);}
+.fc-actions {display:flex; flex-direction:column; gap:6px;}
+.fc-btn {background:none; border:none; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:800; cursor:pointer; transition:0.15s;}
+.fc-btn:active {transform:scale(0.95);}
+.fc-btn.red {background:rgba(232,65,90,0.15); color:var(--dn); border:1px solid rgba(232,65,90,0.4);}
+.fc-btn.green {background:rgba(46,189,107,0.15); color:var(--ok); border:1px solid rgba(46,189,107,0.4);}
+.notif-banner {background:rgba(61,155,233,0.1); border:1px solid rgba(61,155,233,0.3); border-radius:14px; padding:14px; margin-bottom:12px;}
+.fbtn {width:100%; padding:15px; background:var(--pr); color:#fff; font-weight:800; font-size:14px; border:none; border-radius:12px; margin-top:10px; cursor:pointer; text-transform:uppercase;}
 
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -419,13 +493,11 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 
 <div id="s-lb" class="scr" data-i="6">
   <div style="padding:15px">
-    
     <div style="background:var(--p2); border:1px solid rgba(245,197,24,.4); border-radius:15px; padding:15px; margin-bottom:20px; text-align:center; box-shadow:0 4px 15px rgba(245,197,24,.15);">
       <h3 style="color:var(--ac); margin-bottom:5px; font-family:'Orbitron',sans-serif;">🔴 ТУРНИР (СТАВКИ)</h3>
       <p style="font-size:12px; color:rgba(255,255,255,.5); margin-bottom:12px;">Смотри бои топ-игроков и угадывай победителя!</p>
       <button class="pbtn ok" style="width:auto; padding:10px 25px" onclick="openBettingMenu()">СТАВКА (100 💰)</button>
     </div>
-
     <h2 style="font-family:'Orbitron',sans-serif;font-size:18px;text-align:center;margin-bottom:9px;color:var(--ac)">ТОП ИГРОКОВ</h2>
     <div id="ui-lb" style="margin-top:11px"></div>
   </div>
@@ -469,7 +541,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 
 <div id="chest-ov" class="ov" style="z-index:7000; background:rgba(0,0,0,0.95)">
   <div id="chest-box" class="chestbox" onclick="chestTap()" style="filter: drop-shadow(0 0 30px rgba(245,197,24,0.4))">📦</div>
-  <div class="chestrev" id="chest-rev" onclick="nextChestItem()" style="perspective: 1000px">
+  <div class="chestrev" id="chest-rev" onclick="nextChestItem()">
     <div id="ci-icon" class="gacha-item" style="font-size:120px; filter:drop-shadow(0 0 20px rgba(245,197,24,0.5))"></div>
     <div id="ci-text" class="gacha-item" style="color:var(--ac);font-size:22px;font-weight:900;margin-top:15px;text-align:center;font-family:'Orbitron',sans-serif;text-shadow:0 2px 5px rgba(0,0,0,0.8)"></div>
     <div id="ci-cnt" class="gacha-item" style="font-size:32px;font-weight:900;color:#fff;margin-top:5px;font-family:'Orbitron',sans-serif;text-shadow:0 2px 5px rgba(0,0,0,0.8)"></div>
@@ -516,18 +588,23 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       </div>
     </div>
   </div>
+  
   <div id="btimer">3:00</div>
-  <div id="bscore"><span id="sc-e" style="color:var(--dn)">0</span>--<span id="sc-p" style="color:var(--pr)">0</span></div>
+  <div id="bscore"><span id="sc-e" style="color:var(--dn)">0</span> - <span id="sc-p" style="color:var(--pr)">0</span></div>
+  
   <div id="emote-btn" onclick="toggleEmote()">💬</div>
   <div id="emote-panel"></div>
   <div class="ebubble" id="pe" style="bottom:175px;left:56px"></div>
   <div class="ebubble" id="ee" style="top:160px;right:18px;transform:scaleX(-1)"></div>
+  
   <div id="cvs-c"><canvas id="gc"></canvas></div>
+  
   <div class="bui" id="bui-c">
     <div class="elwrap" id="bui-elwrap"><div class="elsegs" id="elsegs"></div><div class="elcnt" id="elcnt">5</div></div>
     <div class="hand" id="hand"></div>
     <div id="spec-info" style="display:none; font-family:'Orbitron',sans-serif; color:var(--ac); font-size:18px; text-align:center;">Режим Трансляции</div>
   </div>
+  
   <div id="bend">
     <h1 style="font-family:'Orbitron',sans-serif;color:#fff;font-size:32px;margin-bottom:6px" id="bend-title">КОНЕЦ БОЯ</h1>
     <div style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:15px" id="bend-sub">+0 XP</div>
@@ -899,67 +976,6 @@ function updateUI(){
   
   renderDeck();renderTower();renderColl();renderBanners();renderShop();if(navIdx===3)renderPassUI();renderMedals();renderEmotes();
 }
-function checkDailyReset(){
-  const k=dailyKey();if(U.lastDailyKey===k)return;
-  U.lastDailyKey=k;U.winsToday=0;U.crownsFromWins=0;U.quests=genQuests();genShop();
-}
-function arenaIdx(){const tr=U.trophies||0;let b=0;for(let i=0;i<ARENAS.length;i++){if(tr>=ARENAS[i].th)b=i;}return b;}
-
-function openProfile(){
-  if(!U)return;
-  document.getElementById('prof-name').innerHTML=`${U.nickname} ${getCB(U.uid)}`;
-  st('prof-tr',`🏆 ${U.trophies||0}`);
-  const s=U.stats||{};st('prof-matches',s.matches||0);st('prof-wins',s.wins||0);
-  renderFavCard();ss('m-profile','display','flex');
-}
-function renderFavCard(){
-  const fc=document.getElementById('prof-fav');if(!fc)return;
-  const fav=U.favoriteCard;
-  if(fav&&CARDS.find(x=>x.id===fav)&&U.cards[fav]){
-  const card=CARDS.find(x=>x.id===fav),data=U.cards[fav],isFoil=data.level>=8;
-  fc.innerHTML=`<div class="ci rr-${card.rr} ${isFoil?'foil':''}" style="height:160px;width:110px;cursor:default">${isFoil?'<div class="foil-fx"></div>':''}<div class="fav-badge">💖 FAV</div><div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div></div>`;
-  }else fc.innerHTML='<p style="color:rgba(255,255,255,.3);font-size:12px">Нет карты</p>';
-}
-function openFavPicker(){
-  const grid=document.getElementById('fav-pick-grid');if(!grid)return;grid.innerHTML='';
-  Object.keys(U.cards||{}).forEach(id=>{
-  const card=CARDS.find(c=>c.id===id);if(!card)return;
-  const data=U.cards[id],isFav=U.favoriteCard===id,isFoil=data.level>=8;
-  const div=document.createElement('div');div.className=`ci rr-${card.rr} ${isFav?'fav-sel':''} ${isFoil?'foil':''}`;div.style.height='145px';
-  div.innerHTML=`${isFoil?'<div class="foil-fx"></div>':''}${isFav?'<div class="fav-badge">💖 FAV</div>':''}<div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div>`;
-  div.onclick=()=>setFavCard(id);grid.appendChild(div);
-  });
-  ss('m-profile','display','none');ss('m-favpick','display','flex');
-}
-function setFavCard(id){U.favoriteCard=id;saveU();notify('Любимая карта выбрана!','ok');ss('m-favpick','display','none');openProfile();}
-
-function saveU(){
-  if(!U)return;
-  if(U.stats){['matches','wins','sdM','sdW','towers','quests'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
-  ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
-  if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
-  updateUI();
-}
-
-function updateUI(){
-  if(!U)return;
-  st('ui-tr',U.trophies);st('ui-go',U.gold);st('ui-ge',U.gems);
-  document.getElementById('ui-pname').innerHTML=`${U.nickname} ${getCB(U.uid)}`;
-  st('ui-cr',U.crowns);st('ui-wins',U.crownsFromWins||0);st('ui-uid','ID: '+U.uid);
-  const xp=U.xp||0,lvl=getLevel(xp);const{cur,max}=xpProg(xp);
-  st('ui-lvl',lvl);st('ui-xp',`${cur}/${max} XP`);const xb=document.getElementById('ui-xpb');if(xb)xb.style.width=`${(cur/max)*100}%`;
-  const ci=arenaIdx(),ao=ARENAS[ci]||ARENAS[0];
-  const ab=document.getElementById('arenabox');
-  if(ab) ab.style.background=ao.bg; 
-  document.body.style.background = ao.bg;
-
-  st('ui-aname',`АРЕНА ${ci+1}`);st('ui-adesc',`${ao.n} (${ao.th}+ 🏆)`);
-  const cs=document.getElementById('cslots');if(cs){cs.innerHTML='';for(let i=0;i<3;i++)cs.innerHTML+=`<div class="cslot ${i<U.winsToday?'filled':''}">${i<U.winsToday?'📦':'🔒'}</div>`;}
-  for(let i=0;i<2;i++){const ms=document.getElementById(`um${i}`);if(!ms)continue;const mid=(U.equippedMedals&&U.equippedMedals[i])?U.equippedMedals[i]:null;if(mid){const m=MEDALS.find(x=>x.id===mid);ms.style.display='inline-flex';ms.textContent=m?m.ic:'';}else ms.style.display='none';}
-  ss('guest-btns','display',U.isGuest?'block':'none');
-  
-  renderDeck();renderTower();renderColl();renderBanners();renderShop();if(navIdx===3)renderPassUI();renderMedals();renderEmotes();
-}
 
 function startUI(){
   ss('topbar','display','flex');ss('mainnav','display','flex');
@@ -1005,235 +1021,7 @@ function renderPassUI(){
       if(q.cl)done++;
       const ok=q.pg>=q.tg;
       let btn=q.cl?`<span style="color:var(--ok);font-size:11px;font-weight:700">✓</span>`:ok?`<button class="pbtn ok" style="width:85px;margin:0;padding:6px;font-size:11px" onclick="claimQ(${q.id})">Забрать</button>`:`<button class="pbtn" style="width:85px;margin:0;padding:6px;background:#2a2d45;color:rgba(255,255,255,.2);font-size:11px" disabled>Забрать</button>`;
-      qc.innerHTML+=`<div class="qcard" style="background:var(--p2);border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid var(--br)"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600">${q.desc}</span><span style="color:var(--ac);font-size:14px;font-weight:800">${q.cr}👑</span></div><div class="cpb" style="margin:10px 0"><div class="cpbf" style="width:${(q.pg/q.tg)*100}%"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:rgba(255,255,255,.38)">${q.pg}/${q.tg}</span>${btn}</div></div>`;
-    });
-    st('qbadge',`${done}/${U.quests.length}`);
-  }
-
-  const svg=document.getElementById('pass-svg'), lay=document.getElementById('pass-layer'), cont=document.getElementById('pass-map-container');
-  if(!svg || !lay || !cont) return;
-  const W = window.innerWidth || 360;
-  const H = 4000; 
-  cont.style.minHeight = H + 'px';
-  let pts = [];
-  const yStep = (H - 250) / PASS_R.length;
-  for(let i=0; i<PASS_R.length; i++){
-    const y = H - (i * yStep) - 200; 
-    const px = Math.sin(i * 0.45) * (W * 0.35); 
-    pts.push({x: W/2 + px, y});
-  }
-
-  let svgHtml = '';
-  const decos = ['🌴','🌿','🌺','🌵','🪨','🦴','🌲','🗿','🍄'];
-  for(let i=0; i<90; i++) {
-    let dy = Math.random() * H;
-    let dx = Math.random() * W;
-    if(Math.abs(dx - W/2) < 60) dx += (Math.random() > 0.5 ? 70 : -70);
-    let ic = '';
-    if(dy > 2700) ic = decos[Math.floor(Math.random()*3)]; 
-    else if(dy > 1300) ic = decos[3+Math.floor(Math.random()*3)]; 
-    else ic = decos[6+Math.floor(Math.random()*3)]; 
-    svgHtml += `<text x="${dx}" y="${dy}" font-size="26" opacity="0.5" text-anchor="middle" dominant-baseline="middle">${ic}</text>`;
-  }
-
-  let dBase = `M ${pts[0].x} ${pts[0].y} `;
-  for(let i=1; i<pts.length; i++) dBase += `L ${pts[i].x} ${pts[i].y} `;
-  svgHtml += `<path d="${dBase}" fill="none" stroke="rgba(70, 0, 0, 0.6)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />`;
-
-  let dFill = `M ${pts[0].x} ${pts[0].y} `;
-  let filledAny = false;
-  for(let i=0; i<pts.length; i++){
-    if(U.crowns >= PASS_R[i].crowns) { dFill += `L ${pts[i].x} ${pts[i].y} `; filledAny = true; }
-  }
-  if(filledAny) svgHtml += `<path d="${dFill}" fill="none" stroke="#e8415a" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />`;
-  svg.innerHTML = svgHtml;
-
-  lay.innerHTML = '';
-  for(let i=0; i<PASS_R.length; i++){
-    const p = pts[i], r = PASS_R[i];
-    const claimed = (U.passClaimed||[]).includes(i);
-    const can = U.crowns >= r.crowns && !claimed;
-    const lock = U.crowns < r.crowns;
-    
-    let btn = claimed ? `<span style="color:var(--ok);font-size:10px;font-weight:700">✓ Забрано</span>` : 
-              can ? `<button class="pbtn ok" style="margin:0;padding:5px 10px;font-size:10px" onclick="claimPass(${i})">Забрать</button>` : 
-              `<span style="color:rgba(255,255,255,.3);font-size:10px">Нужно ${r.crowns} 👑</span>`;
-              
-    lay.innerHTML += `<div style="position:absolute;left:${p.x}px;top:${p.y}px;transform:translate(-50%,-50%);background:var(--panel);border:2px solid ${can?'var(--ok)':lock?'var(--br)':'var(--ac)'};border-radius:12px;padding:8px;text-align:center;width:120px;box-shadow:0 5px 15px rgba(0,0,0,.6);opacity:${lock?0.7:1};pointer-events:auto;">
-      <div style="position:absolute;top:-10px;left:-10px;background:var(--bg);color:var(--ac);border:1px solid var(--ac);border-radius:50%;width:22px;height:22px;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif">${i+1}</div>
-      <div style="font-size:24px;margin-bottom:4px">${r.ic}</div>
-      <div style="font-size:11px;font-weight:800;color:#fff;margin-bottom:6px">${r.n}</div>
-      ${btn}
-    </div>`;
-  }
-}
-
-function nav(id,idx){
-  document.querySelectorAll('.scr').forEach(s=>{const i=parseInt(s.dataset.i);s.className='scr'+(i===idx?' active':i<idx?' past':'');s.style.transform=i===idx?'translateX(0)':i<idx?'translateX(-100%)':'translateX(100%)';s.style.opacity=i===idx?'1':'0';});
-  document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('active',[0,1,2,3,4][i]===idx));
-  navIdx=idx;
-  if(idx===5)renderStats();
-  if(idx===6)loadLB();
-  if(idx===3) { renderPassUI(); const pw = document.getElementById('pass-wrap'); if(pw) setTimeout(()=> pw.scrollTop = pw.scrollHeight, 10); }
-  if(idx===7)renderWorldMap();
-}
-function switchDeck(i){deckTab=i;['dt0','dt1','dt2'].forEach((id,j)=>document.getElementById(id)?.classList.toggle('active',j===i));document.getElementById('dslider').style.transform=`translateX(-${i*33.333}%)`;if(i===2)renderSpells();}
-
-function setupDrag(){
-  const hand=document.getElementById('hand');if(!hand)return;
-  const ghost=document.getElementById('dghost');
-  const nh=hand.cloneNode(true);hand.parentNode.replaceChild(nh,hand);
-  renderHand();
-  const h2=document.getElementById('hand');if(!h2)return;
-  
-  function startD(e){
-    if(bState!=='playing')return;
-    const target=e.target.closest('.gc');if(!target)return;
-    const idx=parseInt(target.dataset.i);const cid=bHand[idx];if(!cid)return;
-    const card=CARDS.find(c=>c.id===cid);if(!card)return;
-    
-    if(elixir<card.c){target.classList.add('flash');setTimeout(()=>target.classList.remove('flash'),900);return;}
-    if(card.t!=='spell'){const my=ents.filter(en=>en.team===0&&en.cid===card.id).length;if(my>=2){notify('Уже 2 таких на поле!');return;}}
-    
-    dragOn=true;dragIdx=idx;
-    const cx=e.touches?e.touches[0].clientX:e.clientX,cy=e.touches?e.touches[0].clientY:e.clientY;
-    if(ghost){ghost.style.display='flex';ghost.style.left=cx+'px';ghost.style.top=cy+'px';document.getElementById('dg-icon').textContent=card.ic;document.getElementById('dg-name').textContent=card.n;}
-    e.preventDefault();
-  }
-  
-  function moveD(e){
-    if(!dragOn)return;
-    const cx=e.touches?e.touches[0].clientX:e.clientX,cy=e.touches?e.touches[0].clientY:e.clientY;
-    if(ghost){ghost.style.left=cx+'px';ghost.style.top=cy+'px';}
-    if(bCanvas){
-      const r=bCanvas.getBoundingClientRect();
-      if(r.width===0 || r.height===0) return;
-      dragCX=((e.touches?e.touches[0].clientX:e.clientX)-r.left) * (cw / r.width);
-      dragCY=((e.touches?e.touches[0].clientY:e.clientY)-r.top) * (ch / r.height);
-    }
-    e.preventDefault();
-  }
-  
-  function endD(e){
-    if(!dragOn)return;if(ghost)ghost.style.display='none';
-    const idx=dragIdx;dragOn=false;dragIdx=-1;if(!bCanvas)return;
-    
-    const r=bCanvas.getBoundingClientRect();
-    if(r.width===0 || r.height===0) return;
-    const scaleX = cw / r.width;
-    const scaleY = ch / r.height;
-    
-    let cx=((e.changedTouches?e.changedTouches[0].clientX:e.clientX)-r.left) * scaleX;
-    let cy=((e.changedTouches?e.changedTouches[0].clientY:e.clientY)-r.top) * scaleY;
-    
-    if(cy >= ch - 15) return; 
-    if(cy < 0 && cy > -50 * scaleY) cy = 5;
-    if(cx < 0) cx = 5;
-    if(cx > cw) cx = cw - 5;
-    if(cy<0||cy>ch||cx<0||cx>cw)return; 
-    
-    const cid=bHand[idx];if(!cid)return;const cardObj=CARDS.find(c=>c.id===cid);if(!cardObj)return;
-    let minY=(cardObj.t==='spell')?0:ch/2+15;
-    if(cardObj.t!=='spell'&&!isSD){
-      const eLT=towers.find(t=>t.team===1&&t.type==='pri'&&t.x<cw/2);
-      const eRT=towers.find(t=>t.team===1&&t.type==='pri'&&t.x>=cw/2);
-      if(!eLT&&cx<cw/2)minY=ch/4;if(!eRT&&cx>=cw/2)minY=ch/4;
-    }
-    
-    if(cy>=minY){
-      const lvl=(U.cards[cid]&&U.cards[cid].level)?U.cards[cid].level:1;
-      spawnCard(cid,0,cx,cy,lvl);
-      if(isMP&&battleId)db.ref(`battles/${battleId}/actions`).push({uid:U.uid,cid,rx:cx/cw,ry:cy/ch,lvl});
-      elixir=Math.max(0,elixir-cardObj.c);
-      const used=bHand.splice(idx,1)[0];bHand.push(used);renderHand();
-    } else {
-      notify('Нельзя ставить войска на вражеской половине!', 'err');
-    }
-  }
-  h2.addEventListener('touchstart',startD,{passive:false});h2.addEventListener('mousedown',startD);
-  document.addEventListener('touchmove',moveD,{passive:false});document.addEventListener('mousemove',moveD);
-  document.addEventListener('touchend',endD);document.addEventListener('mouseup',endD);
-}
-
-// ==== НОВЫЙ РЕЖИМ: ДРАФТ ====
-function initDraft() {
-  isDraft = true; draftStep = 0; draftMyDeck = []; draftEnDeck = [];
-  ss('draft-ov', 'display', 'flex'); st('draft-my-deck', ''); st('draft-en-deck', ''); genDraft();
-}
-
-function genDraft() {
-  if (draftStep >= 4) {
-    let pool = CARDS.filter(c => c.a <= arenaIdx()).map(c => c.id);
-    pool.sort(() => Math.random() - 0.5);
-    let poolIdx = 0;
-    while(draftMyDeck.length < 8) { if(!draftMyDeck.includes(pool[poolIdx])) draftMyDeck.push(pool[poolIdx]); poolIdx++; }
-    while(draftEnDeck.length < 8) { if(!draftEnDeck.includes(pool[poolIdx])) draftEnDeck.push(pool[poolIdx]); poolIdx++; }
-    ss('draft-ov', 'display', 'none');
-    prepMM(false, true); 
-    return;
-  }
-  let pool = CARDS.filter(c => c.a <= arenaIdx());
-  let c1 = pool[Math.floor(Math.random() * pool.length)], c2 = pool[Math.floor(Math.random() * pool.length)];
-  while(c1.id === c2.id) c2 = pool[Math.floor(Math.random() * pool.length)];
-  draftChoices = [c1.id, c2.id];
-  const cont = document.getElementById('draft-choices');
-  cont.innerHTML = `<div class="draft-card" onclick="pickDraft(0)"><div style="font-size:46px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.8))">${c1.ic}</div><div style="font-size:12px; font-weight:800; color:#fff; text-shadow:0 1px 3px #000; margin-top:8px">${c1.n}</div></div><div style="display:flex; align-items:center; font-family:'Orbitron',sans-serif; font-size:18px; color:rgba(255,255,255,.3); font-weight:900">ИЛИ</div><div class="draft-card" onclick="pickDraft(1)"><div style="font-size:46px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.8))">${c2.ic}</div><div style="font-size:12px; font-weight:800; color:#fff; text-shadow:0 1px 3px #000; margin-top:8px">${c2.n}</div></div>`;
-}
-
-function pickDraft(idx) {
-  playSfx('hit'); 
-  const myPick = draftChoices[idx], enPick = draftChoices[idx === 0 ? 1 : 0];
-  draftMyDeck.push(myPick); draftEnDeck.push(enPick);
-  const mCard = CARDS.find(c => c.id === myPick), eCard = CARDS.find(c => c.id === enPick);
-  document.getElementById('draft-my-deck').innerHTML += `<div class="draft-mini" style="border-color:#3d9be9">${mCard.ic}</div>`;
-  document.getElementById('draft-en-deck').innerHTML += `<div class="draft-mini" style="border-color:#e8415a">${eCard.ic}</div>`;
-  draftStep++; genDraft();
-}
-function startUI(){
-  ss('topbar','display','flex');ss('mainnav','display','flex');
-  checkDailyReset();if(!U.quests)U.quests=genQuests();if(!U.dailyEmotes||!U.dailyEmotes.length)genShop();if(!U.dsp)U.dsp={};
-  checkArena();checkMedals();updateUI();saveU();nav('s-main',2);setTimeout(hideCover,150);
-}
-
-function genQuests(){return[{id:0,tp:'play',desc:'Сыграть 3 боя',tg:3,pg:0,cr:5,cl:false},{id:1,tp:'destroy',desc:'Уничтожить 3 башни',tg:3,pg:0,cr:5,cl:false},{id:2,tp:'win',desc:'Выиграть 2 боя',tg:2,pg:0,cr:8,cl:false},{id:3,tp:'play',desc:'Сыграть 5 боёв',tg:5,pg:0,cr:10,cl:false}];}
-function genShop(){U.dailyShop=[];U.dsp={};const own=Object.keys(U.cards||{});for(let i=0;i<3;i++)if(own.length>0)U.dailyShop.push(own[Math.floor(Math.random()*own.length)]);U.dailyEmotes=[];let av=EMOTES.filter(e=>!(U.emotes||[]).includes(e));for(let i=0;i<3;i++){if(!av.length)break;const r=Math.floor(Math.random()*av.length);U.dailyEmotes.push(av[r]);av.splice(r,1);}}
-function checkArena(){
-  const ci=arenaIdx();if(ci>U.maxArena){U.maxArena=ci;U.minTrophies=ARENAS[ci].th;
-  const uc=CARDS.filter(c=>c.a===ci);if(uc.length){st('unlock-name',ARENAS[ci].n);const cont=document.getElementById('unlock-cards');if(cont){cont.innerHTML='';uc.forEach(c=>{cont.innerHTML+=`<div style="text-align:center"><div style="font-size:34px">${c.ic}</div><div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:3px">${c.n}</div></div>`;});}ss('arena-unlock','display','flex');}
-  }
-}
-function checkMedals(){
-  if(!U.medals)U.medals=[];const s=U.stats||{},un=[];
-  if(s.matches>=1)un.push('m1');if(s.wins>=1)un.push('m2');if(s.wins>=10)un.push('m3');if(s.wins>=50)un.push('m4');if(s.wins>=100)un.push('m5');
-  if(U.maxArena>=1)un.push('m6');if(U.maxArena>=4)un.push('m7');if(U.maxArena>=9)un.push('m8');
-  if(U.gold>=10000)un.push('m9');if(U.gems>=100)un.push('m10');
-  const ow=Object.keys(U.cards||{}).length;if(ow>=10)un.push('m11');if(ow>=20)un.push('m12');
-  let ml=1;Object.values(U.cards||{}).forEach(c=>{if(c.level>ml)ml=c.level;});if(ml>=2)un.push('m13');if(ml>=8)un.push('m14');
-  if(s.quests>=10)un.push('m15');if(s.sdM>=5)un.push('m16');if(s.sdW>=1)un.push('m17');
-  if(U.emotes&&U.emotes.length>3)un.push('m18');if(U.friends&&Object.keys(U.friends).length>=1)un.push('m19');
-  if(U.trophies>=1000)un.push('m20');if(getLevel(U.xp||0)>=5)un.push('m21');if(getLevel(U.xp||0)>=10)un.push('m22');if(s.matches>=100)un.push('m23');
-  let got=false;un.forEach(m=>{if(!U.medals.includes(m)){U.medals.push(m);got=true;}});if(got)notify('🏅 Новая медаль!','ok');
-}
-function questProg(tp,amt){if(!U.quests)return;let ch=false;U.quests.forEach(q=>{if(q.tp===tp&&!q.cl&&q.pg<q.tg){q.pg=Math.min(q.tg,q.pg+amt);ch=true;}});if(ch)saveU();}
-function claimQ(id){const q=U.quests.find(x=>x.id===id);if(q&&q.pg>=q.tg&&!q.cl){q.cl=true;U.crowns+=q.cr;U.stats.quests++;checkMedals();saveU();notify(`+${q.cr} 👑!`,'ok');}}
-function claimPass(i){
-  const r=PASS_R[i];if(U.crowns>=r.crowns&&!(U.passClaimed||[]).includes(i)){
-  if(!U.passClaimed)U.passClaimed=[];U.passClaimed.push(i);
-  if(r.t==='gold'){U.gold+=r.v;notify(`+${r.v} Золота!`,'ok');}else if(r.t==='gems'){U.gems+=r.v;notify(`+${r.v} Гемов!`,'ok');}else if(r.t==='chest')genChest(r.v);
-  saveU();renderPassUI();
-  }
-}
-function toggleQ(){document.getElementById('qpanel')?.classList.toggle('open');}
-
-function renderPassUI(){
-  const qc=document.getElementById('ui-quests');let done=0;
-  if(qc&&U.quests){
-    qc.innerHTML='';
-    U.quests.forEach(q=>{
-      if(q.cl)done++;
-      const ok=q.pg>=q.tg;
-      let btn=q.cl?`<span style="color:var(--ok);font-size:11px;font-weight:700">✓</span>`:ok?`<button class="pbtn ok" style="width:85px;margin:0;padding:6px;font-size:11px" onclick="claimQ(${q.id})">Забрать</button>`:`<button class="pbtn" style="width:85px;margin:0;padding:6px;background:#2a2d45;color:rgba(255,255,255,.2);font-size:11px" disabled>Забрать</button>`;
-      qc.innerHTML+=`<div class="qcard" style="background:var(--p2);border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid var(--br)"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600">${q.desc}</span><span style="color:var(--ac);font-size:14px;font-weight:800">${q.cr}👑</span></div><div class="cpb" style="margin:10px 0"><div class="cpbf" style="width:${(q.pg/q.tg)*100}%"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:rgba(255,255,255,.38)">${q.pg}/${q.tg}</span>${btn}</div></div>`;
+      qc.innerHTML+=`<div class="qcard"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600">${q.desc}</span><span style="color:var(--ac);font-size:14px;font-weight:800">${q.cr}👑</span></div><div class="cpb" style="margin:10px 0"><div class="cpbf" style="width:${(q.pg/q.tg)*100}%"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:rgba(255,255,255,.38)">${q.pg}/${q.tg}</span>${btn}</div></div>`;
     });
     st('qbadge',`${done}/${U.quests.length}`);
   }
