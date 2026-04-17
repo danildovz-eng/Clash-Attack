@@ -37,8 +37,6 @@ html, body {
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes emotePop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
-@keyframes slideBannerE{0%{right:-320px}15%{right:0}85%{right:0}100%{right:-320px}}
-@keyframes slideBannerP{0%{left:-320px}15%{left:0}85%{left:0}100%{left:-320px}}
 @keyframes flashRed{0%,100%{border-color:rgba(255,255,255,.12);background:rgba(42,45,69,1)}40%,70%{border-color:#e8415a;background:rgba(232,65,90,.2)}}
 @keyframes foilSweep{0%{left:-150%}30%{left:150%}100%{left:150%}}
 @keyframes gachaReveal{0%{transform:scale(0) rotateY(180deg);opacity:0}60%{transform:scale(1.3) rotateY(-20deg);opacity:1}100%{transform:scale(1) rotateY(0);opacity:1}}
@@ -71,7 +69,9 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 
 #s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:15px;align-items:center;padding:15px 0 15px!important;overflow-y:auto;overflow-x:hidden}
 .grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;padding:13px;width:100%;max-width:500px;margin:0 auto}
-.ci{background:linear-gradient(155deg,rgba(42,45,69,0.9),rgba(30,32,48,0.9));border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%;height:auto;aspect-ratio:1/1.3;cursor:pointer;transition:.2s;box-shadow: 0 4px 10px rgba(0,0,0,0.3); overflow:hidden;}
+
+/* УБРАЛИ OVERFLOW: HIDDEN ЧТОБЫ БЕЙДЖИ НЕ ОБРЕЗАЛИСЬ */
+.ci{background:linear-gradient(155deg,rgba(42,45,69,0.9),rgba(30,32,48,0.9));border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%;height:auto;aspect-ratio:1/1.3;cursor:pointer;transition:.2s;box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
 .cicon { font-size: 40px; margin-bottom: 4px; position: relative; z-index: 2; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 @media (min-width: 450px) { .cicon { font-size: 48px; } }
 .cpb{width:100%;height:8px;background:rgba(0,0,0,.6);border-radius:4px;overflow:hidden;margin-top:auto;margin-bottom:3px;position:relative;z-index:2}
@@ -94,10 +94,10 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 #cvs-c{flex:1;width:100%;position:relative;overflow:hidden;}
 canvas{display:block;width:100%;height:100%;touch-action:none}
 
-.bban {position:absolute; top:calc(15px + var(--safe-top)); padding:10px 15px; border-radius:12px; z-index:10; background:rgba(0,0,0,0.85); border:2px solid rgba(255,255,255,0.2); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 4px 15px rgba(0,0,0,0.6); display:flex; flex-direction:column;}
+.bban {position:absolute; top:calc(15px + var(--safe-top)); padding:10px 15px; border-radius:12px; z-index:10; background:rgba(0,0,0,0.85); border:2px solid rgba(255,255,255,0.2); transition:transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 4px 15px rgba(0,0,0,0.6); display:flex; flex-direction:column;}
 .bban.anim {transform:translateX(0) !important;}
-.bban-e {right:-250px; border-top-right-radius:0; border-bottom-right-radius:0; transform:translateX(250px); align-items:flex-end;}
-.bban-p {left:-250px; border-top-left-radius:0; border-bottom-left-radius:0; transform:translateX(-250px); align-items:flex-start;}
+.bban-e {right:0; border-top-right-radius:0; border-bottom-right-radius:0; transform:translateX(110%); align-items:flex-end;}
+.bban-p {left:0; border-top-left-radius:0; border-bottom-left-radius:0; transform:translateX(-110%); align-items:flex-start;}
 
 #btimer {position:absolute; top:calc(20px + var(--safe-top)); left:50%; transform:translateX(-50%); font-family:'Orbitron',sans-serif; font-size:26px; font-weight:900; color:#fff; z-index:10; text-shadow:0 2px 6px #000, 0 0 10px rgba(0,0,0,0.8);}
 #bscore {position:absolute; top:calc(55px + var(--safe-top)); left:50%; transform:translateX(-50%); font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; z-index:10; background:rgba(0,0,0,0.6); padding:4px 15px; border-radius:15px; border:1px solid rgba(255,255,255,0.1);}
@@ -106,7 +106,9 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #emote-btn {position:absolute; bottom:160px; left:15px; font-size:28px; width:48px; height:48px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.3); border-radius:50%; display:flex; justify-content:center; align-items:center; z-index:20; cursor:pointer; backdrop-filter:blur(5px); box-shadow:0 4px 10px rgba(0,0,0,0.4);}
 #emote-panel {position:absolute; bottom:220px; left:15px; display:none; flex-direction:column; gap:10px; background:rgba(0,0,0,0.7); padding:10px; border-radius:25px; z-index:20; border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(5px);}
 .ebubble {position:absolute; background:#fff; padding:10px; border-radius:15px; font-size:28px; z-index:15; display:none; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.6));}
-.ebubble::after {content:''; position:absolute; bottom:-10px; left:15px; border-width:10px 10px 0; border-style:solid; border-color:#fff transparent transparent;}
+.ebubble::after {content:''; position:absolute; bottom:-10px; border-style:solid;}
+#pe::after {left:15px; border-width:10px 10px 0 0; border-color:#fff transparent transparent transparent;}
+#ee::after {right:15px; border-width:10px 0 0 10px; border-color:#fff transparent transparent transparent;}
 
 /* --- End Battle Classes --- */
 #bend {display:none; position:absolute; inset:0; background:rgba(0,0,0,0.9); z-index:30; flex-direction:column; align-items:center; justify-content:center; opacity:0; transition:opacity 0.4s ease; padding:20px;}
@@ -122,7 +124,8 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 /* --- Deck & In-Game Hand --- */
 .bui{flex:0 0 auto;width:100%;min-height:140px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 10px calc(5px + var(--safe-bot));position:relative;z-index:10;box-sizing:border-box}
 .hand{display:flex;flex-direction:row;gap:8px;justify-content:center;align-items:center;width:100%;overflow:visible;}
-.gc{width:23vw;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,transform .15s; overflow:hidden;}
+/* УБРАЛИ OVERFLOW С КАРТ В РУКЕ, ЧТОБЫ ЭЛИКСИР БЫЛ ВИДЕН */
+.gc{width:23vw;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,transform .15s;}
 .gc.can{border-color:rgba(61,155,233,.8);background:linear-gradient(155deg,#2e3550,#1e2540);box-shadow:0 0 10px rgba(61,155,233,0.3)}
 .gc.cant{opacity:.45;border-color:rgba(232,65,90,.28)}
 .gc.flash{animation:flashRed .3s ease 3}
@@ -157,7 +160,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .rr-e{border:1.5px solid #9b5de5!important;box-shadow:inset 0 0 15px rgba(155,93,229,0.2)}
 .rr-l{border:1.5px solid #f5c518!important;box-shadow:inset 0 0 20px rgba(245,197,24,0.3)}
 .foil{border-color:#f5c518!important;box-shadow:0 0 20px rgba(245,197,24,0.6)!important}
-.foil-fx {position:absolute; inset:0; background:linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.4) 40%, rgba(245,197,24,0.5) 50%, rgba(255,255,255,0.4) 60%, transparent 80%); background-size: 200% 200%; animation: foilSweep 3s infinite linear; z-index:1; pointer-events:none;}
+.foil-fx {position:absolute; inset:0; background:linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.4) 40%, rgba(245,197,24,0.5) 50%, rgba(255,255,255,0.4) 60%, transparent 80%); background-size: 200% 200%; animation: foilSweep 3s infinite linear; z-index:1; pointer-events:none; border-radius:inherit; clip-path:inset(0 round 13px);}
 .fav-badge {position:absolute; bottom:5px; left:50%; transform:translateX(-50%); background:rgba(232,65,90,0.9); font-size:9px; font-weight:800; padding:2px 6px; border-radius:6px; z-index:10; color:#fff; white-space:nowrap; border:1px solid rgba(255,255,255,0.3);}
 .fav-sel {border-color:#e8415a !important; box-shadow:0 0 15px rgba(232,65,90,0.6) !important;}
 
@@ -216,6 +219,21 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .notif-banner {background:rgba(61,155,233,0.1); border:1px solid rgba(61,155,233,0.3); border-radius:14px; padding:14px; margin-bottom:12px;}
 .fbtn {width:100%; padding:15px; background:var(--pr); color:#fff; font-weight:800; font-size:14px; border:none; border-radius:12px; margin-top:10px; cursor:pointer; text-transform:uppercase;}
 
+/* Roulette UI Fixes */
+.rl-machine { height: 120px; background: #0a0d14; border: 2px solid var(--br); border-radius: 15px; position: relative; overflow: hidden; width: 100%; box-shadow: inset 0 0 20px #000; }
+.rl-track { display: flex; flex-direction: column; width: 100%; transition: transform 3.5s cubic-bezier(0.17, 0.67, 0.12, 1.0); }
+.rl-item { height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; }
+.rl-item span { font-size: 13px; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 800; margin-top: 5px; text-shadow: 0 2px 4px #000; }
+.rl-highlight { position: absolute; inset: 0; border: 3px solid var(--ok); border-radius: 13px; box-shadow: inset 0 0 25px rgba(46,189,107,0.4); pointer-events: none; z-index: 2; }
+.rl-arrow { position: absolute; right: -12px; top: 50%; transform: translateY(-50%); font-size: 28px; color: var(--ok); z-index: 3; text-shadow: -2px 0 5px #000; }
+
+/* Battle Pass Scrolling & Quests Fixes */
+#s-pass { position: relative; overflow: hidden; } 
+#pass-controls { position: absolute; top: 0; left: 0; right: 0; height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; background: rgba(18,19,26,0.85); border-bottom: 1px solid var(--br); z-index: 100; backdrop-filter: blur(10px); }
+#pass-wrap { position: absolute; top: 60px; bottom: 0; left: 0; right: 0; overflow-y: auto; scroll-behavior: auto; }
+#qpanel { position: absolute; bottom: 0; left: 0; right: 0; background: var(--bg); border-top-left-radius: 24px; border-top-right-radius: 24px; z-index: 200; transform: translateY(110%); transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -10px 40px rgba(0,0,0,0.8); max-height: 80vh; display: flex; flex-direction: column; border-top: 1px solid var(--br); }
+#qpanel.open { transform: translateY(0); }
+
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -259,7 +277,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div class="mbox" style="padding:24px;align-items:center">
     <div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--ac);margin-bottom:4px">🎰 РУЛЕТКА</div>
     <div style="font-size:12px;color:rgba(255,255,255,.35);margin-bottom:18px">Ежедневная бесплатная прокрутка</div>
-    <div style="position:relative;margin-bottom:22px">
+    <div style="position:relative;margin-bottom:22px;width:100%;">
       <div class="rl-machine"><div class="rl-track" id="rl-track"></div><div class="rl-highlight"></div></div>
       <div class="rl-arrow">◀</div>
     </div>
@@ -283,8 +301,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div class="mbox" style="padding:24px; text-align:center; max-width:480px">
     <h2 style="color:var(--pr); font-family:'Orbitron',sans-serif; margin-bottom:5px">🃏 ДРАФТ-ВЫБОР</h2>
     <p style="font-size:12px; color:rgba(255,255,255,.5); margin-bottom:20px" id="draft-title">Выбери 1 карту себе, вторая достанется противнику!</p>
-    <div style="display:flex; justify-content:center; gap:20px; margin-bottom:25px" id="draft-choices">
-       </div>
+    <div style="display:flex; justify-content:center; gap:20px; margin-bottom:25px" id="draft-choices"></div>
     <div style="display:flex; justify-content:space-between; margin-bottom:10px">
        <div style="flex:1; border-right: 1px solid var(--br); padding-right:5px">
          <div style="font-size:11px; color:rgba(255,255,255,.7); margin-bottom:8px; font-weight:bold">ТВОЯ КОЛОДА</div>
@@ -413,7 +430,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <div id="s-pass" class="scr" data-i="3">
   <div id="pass-controls">
     <button class="pbtn" style="width:auto;padding:9px 22px;border-radius:20px;margin:0;font-size:13px" onclick="toggleQ()">📋 ЗАДАНИЯ (<span id="qbadge">0/0</span>)</button>
-    <div style="background:var(--panel);border:1px solid var(--br);border-radius:11px;padding:7px 11px;font-size:14px;font-weight:800">👑 <span id="ui-cr">0</span></div>
+    <div style="background:rgba(30,32,48,0.85);border:1px solid var(--br);border-radius:11px;padding:7px 11px;font-size:14px;font-weight:800">👑 <span id="ui-cr">0</span></div>
   </div>
   
   <div id="pass-wrap">
@@ -432,7 +449,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       <span style="font-weight:800;font-size:16px">📋 Задания</span>
       <span onclick="toggleQ()" style="font-size:24px;cursor:pointer;color:rgba(255,255,255,.35)">✕</span>
     </div>
-    <div id="ui-quests" style="padding:13px"></div>
+    <div id="ui-quests" style="padding:13px; overflow-y:auto; flex:1;"></div>
     <div style="padding:0 13px 13px;color:rgba(255,255,255,.3);font-size:11px;text-align:center">Побед сегодня: <span id="ui-wins">0</span>/5</div>
   </div>
 </div>
@@ -595,7 +612,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div id="emote-btn" onclick="toggleEmote()">💬</div>
   <div id="emote-panel"></div>
   <div class="ebubble" id="pe" style="bottom:175px;left:56px"></div>
-  <div class="ebubble" id="ee" style="top:160px;right:18px;transform:scaleX(-1)"></div>
+  <div class="ebubble" id="ee" style="top:160px;right:18px"></div>
   
   <div id="cvs-c"><canvas id="gc"></canvas></div>
   
@@ -690,7 +707,6 @@ const rb=document.getElementById('rl-btn');if(rb)rb.disabled=!can;
 const ct=document.getElementById('ctimer');if(ct)ct.textContent=`Обновится через ${cd}`;
 },1000);
 
-// Инициализация звука (Защита от ошибки Safari)
 let audioCtx = null;
 let sfxOn = true;
 function initAudio() {
@@ -1090,7 +1106,7 @@ function nav(id,idx){
   navIdx=idx;
   if(idx===5)renderStats();
   if(idx===6)loadLB();
-  if(idx===3) { renderPassUI(); const pw = document.getElementById('pass-wrap'); if(pw) setTimeout(()=> pw.scrollTop = pw.scrollHeight, 10); }
+  if(idx===3) { renderPassUI(); setTimeout(()=>{ const pw = document.getElementById('pass-wrap'); if(pw) pw.scrollTop = pw.scrollHeight; }, 10); }
   if(idx===7)renderWorldMap();
 }
 function switchDeck(i){deckTab=i;['dt0','dt1','dt2'].forEach((id,j)=>document.getElementById(id)?.classList.toggle('active',j===i));document.getElementById('dslider').style.transform=`translateX(-${i*33.333}%)`;if(i===2)renderSpells();}
