@@ -40,7 +40,6 @@ html, body {
 @keyframes emotePop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes flashRed{0%,100%{border-color:rgba(255,255,255,.12);background:rgba(42,45,69,1)}40%,70%{border-color:#e8415a;background:rgba(232,65,90,.2)}}
 @keyframes foilSweep{0%{left:-150%}30%{left:150%}100%{left:150%}}
-/* Оптимизированная анимация без RotateY и фильтров для плавности на iOS */
 @keyframes gachaReveal{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes mmPulse{from{transform:scale(0.9);opacity:0.8;}to{transform:scale(1.1);opacity:1;}}
 
@@ -61,7 +60,8 @@ html, body {
 .topbar{position:absolute;top:0;left:0;right:0;height:var(--top-bar);padding-top:var(--safe-top);background:rgba(18,19,26,.6);display:flex;justify-content:space-between;align-items:center;padding-left:14px;padding-right:14px;z-index:2000;border-bottom:1px solid var(--br);backdrop-filter:blur(10px)}
 .tstat{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;background:var(--panel);padding:7px 12px;border-radius:20px;border:1px solid var(--br)}
 
-nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:rgba(18,19,26,.8);display:flex;justify-content:space-around;align-items:center;z-index:2000;border-top:1px solid var(--br);backdrop-filter:blur(12px);padding-bottom:max(5px, var(--safe-bot))}
+/* Фикс безопасной зоны внизу для навигации */
+nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:rgba(18,19,26,.8);display:flex;justify-content:space-around;align-items:center;z-index:2000;border-top:1px solid var(--br);backdrop-filter:blur(12px);padding-bottom:var(--safe-bot)}
 .nb{padding:4px;font-size:10px;text-align:center;cursor:pointer;opacity:.5;transition:.2s;text-transform:uppercase;color:var(--tx);font-weight:700;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;letter-spacing:.3px}
 .nb.active{opacity:1;color:#fff;text-shadow: 0 0 8px var(--pr)}.ni{font-size:24px;transition:.2s}
 
@@ -70,7 +70,7 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 .scr.past{transform:translateX(-100%);opacity:0;pointer-events:none}
 
 /* Фикс отступов в главном меню на iOS */
-#s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:15px;align-items:center;padding:15px 0 max(15px, var(--safe-bot))!important;overflow-y:auto;overflow-x:hidden}
+#s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:15px;align-items:center;padding:15px 0 calc(20px + var(--safe-bot))!important;overflow-y:auto;overflow-x:hidden}
 .grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;padding:13px;width:100%;max-width:500px;margin:0 auto}
 
 .ci{background:linear-gradient(155deg,rgba(42,45,69,0.9),rgba(30,32,48,0.9));border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%;height:auto;aspect-ratio:1/1.3;cursor:pointer;transition:.2s;box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
@@ -96,7 +96,6 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 #cvs-c{flex:1;width:100%;position:relative;overflow:hidden;}
 canvas{display:block;width:100%;height:100%;touch-action:none}
 
-/* ПРАВИЛЬНЫЕ БАННЕРЫ ИГРОКОВ В БОЮ */
 .bban {position:absolute; width:75%; max-width:320px; padding:12px 18px; z-index:8000; background:rgba(0,0,0,0.9); border:2px solid rgba(255,255,255,0.2); box-shadow: 0 10px 25px rgba(0,0,0,0.7); display:flex; flex-direction:column; pointer-events:none; will-change: transform;}
 .bban-e {top:15%; right:0; border-radius:15px 0 0 15px; transform:translateX(100%); align-items:flex-end;}
 .bban-p {bottom:25%; left:0; border-radius:0 15px 15px 0; transform:translateX(-100%); align-items:flex-start;}
@@ -105,7 +104,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 @keyframes banEIn {0%{transform:translateX(100%);} 15%,85%{transform:translateX(0);} 100%{transform:translateX(100%);}}
 @keyframes banPIn {0%{transform:translateX(-100%);} 15%,85%{transform:translateX(0);} 100%{transform:translateX(-100%);}}
 
-/* ТАЙМЕР И СЧЕТ ПО КРАЯМ */
 #btimer {position:absolute; top:calc(15px + var(--safe-top)); right:15px; font-family:'Orbitron',sans-serif; font-size:22px; font-weight:900; color:#fff; z-index:10; text-shadow:0 2px 6px #000, 0 0 10px rgba(0,0,0,0.8);}
 #bscore {position:absolute; top:calc(15px + var(--safe-top)); left:15px; font-family:'Orbitron',sans-serif; font-size:20px; font-weight:900; z-index:10; background:rgba(0,0,0,0.6); padding:6px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; gap:8px;}
 
@@ -129,7 +127,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .etro.tie {color:#ccc;}
 
 /* --- Deck & In-Game Hand --- */
-.bui{flex:0 0 auto;width:100%;min-height:140px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 10px max(5px, var(--safe-bot));position:relative;z-index:10;box-sizing:border-box}
+.bui{flex:0 0 auto;width:100%;min-height:140px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 10px calc(5px + var(--safe-bot));position:relative;z-index:10;box-sizing:border-box}
 .hand{display:flex;flex-direction:row;gap:8px;justify-content:center;align-items:center;width:100%;overflow:visible;}
 .gc{width:23vw;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,transform .15s;}
 .gc.can{border-color:rgba(61,155,233,.8);background:linear-gradient(155deg,#2e3550,#1e2540);box-shadow:0 0 10px rgba(61,155,233,0.3)}
@@ -179,7 +177,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .finput, .ainput {width:100%; padding:14px; border-radius:12px; border:1px solid var(--br); background:rgba(0,0,0,0.3); color:#fff; font-size:15px; margin-bottom:12px; outline:none;}
 .finput:focus, .ainput:focus {border-color:var(--pr);}
 
-/* Chests & Gacha Animation (Оптимизировано для iOS) */
+/* Chests & Gacha Animation */
 .gacha-item { animation: gachaReveal 0.4s ease-out forwards; will-change: transform, opacity; }
 .draft-card { width:120px; height:160px; background:linear-gradient(155deg,#2a2d45,#1e2030); border-radius:15px; border:2px solid var(--br); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; box-shadow:0 10px 20px rgba(0,0,0,0.5); }
 .draft-card:hover { transform:scale(1.05); box-shadow:0 15px 30px rgba(0,0,0,0.7); }
@@ -764,7 +762,7 @@ const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9,GEM-P4M5,GEM-R7T6,GEM-W2Q1,GEM-N5H4,GEM-Y3Z2,GEM-F1G8,GEM-S6D7,GEM-V9B0,GEM-J2K3,GEM-L5P6,GEM-M8N9,GEM-C1X2,GEM-Z4V5,GEM-A7S8,GEM-D0F1,GEM-G3H4,GEM-J6K7,GEM-L9P0,GEM-Q2W3,GEM-E5R6,GEM-T8Y9,GEM-U1I2,GEM-O4P5,GEM-A7D8,GEM-F0G1,GEM-H3J4,GEM-K6L7,GEM-Z9X0,GEM-C2V3,GEM-B5N6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4,COIN-T5Y6,COIN-U7I8,COIN-O9P0,COIN-A1S2,COIN-D3F4,COIN-G5H6,COIN-J7K8,COIN-L9Z0,COIN-X1C2,COIN-V3B4,COIN-N5M6,COIN-Q7A8,COIN-W9S0,COIN-E1D2,COIN-R3F4,COIN-T5G6,COIN-Y7H8,COIN-U9J0,COIN-I1K2,COIN-O3L4,COIN-P5Z6,COIN-A7X8,COIN-S9C0,COIN-D1V2,COIN-F3B4,COIN-G5N6,COIN-H7M8,COIN-J9Q0,COIN-K1W2,COIN-L3E4,COIN-Z5R6".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
 
-// Заглушки картинок. Просто замени img/arena_X.jpg на свои ссылки.
+// Заглушки картинок. Просто замени img/arena_X.JPG на свои ссылки.
 const ARENAS=[
 {n:'Лужайка',     th:0,    bg:"url('img/arena_0.JPG')",col:'#2ebd6b',em:'🌿'},
 {n:'Пустыня',     th:600,  bg:"url('img/arena_1.JPG')",col:'#e67e22',em:'🏜️'},
@@ -1432,7 +1430,10 @@ function placeBet(i1, i2, betIndex) {
 function startSpectatorMatch(p1, p2) {
   document.querySelectorAll('.scr').forEach(s=>{s.classList.remove('active');s.style.opacity='0';});
   ss('topbar','display','none');ss('mainnav','display','none');
-  const bscr=document.getElementById('bscr');if(bscr)bscr.classList.add('active');
+  const bscr=document.getElementById('bscr');if(bscr) {
+    bscr.classList.add('active');
+    bscr.style.backgroundImage = 'none'; // зрительский фон можно тоже кастомизировать
+  }
   const bend=document.getElementById('bend');if(bend){bend.style.display='none';bend.classList.remove('active');}
   bState='intro';isOvertime=false;isTieBreaker=false;isBotFrozen=false;freezeCd=0;dragOn=false;dragIdx=-1;
   
@@ -1729,7 +1730,7 @@ function bLoop(time){
   if(!lastTime) lastTime = time;
   let dt = (time - lastTime) / 16.666; // нормализуем под 60fps
   lastTime = time;
-  if (dt > 3) dt = 3; // Защита от резких прыжков при сворачивании вкладки
+  if (dt > 3) dt = 3; // Защита от резких прыжков
 
   updateGame(dt);
   renderGame();
