@@ -42,9 +42,8 @@ html, body {
 @keyframes foilSweep{0%{left:-150%}30%{left:150%}100%{left:150%}}
 @keyframes gachaReveal{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes mmPulse{from{transform:scale(0.9);opacity:0.8;}to{transform:scale(1.1);opacity:1;}}
-
-/* Новые эффекты Внезапной смерти и всплывающего урона */
 @keyframes sdPulse { from { box-shadow: inset 0 0 30px rgba(232,65,90,0.2); } to { box-shadow: inset 0 0 80px rgba(232,65,90,0.7); } }
+
 .dmg-txt { position: absolute; color: #ff4757; font-weight: 900; font-size: 18px; text-shadow: 0 2px 5px #000; pointer-events: none; z-index: 25; font-family: 'Orbitron', sans-serif; transition: transform 0.8s ease-out, opacity 0.8s ease-out; }
 .streak-fire { text-shadow: 0 0 10px #ff9800, 0 0 20px #ff5722 !important; color: #ffeb3b !important; }
 .p-title { font-size: 10px; color: var(--ac); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
@@ -66,7 +65,7 @@ html, body {
 .topbar{position:absolute;top:0;left:0;right:0;height:var(--top-bar);padding-top:var(--safe-top);background:rgba(18,19,26,.6);display:flex;justify-content:space-between;align-items:center;padding-left:14px;padding-right:14px;z-index:2000;border-bottom:1px solid var(--br);backdrop-filter:blur(10px)}
 .tstat{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;background:var(--panel);padding:7px 12px;border-radius:20px;border:1px solid var(--br)}
 
-nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:rgba(18,19,26,.8);display:flex;justify-content:space-around;align-items:center;z-index:2000;border-top:1px solid var(--br);backdrop-filter:blur(12px);padding-bottom:max(5px, var(--safe-bot))}
+nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:rgba(18,19,26,.8);display:flex;justify-content:space-around;align-items:center;z-index:2000;border-top:1px solid var(--br);backdrop-filter:blur(12px);padding-bottom:max(2px, var(--safe-bot))}
 .nb{padding:4px;font-size:10px;text-align:center;cursor:pointer;opacity:.5;transition:.2s;text-transform:uppercase;color:var(--tx);font-weight:700;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;letter-spacing:.3px}
 .nb.active{opacity:1;color:#fff;text-shadow: 0 0 8px var(--pr)}.ni{font-size:24px;transition:.2s}
 
@@ -74,7 +73,7 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 .scr.active{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2}
 .scr.past{transform:translateX(-100%);opacity:0;pointer-events:none}
 
-#s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:15px;align-items:center;padding:15px 0 calc(20px + var(--safe-bot))!important;overflow-y:auto;overflow-x:hidden}
+#s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:15px;align-items:center;padding:15px 0 calc(10px + var(--safe-bot))!important;overflow-y:auto;overflow-x:hidden}
 .grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;padding:13px;width:100%;max-width:500px;margin:0 auto}
 
 .ci{background:linear-gradient(155deg,rgba(42,45,69,0.9),rgba(30,32,48,0.9));border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%;height:auto;aspect-ratio:1/1.3;cursor:pointer;transition:.2s;box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
@@ -186,7 +185,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .finput, .ainput {width:100%; padding:14px; border-radius:12px; border:1px solid var(--br); background:rgba(0,0,0,0.3); color:#fff; font-size:15px; margin-bottom:12px; outline:none;}
 .finput:focus, .ainput:focus {border-color:var(--pr);}
 
-/* Chests & Gacha Animation (Оптимизировано для iOS) */
+/* Chests & Gacha Animation */
 .gacha-item { animation: gachaReveal 0.4s ease-out forwards; will-change: transform, opacity; }
 .draft-card { width:120px; height:160px; background:linear-gradient(155deg,#2a2d45,#1e2030); border-radius:15px; border:2px solid var(--br); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; box-shadow:0 10px 20px rgba(0,0,0,0.5); }
 .draft-card:hover { transform:scale(1.05); box-shadow:0 15px 30px rgba(0,0,0,0.7); }
@@ -784,7 +783,7 @@ const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
 
-// Надежные фоны: сначала пытается загрузить картинку, если нет — включает градиент.
+// Надежные фоны с картинкой и градиентным фоллбеком
 const ARENAS=[
 {n:'Лужайка',     th:0,    bg:"url('img/arena_0.JPG'), radial-gradient(circle at top, #1e3c1a, #12131a)",col:'#2ebd6b',em:'🌿'},
 {n:'Пустыня',     th:600,  bg:"url('img/arena_1.JPG'), radial-gradient(circle at top, #4a2e00, #12131a)",col:'#e67e22',em:'🏜️'},
@@ -800,7 +799,7 @@ const ARENAS=[
 {n:'Арена боёв',  th:6800, bg:"url('img/arena_11.JPG'), radial-gradient(circle at top, #3a0a0f, #12131a)",col:'#e63946',em:'⚔️'}
 ];
 
-// Урон тяжеловесам порезан (sparky: 260, pekka: 180, lightning: 180, ball: 140, mpekka: 100)
+// Полный массив карт
 const CARDS=[
 {id:'spear_g',a:0,n:'Копейщики',  c:2,hp:110, d:25, sp:0.70,r:120,t:'ground',tg:'all',    ic:'👺',pr:'🏹',rr:'c'},
 {id:'fire_s', a:0,n:'Огн.Духи',   c:2,hp:90,  d:80, sp:0.90,r:40, t:'ground',tg:'all',    ic:'🔥',pr:null,rr:'c'},
@@ -844,23 +843,56 @@ const CARDS=[
 {id:'bats',   a:7,n:'Мыши',       c:2,hp:100, d:15, sp:0.80,r:40, t:'air',   tg:'all',    ic:'🦇',pr:null,rr:'c',multi:4},
 {id:'ewiz',   a:8,n:'Громовержец',c:4,hp:600, d:40, sp:0.50,r:100,t:'ground',tg:'all',    ic:'🌩️',pr:'⚡',rr:'l',freezeOnHit:true},
 {id:'poison', a:8,n:'Яд',         c:4,hp:0,   d:100,sp:0,   r:120,t:'spell', tg:'all',    ic:'🧪',pr:'🧪',rr:'e'},
-{id:'sparky', a:8,n:'Спарки',     c:6,hp:1000,d:260,sp:0.30,r:100,t:'ground',tg:'ground', ic:'🔋',pr:'⚡',rr:'l'}
+{id:'sparky', a:8,n:'Спарки',     c:6,hp:1000,d:260,sp:0.30,r:100,t:'ground',tg:'ground', ic:'🔋',pr:'⚡',rr:'l'},
+{id:'miner',  a:8,n:'Шахтер',     c:3,hp:800, d:50, sp:0.75,r:40, t:'ground',tg:'all',    ic:'⛏️',pr:null,rr:'l'},
+{id:'dart_g', a:9,n:'Гоблин-дрот',c:3,hp:200, d:30, sp:0.70,r:160,t:'ground',tg:'all',    ic:'👺',pr:'🏹',rr:'r'},
+{id:'prin2',  a:9,n:'Принцесса',  c:3,hp:150, d:45, sp:0.50,r:200,t:'ground',tg:'all',    ic:'👸',pr:'🔥',rr:'l'},
+{id:'bandit', a:9,n:'Бандитка',   c:3,hp:750, d:80, sp:0.80,r:40, t:'ground',tg:'ground', ic:'🥷',pr:null,rr:'l'},
+{id:'lumber', a:9,n:'Дровосек',   c:4,hp:990, d:100,sp:0.85,r:40, t:'ground',tg:'ground', ic:'🪓',pr:null,rr:'l'},
+{id:'mknight',a:11,n:'Мегарыцарь',c:7,hp:3300,d:120,sp:0.40,r:50, t:'ground',tg:'ground', ic:'🦹‍♂️',pr:null,rr:'l'},
+{id:'equake', a:11,n:'Землетряс.',c:3,hp:0,   d:85, sp:0,   r:150,t:'spell', tg:'ground', ic:'🫨',pr:'🪨',rr:'r'},
+{id:'bhealer',a:11,n:'Боев. Целит',c:4,hp:1200,d:40, sp:0.50,r:40, t:'ground',tg:'ground', ic:'🧚‍♀️',pr:null,rr:'r',heal:20,lifeSteal:true},
+{id:'marcher',a:12,n:'Маг. Лучник',c:4,hp:450, d:50, sp:0.60,r:180,t:'ground',tg:'all',    ic:'🧝‍♂️',pr:'✨',rr:'l'},
+{id:'rghost', a:12,n:'Кор. Призрак',c:3,hp:1000,d:70,sp:0.60,r:40,t:'ground',tg:'ground', ic:'👻',pr:null,rr:'l'}
 ];
 
-const TSKINS=[{id:'ts1',n:'Стандарт',ic:'🏰',hm:1.0,col:'#7f8c8d'},{id:'ts2',n:'Крепость',ic:'🪨',hm:1.05,col:'#6d4c41'}];
-const TTROOP=[{id:'tt1',n:'Лучница',ic:'👱‍♀️',d:25,sp:60,pr:'🏹',ra:0},{id:'tt2',n:'Канонир',ic:'🧨',d:75,sp:120,pr:'💣',ra:4}];
+const TSKINS=[{id:'ts1',n:'Стандарт',ic:'🏰',hm:1.0,col:'#7f8c8d'},{id:'ts2',n:'Крепость',ic:'🪨',hm:1.05,col:'#6d4c41'},{id:'ts3',n:'Кристалл',ic:'🔮',hm:1.1,col:'#8e24aa'}];
+const TTROOP=[{id:'tt1',n:'Лучница',ic:'👱‍♀️',d:25,sp:60,pr:'🏹',ra:0},{id:'tt2',n:'Канонир',ic:'🧨',d:75,sp:120,pr:'💣',ra:4},{id:'tt3',n:'Маг',ic:'🧙',d:40,sp:70,pr:'🔥',ra:4}];
+// Полный массив баннеров
 const BANNERS=[
 {id:'blue',s:'linear-gradient(135deg,#1a6eb5,#3d9be9)'},{id:'red',s:'linear-gradient(135deg,#8b0000,#e8415a)'},
-{id:'green',s:'linear-gradient(135deg,#0d5c2e,#2ebd6b)'},{id:'gold',s:'linear-gradient(135deg,#7d5900,#f5c518)'}
+{id:'green',s:'linear-gradient(135deg,#0d5c2e,#2ebd6b)'},{id:'purple',s:'linear-gradient(135deg,#4a0080,#9b5de5)'},
+{id:'orange',s:'linear-gradient(135deg,#8c4000,#e67e22)'},{id:'dark',s:'linear-gradient(135deg,#0a0d14,#2c3e50)'},
+{id:'gold',s:'linear-gradient(135deg,#7d5900,#f5c518)'}
 ];
-const EMOTES=['😂','😭','😡','🙄','🤩','😴','🥶','🤯','😱','😈','🤡','💩','👻','💀','👽'];
-const MEDALS=[{id:'m1',ic:'⚔️',d:'Сыграть 1 бой'},{id:'m2',ic:'🏆',d:'1 Победа'},{id:'m6',ic:'🏜️',d:'Арена 2'}];
-const RL_PRIZES=[{ic:'💰',lbl:'300 Золота', tp:'gold',v:300, w:30},{ic:'💎',lbl:'10 Гемов',  tp:'gems',v:10,  w:20},{ic:'📦',lbl:'Ящик',tp:'chest',v:'g', w:10},{ic:'⚡',lbl:'30 Очков',  tp:'power',v:30, w:14}];
+// Полный массив эмодзи
+const EMOTES=['😂','😭','😡','🙄','🤩','😴','🥶','🤯','😱','😈','🤡','💩','👻','💀','👽','🤖','🎃','🐶','🐱','🐵','🦁','🐲','🤑','🥳','😎'];
+// Полный массив медалей
+const MEDALS=[
+{id:'m1',ic:'⚔️',d:'Сыграть 1 бой'},{id:'m2',ic:'🏆',d:'1 Победа'},{id:'m3',ic:'👑',d:'10 Побед'},
+{id:'m4',ic:'🌟',d:'50 Побед'},{id:'m5',ic:'🔥',d:'100 Побед'},
+{id:'m6',ic:'🏜️',d:'Арена 2'},{id:'m7',ic:'❄️',d:'Арена 5'},{id:'m8',ic:'🌋',d:'Арена 10'},
+{id:'m9',ic:'💰',d:'10000 Золота'},{id:'m10',ic:'💎',d:'100 Гемов'},
+{id:'m11',ic:'🃏',d:'10 карт'},{id:'m12',ic:'🎴',d:'20 карт'},
+{id:'m13',ic:'⬆️',d:'Карта 2 ур.'},{id:'m14',ic:'⭐',d:'Карта 8 ур.'},
+{id:'m15',ic:'📜',d:'10 квестов'},{id:'m16',ic:'☠️',d:'5 боёв ВС'},{id:'m17',ic:'💀',d:'Победа ВС'},
+{id:'m18',ic:'🎭',d:'Купить смайлик'},{id:'m19',ic:'🤝',d:'Добавить друга'},
+{id:'m20',ic:'🧠',d:'1000 кубков'},{id:'m21',ic:'🏅',d:'Уровень 5'},{id:'m22',ic:'🎖️',d:'Уровень 10'},
+{id:'m23',ic:'💯',d:'100 боёв'}
+];
+const RL_PRIZES=[
+{ic:'💰',lbl:'300 Золота', tp:'gold',v:300, w:30},{ic:'💰',lbl:'600 Золота', tp:'gold',v:600, w:18},
+{ic:'💰',lbl:'1000 Золота',tp:'gold',v:1000,w:8}, {ic:'💎',lbl:'10 Гемов',  tp:'gems',v:10,  w:20},
+{ic:'💎',lbl:'25 Гемов',  tp:'gems',v:25,  w:10},{ic:'💎',lbl:'50 Гемов',  tp:'gems',v:50,  w:5},
+{ic:'📦',lbl:'Ящик',       tp:'chest',v:'g', w:10},{ic:'✨',lbl:'Маг.Ящик', tp:'chest',v:'m', w:3},
+{ic:'👑',lbl:'5 Корон',   tp:'crowns',v:5,  w:8}, {ic:'⚡',lbl:'30 Очков',  tp:'power',v:30, w:14},
+];
 const PASS_R=Array.from({length:50},(_,i)=>{
 const c=(i+1)*8;
 if((i+1)%10===0)return{crowns:c,t:'chest',v:'m',ic:'✨',n:'МЕГА ЯЩИК'};
 if((i+1)%5===0) return{crowns:c,t:'chest',v:'g',ic:'📦',n:'Ящик'};
 if(i%3===0)     return{crowns:c,t:'gold', v:400+i*40,ic:'💰',n:`${400+i*40} Золота`};
+if(i%3===1)     return{crowns:c,t:'gems', v:8+i,ic:'💎',n:`${8+i} Гемов`};
 return{crowns:c,t:'gems',v:15+i*2,ic:'💎',n:`${15+i*2} Гемов`};
 });
 const XP_T=[0,100,250,500,900,1500,2400,3700,5500,8000,12000];
@@ -1360,7 +1392,7 @@ function unequipMedal(i){if(U.equippedMedals)U.equippedMedals[i]=null;saveU();}
 function renderEmotes(){for(let i=0;i<3;i++){const slot=document.getElementById(`esl${i}`);if(!slot)continue;const e=(U.equippedEmotes&&U.equippedEmotes[i])?U.equippedEmotes[i]:null;slot.className='eslot'+(e?' filled':'');slot.textContent=e||'+';}const c=document.getElementById('ui-emotes');if(!c)return;c.innerHTML='';(U.emotes||[]).forEach(e=>{const eq=(U.equippedEmotes||[]).includes(e);c.innerHTML+=`<div class="mitem unl ${eq?'eq':''}" style="background:var(--p2);border-radius:11px" onclick="eqEmote('${e}')">${e}</div>`;});}
 function eqEmote(e){if(!U.equippedEmotes)U.equippedEmotes=[null,null,null];const i=U.equippedEmotes.indexOf(e);if(i!==-1)U.equippedEmotes[i]=null;else{const s=U.equippedEmotes.indexOf(null);if(s!==-1)U.equippedEmotes[s]=e;else{U.equippedEmotes.shift();U.equippedEmotes.push(e);}}saveU();}
 function unequipEmote(i){if(U.equippedEmotes)U.equippedEmotes[i]=null;saveU();}
-function renderStats(){const c=document.getElementById('ui-stats');if(!c||!U)return;const s=U.stats||{},xp=U.xp||0,lvl=getLevel(xp);const rows=[['👤 Никнейм',U.nickname],['🏆 Кубки',U.trophies],['⭐ Уровень',lvl],['⚔️ Всего боёв',s.matches||0],['🏅 Побед',s.wins||0],['💀 Поражений',(s.matches||0)-(s.wins||0)],['🔥 Вин Стрик',s.winStreak||0],['☠️ Боёв ВС',s.sdM||0],['🏰 Башен',s.towers||0],['📜 Квестов',s.quests||0],['🃏 Карт',Object.keys(U.cards||{}).length]];c.innerHTML=rows.map(([l,v])=>`<div class="srow"><span class="slbl">${l}</span><span class="sval">${v}</span></div>`).join('');renderMedals();}
+function renderStats(){const c=document.getElementById('ui-stats');if(!c||!U)return;const s=U.stats||{},xp=U.xp||0,lvl=getLevel(xp);const rows=[['👤 Никнейм',U.nickname],['🏆 Кубки',U.trophies],['⭐ Уровень',lvl],['⚔️ Всего боёв',s.matches||0],['🏅 Побед',s.wins||0],['💀 Поражений',(s.matches||0)-(s.wins||0)],['🔥 Вин Стрик',s.winStreak||0],['☠️ Боёв ВС',s.sdM||0],['💀 Побед ВС',s.sdW||0],['🏰 Башен',s.towers||0],['📜 Квестов',s.quests||0],['🃏 Карт',Object.keys(U.cards||{}).length]];c.innerHTML=rows.map(([l,v])=>`<div class="srow"><span class="slbl">${l}</span><span class="sval">${v}</span></div>`).join('');renderMedals();}
 
 function loadLB(){
   const lb=document.getElementById('ui-lb');if(!lb)return;
@@ -1910,8 +1942,19 @@ if(!k0&&!isTut){endBattle(false);return;}if(!k1){endBattle(true);return;}
 }
 
 function renderGame(){
-if(!bCtx||!cw||!ch)return;bCtx.clearRect(0,0,cw,ch);
-bCtx.fillStyle='rgba(0,0,0,0.15)';bCtx.fillRect(0,0,cw,ch);
+if(!bCtx||!cw||!ch)return;
+bCtx.clearRect(0,0,cw,ch);
+
+// ПОЛУПРОЗРАЧНЫЙ ФОН ТРАВЫ И СЕТКИ (Ложится поверх картинки)
+bCtx.fillStyle='rgba(58, 100, 40, 0.65)';
+bCtx.fillRect(0,0,cw,ch);
+bCtx.fillStyle='rgba(0,0,0,0.1)';
+for(let i=0;i<cw;i+=28){
+  for(let j=0;j<ch;j+=28){
+    if((Math.floor(i/28)+Math.floor(j/28))%2===0) bCtx.fillRect(i,j,28,28);
+  }
+}
+
 if(!isSD){
 const rg=bCtx.createLinearGradient(0,ch/2-23,0,ch/2+23);rg.addColorStop(0,'#1a5e8a');rg.addColorStop(.5,'#2472a4');rg.addColorStop(1,'#1a5e8a');bCtx.fillStyle=rg;bCtx.fillRect(0,ch/2-24,cw,48);
 bCtx.fillStyle='rgba(255,255,255,0.055)';for(let i=0;i<cw;i+=52)bCtx.fillRect(i,ch/2-17,26,4);
