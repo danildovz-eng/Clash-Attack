@@ -46,7 +46,7 @@ html, body {
 
 .dmg-txt { position: absolute; color: #ff4757; font-weight: 900; font-size: 18px; text-shadow: 0 2px 5px #000; pointer-events: none; z-index: 25; font-family: 'Orbitron', sans-serif; transition: transform 0.8s ease-out, opacity 0.8s ease-out; }
 .streak-fire { text-shadow: 0 0 10px #ff9800, 0 0 20px #ff5722 !important; color: #ffeb3b !important; }
-.p-title { font-size: 10px; color: var(--ac); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+.p-title { font-size: 11px; color: var(--ac); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
 
 #app-cover{position:absolute;inset:0;background:var(--bg);z-index:19000;transition:opacity .4s ease;pointer-events:none}
 #toast-c{position:absolute;top:calc(70px + var(--safe-top));left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:88%;max-width:350px}
@@ -73,7 +73,13 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 .scr.active{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2}
 .scr.past{transform:translateX(-100%);opacity:0;pointer-events:none}
 
-#s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:15px;align-items:center;padding:15px 0 calc(10px + var(--safe-bot))!important;overflow-y:auto;overflow-x:hidden}
+/* --- MAIN MENU FIXES --- */
+#s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:12px;align-items:center;padding:12px 0 calc(15px + var(--safe-bot))!important;overflow-y:auto;overflow-x:hidden}
+.p-info-card { background: var(--p2); border: 1px solid var(--br); border-radius: 18px; padding: 14px 18px; width: 92%; max-width: 440px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 6px 15px rgba(0,0,0,0.4); cursor: pointer; transition: transform 0.1s;}
+.p-info-card:active { transform: scale(0.98); }
+.p-info-top { display: flex; justify-content: space-between; align-items: center; }
+.p-info-name-block { display: flex; flex-direction: column; align-items: flex-start;}
+
 .grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;padding:13px;width:100%;max-width:500px;margin:0 auto}
 
 .ci{background:linear-gradient(155deg,rgba(42,45,69,0.9),rgba(30,32,48,0.9));border-radius:14px;border:1.5px solid var(--br);text-align:center;position:relative;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%;height:auto;aspect-ratio:1/1.3;cursor:pointer;transition:.2s;box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
@@ -88,7 +94,7 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 .cname{font-size:13px;font-weight:800;color:#fff;width:100%;line-height:1.1;text-align:center;position:relative;z-index:2;text-shadow: 0 1px 3px rgba(0,0,0,0.8)}
 .clvl{position:absolute;top:-8px;right:-8px;background:#111;color:var(--ac);border:1.5px solid var(--ac);border-radius:8px;padding:3px 6px;font-size:11px;font-weight:900;font-family:'Orbitron',sans-serif;z-index:10;box-shadow:0 2px 5px rgba(0,0,0,0.5)}
 
-.bigbtn{width:88vw;max-width:340px;height:8.5vh;min-height:60px;max-height:75px;background:linear-gradient(145deg,#f5c518,#d4810a);border:2px solid rgba(255,255,255,0.2);border-radius:15px;color:#1a1000;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 6px 0 #9e5b00, 0 10px 20px rgba(0,0,0,0.4);transition:.1s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px;text-transform:uppercase;letter-spacing:1px}
+.bigbtn{width:88vw;max-width:340px;height:8.5vh;min-height:60px;max-height:75px;background:linear-gradient(145deg,#f5c518,#d4810a);border:2px solid rgba(255,255,255,0.2);border-radius:15px;color:#1a1000;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 6px 0 #9e5b00, 0 10px 20px rgba(0,0,0,0.4);transition:.1s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:10px;text-transform:uppercase;letter-spacing:1px}
 .bigbtn:active{transform:translateY(6px);box-shadow:0 0 0 transparent, 0 2px 5px rgba(0,0,0,0.4)}
 .bigbtn.sd{background:linear-gradient(145deg,#e8415a,#9d1828);color:#fff;font-size:15px;height:7.5vh;min-height:54px;box-shadow:0 6px 0 #6b0f1a, 0 10px 20px rgba(0,0,0,0.4)}
 .bigbtn.dr{background:linear-gradient(145deg,#9b5de5,#5e2a99);color:#fff;font-size:15px;height:7.5vh;min-height:54px;box-shadow:0 6px 0 #3a1466, 0 10px 20px rgba(0,0,0,0.4)}
@@ -185,7 +191,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .finput, .ainput {width:100%; padding:14px; border-radius:12px; border:1px solid var(--br); background:rgba(0,0,0,0.3); color:#fff; font-size:15px; margin-bottom:12px; outline:none;}
 .finput:focus, .ainput:focus {border-color:var(--pr);}
 
-/* Chests & Gacha Animation */
+/* Chests & Gacha Animation (Оптимизировано для iOS) */
 .gacha-item { animation: gachaReveal 0.4s ease-out forwards; will-change: transform, opacity; }
 .draft-card { width:120px; height:160px; background:linear-gradient(155deg,#2a2d45,#1e2030); border-radius:15px; border:2px solid var(--br); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; box-shadow:0 10px 20px rgba(0,0,0,0.5); }
 .draft-card:hover { transform:scale(1.05); box-shadow:0 15px 30px rgba(0,0,0,0.7); }
@@ -209,7 +215,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .qcard {background:var(--p2); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--br); box-shadow:0 4px 10px rgba(0,0,0,0.2);}
 
 /* Leaderboard */
-.lbi {display:flex; align-items:center; background:var(--p2); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--br); box-shadow:0 4px 8px rgba(0,0,0,0.2);}
+.lbi {display:flex; align-items:center; background:var(--p2); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--br); box-shadow:0 4px 8px rgba(0,0,0,0.2); cursor:pointer;}
 .lbr {font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; color:rgba(255,255,255,0.3); width:35px; text-align:center;}
 .lbr.gold {color:#f5c518; text-shadow:0 0 10px rgba(245,197,24,0.6);}
 .lbr.silver {color:#e0e0e0; text-shadow:0 0 10px rgba(224,224,224,0.6);}
@@ -219,12 +225,12 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .fbox {width:92%; max-width:440px; max-height:85vh; background:var(--bg); border-radius:22px; border:1px solid var(--br); display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.8);}
 .ftab {flex:1; text-align:center; padding:12px 0; font-size:13px; font-weight:800; color:rgba(255,255,255,0.4); border-bottom:3px solid transparent; cursor:pointer; text-transform:uppercase; transition:0.2s;}
 .ftab.active {color:#fff; border-bottom-color:var(--pr); text-shadow:0 0 8px rgba(61,155,233,0.5);}
-.friend-card {background:var(--p2); border:1px solid var(--br); border-radius:14px; padding:14px; margin-bottom:12px; display:flex; align-items:center; gap:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+.friend-card {background:var(--p2); border:1px solid var(--br); border-radius:14px; padding:14px; margin-bottom:12px; display:flex; align-items:center; gap:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); cursor:pointer;}
 .fc-info {flex:1;}
 .fc-name {font-weight:800; font-size:15px; color:#fff; margin-bottom:2px;}
 .fc-sub {font-size:12px; color:rgba(255,255,255,0.4);}
 .fc-actions {display:flex; flex-direction:column; gap:6px;}
-.fc-btn {background:none; border:none; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:800; cursor:pointer; transition:0.15s;}
+.fc-btn {background:none; border:none; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:800; cursor:pointer; transition:0.15s; z-index:2;}
 .fc-btn:active {transform:scale(0.95);}
 .fc-btn.red {background:rgba(232,65,90,0.15); color:var(--dn); border:1px solid rgba(232,65,90,0.4);}
 .fc-btn.green {background:rgba(46,189,107,0.15); color:var(--ok); border:1px solid rgba(46,189,107,0.4);}
@@ -245,6 +251,10 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #pass-wrap { position: absolute; top: 60px; bottom: 0; left: 0; right: 0; overflow-y: auto; scroll-behavior: auto; }
 #qpanel { position: absolute; bottom: 0; left: 0; right: 0; background: var(--bg); border-top-left-radius: 24px; border-top-right-radius: 24px; z-index: 200; transform: translateY(110%); transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -10px 40px rgba(0,0,0,0.8); max-height: 80vh; display: flex; flex-direction: column; border-top: 1px solid var(--br); }
 #qpanel.open { transform: translateY(0); }
+
+/* Карточка мира (Центрированная) */
+#world-tooltip { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); opacity: 0; pointer-events: none; background: var(--bg); border: 2px solid var(--pr); border-radius: 20px; padding: 20px; z-index: 9999; box-shadow: 0 10px 40px rgba(0,0,0,0.8); text-align: center; transition: 0.3s; width: 85%; max-width: 320px; }
+#world-tooltip.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
 
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -271,6 +281,22 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px"><span>Всего боёв:</span><b id="prof-matches">0</b></div>
     <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:18px;font-size:14px"><span>Побед:</span><b id="prof-wins" style="color:var(--ok)">0</b></div>
     <button class="pbtn" onclick="ss('m-profile','display','none')">ЗАКРЫТЬ</button>
+  </div>
+</div>
+
+<div id="m-other-profile" class="ov" style="z-index:5600">
+  <div class="mbox" style="padding:24px;align-items:center;overflow-y:auto">
+    <div style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:var(--pr);margin-bottom:8px">ИНФО ИГРОКА</div>
+    <h2 id="op-name" style="font-size:20px;font-weight:800;margin-bottom:0">Игрок</h2>
+    <div id="op-title" class="p-title" style="margin-bottom:4px">Искатель</div>
+    <div id="op-tr" style="color:var(--ac);font-weight:900;font-size:16px;margin-bottom:16px;font-family:'Orbitron',sans-serif">🏆 0</div>
+    <div class="sec" style="width:100%;margin:0 0 12px 0;padding:15px">
+      <div class="stit">Любимая карта</div>
+      <div id="op-fav" style="display:flex;justify-content:center;"></div>
+    </div>
+    <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px"><span>Всего боёв:</span><b id="op-matches">0</b></div>
+    <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:18px;font-size:14px"><span>Побед:</span><b id="op-wins" style="color:var(--ok)">0</b></div>
+    <button class="pbtn" onclick="ss('m-other-profile','display','none')">ЗАКРЫТЬ</button>
   </div>
 </div>
 
@@ -416,15 +442,22 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 
 <div id="s-main" class="scr active" data-i="2">
   <div id="arenabox" onclick="nav('s-world',7)"><div class="arenaoverlay"></div><div class="arenacont"><h1 class="arenatit" id="ui-aname">АРЕНА 1</h1><p class="arenadesc" id="ui-adesc">Лужайка</p></div></div>
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0px;margin-top:-5px">
-    <p style="font-size:17px;font-weight:800;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(255,255,255,.3)" id="ui-pname" onclick="openProfile()">Игрок</p>
-    <div id="ui-title-main" class="p-title">Искатель</div>
-    <div id="ui-streak" style="display:none; font-size:12px; margin-top:2px;" class="streak-fire">🔥 Серия: <span>0</span></div>
+  
+  <div class="p-info-card" onclick="openProfile()">
+    <div class="p-info-top">
+      <div class="p-info-name-block">
+        <span id="ui-pname" style="font-size:18px;font-weight:900;">Игрок</span>
+        <span id="ui-title-main" class="p-title">Искатель</span>
+      </div>
+      <div id="ui-streak" style="display:none; font-size:12px; font-weight:800" class="streak-fire">🔥 Серия: <span>0</span></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-top:4px">
+      <span>Ур. <span id="ui-lvl" style="color:var(--ac);font-weight:900">1</span></span>
+      <span id="ui-xp">0/100 XP</span>
+    </div>
+    <div class="xpwrap" style="margin-bottom:0; height:8px;"><div class="xpfill" id="ui-xpb" style="width:0%"></div></div>
   </div>
-  <div style="width:92%;max-width:420px">
-    <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.33);margin-bottom:4px"><span>Ур. <span id="ui-lvl" style="color:var(--ac);font-weight:900">1</span></span><span id="ui-xp">0/100 XP</span></div>
-    <div class="xpwrap"><div class="xpfill" id="ui-xpb" style="width:0%"></div></div>
-  </div>
+
   <div style="display:flex;gap:8px;width:92%;max-width:440px">
     <div class="mfbtn" onclick="openFriends()">👥 Друзья <span id="ndot" style="display:none;background:var(--dn);width:8px;height:8px;border-radius:50%;margin-left:4px"></span></div>
     <div class="mfbtn" onclick="nav('s-stats',5)">📊 Статы</div>
@@ -541,9 +574,10 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <div id="s-world" class="scr" data-i="7">
   <div id="world-container">
     <svg id="world-svg" viewBox="0 0 360 700" preserveAspectRatio="xMidYMid meet"></svg>
-    <div id="world-tooltip" style="opacity:0">
-      <h3 id="wt-name">Арена</h3>
-      <p id="wt-desc">Информация</p>
+    <div id="world-tooltip">
+      <h3 id="wt-name" style="font-family:'Orbitron',sans-serif; color:var(--pr); margin-bottom:8px;">Арена</h3>
+      <p id="wt-desc" style="font-size:13px; color:rgba(255,255,255,0.8); margin-bottom:15px;">Информация</p>
+      <button class="pbtn ok" style="padding:10px; margin:0;" onclick="document.getElementById('world-tooltip').classList.remove('active')">ПОНЯТНО</button>
     </div>
   </div>
 </div>
@@ -783,7 +817,6 @@ const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
 
-// Надежные фоны с картинкой и градиентным фоллбеком
 const ARENAS=[
 {n:'Лужайка',     th:0,    bg:"url('img/arena_0.JPG'), radial-gradient(circle at top, #1e3c1a, #12131a)",col:'#2ebd6b',em:'🌿'},
 {n:'Пустыня',     th:600,  bg:"url('img/arena_1.JPG'), radial-gradient(circle at top, #4a2e00, #12131a)",col:'#e67e22',em:'🏜️'},
@@ -799,7 +832,6 @@ const ARENAS=[
 {n:'Арена боёв',  th:6800, bg:"url('img/arena_11.JPG'), radial-gradient(circle at top, #3a0a0f, #12131a)",col:'#e63946',em:'⚔️'}
 ];
 
-// Полный массив карт
 const CARDS=[
 {id:'spear_g',a:0,n:'Копейщики',  c:2,hp:110, d:25, sp:0.70,r:120,t:'ground',tg:'all',    ic:'👺',pr:'🏹',rr:'c'},
 {id:'fire_s', a:0,n:'Огн.Духи',   c:2,hp:90,  d:80, sp:0.90,r:40, t:'ground',tg:'all',    ic:'🔥',pr:null,rr:'c'},
@@ -858,16 +890,15 @@ const CARDS=[
 
 const TSKINS=[{id:'ts1',n:'Стандарт',ic:'🏰',hm:1.0,col:'#7f8c8d'},{id:'ts2',n:'Крепость',ic:'🪨',hm:1.05,col:'#6d4c41'},{id:'ts3',n:'Кристалл',ic:'🔮',hm:1.1,col:'#8e24aa'}];
 const TTROOP=[{id:'tt1',n:'Лучница',ic:'👱‍♀️',d:25,sp:60,pr:'🏹',ra:0},{id:'tt2',n:'Канонир',ic:'🧨',d:75,sp:120,pr:'💣',ra:4},{id:'tt3',n:'Маг',ic:'🧙',d:40,sp:70,pr:'🔥',ra:4}];
-// Полный массив баннеров
+
 const BANNERS=[
 {id:'blue',s:'linear-gradient(135deg,#1a6eb5,#3d9be9)'},{id:'red',s:'linear-gradient(135deg,#8b0000,#e8415a)'},
 {id:'green',s:'linear-gradient(135deg,#0d5c2e,#2ebd6b)'},{id:'purple',s:'linear-gradient(135deg,#4a0080,#9b5de5)'},
 {id:'orange',s:'linear-gradient(135deg,#8c4000,#e67e22)'},{id:'dark',s:'linear-gradient(135deg,#0a0d14,#2c3e50)'},
 {id:'gold',s:'linear-gradient(135deg,#7d5900,#f5c518)'}
 ];
-// Полный массив эмодзи
 const EMOTES=['😂','😭','😡','🙄','🤩','😴','🥶','🤯','😱','😈','🤡','💩','👻','💀','👽','🤖','🎃','🐶','🐱','🐵','🦁','🐲','🤑','🥳','😎'];
-// Полный массив медалей
+
 const MEDALS=[
 {id:'m1',ic:'⚔️',d:'Сыграть 1 бой'},{id:'m2',ic:'🏆',d:'1 Победа'},{id:'m3',ic:'👑',d:'10 Побед'},
 {id:'m4',ic:'🌟',d:'50 Побед'},{id:'m5',ic:'🔥',d:'100 Побед'},
@@ -880,6 +911,7 @@ const MEDALS=[
 {id:'m20',ic:'🧠',d:'1000 кубков'},{id:'m21',ic:'🏅',d:'Уровень 5'},{id:'m22',ic:'🎖️',d:'Уровень 10'},
 {id:'m23',ic:'💯',d:'100 боёв'}
 ];
+
 const RL_PRIZES=[
 {ic:'💰',lbl:'300 Золота', tp:'gold',v:300, w:30},{ic:'💰',lbl:'600 Золота', tp:'gold',v:600, w:18},
 {ic:'💰',lbl:'1000 Золота',tp:'gold',v:1000,w:8}, {ic:'💎',lbl:'10 Гемов',  tp:'gems',v:10,  w:20},
@@ -972,13 +1004,33 @@ function openProfile(){
   document.getElementById('prof-name').innerHTML=`${U.nickname} ${getCB(U.uid)}`;
   st('prof-tr',`🏆 ${U.trophies||0}`);
   const s=U.stats||{};st('prof-matches',s.matches||0);st('prof-wins',s.wins||0);
-  renderFavCard();ss('m-profile','display','flex');
+  renderFavCard('prof-fav', U);ss('m-profile','display','flex');
 }
-function renderFavCard(){
-  const fc=document.getElementById('prof-fav');if(!fc)return;
-  const fav=U.favoriteCard;
-  if(fav&&CARDS.find(x=>x.id===fav)&&U.cards[fav]){
-  const card=CARDS.find(x=>x.id===fav),data=U.cards[fav],isFoil=data.level>=8;
+
+function viewPlayer(uid) {
+  if(uid === U.uid) return openProfile();
+  doLoad('Загрузка профиля...', () => {
+    db.ref('users/' + uid).once('value').then(snap => {
+      loading = false; hideCover();
+      if(!snap.exists()) return notify('Игрок не найден');
+      const p = snap.val();
+      st('op-name', p.nickname || 'Игрок');
+      st('op-title', getTitle(p.trophies || 0));
+      st('op-tr', `🏆 ${p.trophies || 0}`);
+      const s = p.stats || {};
+      st('op-matches', s.matches || 0);
+      st('op-wins', s.wins || 0);
+      renderFavCard('op-fav', p);
+      ss('m-other-profile', 'display', 'flex');
+    }).catch(() => { loading = false; hideCover(); notify('Ошибка загрузки'); });
+  });
+}
+
+function renderFavCard(containerId, userData){
+  const fc=document.getElementById(containerId);if(!fc)return;
+  const fav=userData.favoriteCard;
+  if(fav&&CARDS.find(x=>x.id===fav)&&userData.cards[fav]){
+  const card=CARDS.find(x=>x.id===fav),data=userData.cards[fav],isFoil=data.level>=8;
   fc.innerHTML=`<div class="ci rr-${card.rr} ${isFoil?'foil':''}" style="height:160px;width:110px;cursor:default">${isFoil?'<div class="foil-fx"></div>':''}<div class="fav-badge">💖 FAV</div><div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div></div>`;
   }else fc.innerHTML='<p style="color:rgba(255,255,255,.3);font-size:12px">Нет карты</p>';
 }
@@ -1399,7 +1451,7 @@ function loadLB(){
   lb.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.4);padding:20px">Загрузка…</p>';
   db.ref('users').once('value').then(snap=>{
     const players=[];
-    snap.forEach(c=>{const u=c.val();if(u&&u.nickname)players.push(u);});
+    snap.forEach(c=>{const u=c.val();if(u&&u.nickname){u.uid=c.key;players.push(u);}});
     players.sort((a,b)=>(b.trophies||0)-(a.trophies||0));
     globalLbPlayers = players;
     lb.innerHTML='';
@@ -1408,7 +1460,7 @@ function loadLB(){
       const rc=i===0?'gold':i===1?'silver':i===2?'bronze':'';
       const mH=(p.equippedMedals||[]).map(m=>{if(!m)return'';const med=MEDALS.find(x=>x.id===m);return med?`<span style="font-size:13px">${med.ic}</span>`:''}).join('');
       const cb=getCB(p.uid);const ar=ARENAS.findIndex(a=>a.th>(p.trophies||0));const an=ar===-1?ARENAS.length:ar;
-      lb.innerHTML+=`<div class="lbi"><span class="lbr ${rc}">${i+1}</span><div style="flex:1;margin-left:8px"><div style="font-weight:700;font-size:14px">${p.nickname||'?'} ${cb} ${mH}</div><div style="font-size:11px;color:rgba(255,255,255,.35)">Арена ${an}</div></div><span style="color:var(--ac);font-weight:800;font-size:15px;font-family:'Orbitron',sans-serif">${p.trophies||0}🏆</span></div>`;
+      lb.innerHTML+=`<div class="lbi" onclick="viewPlayer('${p.uid}')"><span class="lbr ${rc}">${i+1}</span><div style="flex:1;margin-left:8px"><div style="font-weight:700;font-size:14px">${p.nickname||'?'} ${cb} ${mH}</div><div style="font-size:11px;color:rgba(255,255,255,.35)">Арена ${an}</div></div><span style="color:var(--ac);font-weight:800;font-size:15px;font-family:'Orbitron',sans-serif">${p.trophies||0}🏆</span></div>`;
     });
   }).catch(()=>{lb.innerHTML='<p style="text-align:center;color:var(--dn)">Ошибка загрузки</p>';});
 }
@@ -2200,8 +2252,7 @@ const ar=ARENAS[ai],ci=arenaIdx(),unlocked=ai<=ci;
 const wt=document.getElementById('world-tooltip');if(!wt)return;
 document.getElementById('wt-name').textContent=`${ar.em} Арена ${ai+1}: ${ar.n}`;
 document.getElementById('wt-desc').textContent=unlocked?`${ar.th}+ 🏆 · Разблокирована · ${CARDS.filter(c=>c.a===ai).length} карт`:`🔒 Нужно ${ar.th} 🏆`;
-wt.style.opacity='1';wt.style.borderColor=`${ar.col}55`;
-clearTimeout(wt._t);wt._t=setTimeout(()=>{wt.style.opacity='0';},3500);
+wt.classList.add('active');
 }
 
 function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
@@ -2259,7 +2310,7 @@ db.ref(`users/${U.uid}/friends`).once('value').then(fsnap => {
     snaps.forEach((snap,i)=>{
       if(!snap||!snap.exists())return;added++;
       const fr=snap.val(),fuid=friends[i],arI=ARENAS.findIndex(a=>a.th>(fr.trophies||0)),arN=arI>0?ARENAS[arI-1].n:'Лужайка';
-      c.innerHTML+=`<div class="friend-card"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${fr.nickname||'?'}</div> <div class="fc-sub">🏆 ${fr.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${fuid}</div> </div> <div class="fc-actions"> <button class="fc-btn red" onclick="removeFriend('${fuid}')">✕ Удалить</button> </div> </div>`;
+      c.innerHTML+=`<div class="friend-card" onclick="viewPlayer('${fuid}')"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${fr.nickname||'?'}</div> <div class="fc-sub">🏆 ${fr.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${fuid}</div> </div> <div class="fc-actions"> <button class="fc-btn red" onclick="event.stopPropagation(); removeFriend('${fuid}')">✕ Удалить</button> </div> </div>`;
     });
     if(!added)c.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.38);font-size:13px;padding:20px">Нет друзей</p>';
   }).catch(()=>{c.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">Ошибка загрузки</p>';});
@@ -2287,7 +2338,7 @@ res.innerHTML='<p style="color:rgba(255,255,255,.4);font-size:13px;text-align:ce
 db.ref('users/'+id).once('value').then(snap=>{
 if(!snap.exists()){res.innerHTML='<p style="color:var(--dn);font-size:13px;text-align:center">❌ Игрок не найден</p>';return;}
 const u=snap.val(),arI=ARENAS.findIndex(a=>a.th>(u.trophies||0)),arN=arI>0?ARENAS[arI-1].n:'Лужайка';
-res.innerHTML=`<div class="friend-card"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${u.nickname||'?'}</div> <div class="fc-sub">🏆 ${u.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${id}</div> </div> <div class="fc-actions"> <button class="fc-btn green" onclick="sendFriendReq('${id}','${(u.nickname||'').replace(/'/g,'').replace(/"/g,'')}')">➕ Добавить</button> </div> </div>`;
+res.innerHTML=`<div class="friend-card" onclick="viewPlayer('${id}')"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${u.nickname||'?'}</div> <div class="fc-sub">🏆 ${u.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${id}</div> </div> <div class="fc-actions"> <button class="fc-btn green" onclick="event.stopPropagation(); sendFriendReq('${id}','${(u.nickname||'').replace(/'/g,'').replace(/"/g,'')}')">➕ Добавить</button> </div> </div>`;
 }).catch(()=>{res.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">⚠️ Ошибка</p>';});
 }
 
