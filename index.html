@@ -25,13 +25,26 @@
 }
 *{box-sizing:border-box;user-select:none;margin:0;padding:0;font-family:'Exo 2',sans-serif;-webkit-tap-highlight-color:transparent}
 
+/* --- АДАПТАЦИЯ ДЛЯ ПК И ТЕЛЕФОНОВ --- */
 html, body {
   width: 100%; height: 100%;
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background-color: var(--bg); background-size: cover; background-position: center;
-  color: var(--tx); overflow: hidden;
+  margin: 0; padding: 0;
+  background-color: #05070a; /* Темный фон вокруг игры на ПК */
+  display: flex; justify-content: center; align-items: center;
+  color: var(--tx); 
+}
+
+#app-container {
+  width: 100%; height: 100%;
+  max-width: 480px; /* Максимальная ширина для ПК-версии */
+  position: relative;
+  background-color: var(--bg);
+  background-size: cover; background-position: center;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0,0,0,0.9); /* Тень по бокам */
   transition: background 0.8s ease, background-color 0.8s ease;
 }
+/* ------------------------------------- */
 
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
@@ -73,7 +86,6 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 .scr.active{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2}
 .scr.past{transform:translateX(-100%);opacity:0;pointer-events:none}
 
-/* --- MAIN MENU FIXES --- */
 #s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:12px;align-items:center;padding:12px 0 calc(15px + var(--safe-bot))!important;overflow-y:auto;overflow-x:hidden}
 .p-info-card { background: var(--p2); border: 1px solid var(--br); border-radius: 18px; padding: 14px 18px; width: 92%; max-width: 440px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 6px 15px rgba(0,0,0,0.4); cursor: pointer; transition: transform 0.1s;}
 .p-info-card:active { transform: scale(0.98); }
@@ -140,13 +152,15 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .etro.tie {color:#ccc;}
 
 /* --- Deck & In-Game Hand --- */
-.bui{flex:0 0 auto;width:100%;min-height:140px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 10px max(5px, var(--safe-bot));position:relative;z-index:10;box-sizing:border-box}
+.bui{flex:0 0 auto;width:100%;min-height:140px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 10px calc(5px + var(--safe-bot));position:relative;z-index:10;box-sizing:border-box}
 .hand{display:flex;flex-direction:row;gap:8px;justify-content:center;align-items:center;width:100%;overflow:visible;}
-.gc{width:23vw;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,transform .15s;}
+.gc{width:23%;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,transform .15s;}
 .gc.can{border-color:rgba(61,155,233,.8);background:linear-gradient(155deg,#2e3550,#1e2540);box-shadow:0 0 10px rgba(61,155,233,0.3)}
 .gc.cant{opacity:.45;border-color:rgba(232,65,90,.28)}
 .gc.flash{animation:flashRed .3s ease 3}
+#dghost { position: fixed; z-index: 99999; pointer-events: none; transform: translate(-50%, -100%); display:none; flex-direction:column; align-items:center; opacity: 0.8; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));}
 .gc-icon{font-size:10vw;margin-bottom:4px;pointer-events:none;position:relative;z-index:2;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.6))}
+@media (min-width: 450px) { .gc-icon { font-size: 40px; } }
 .gc-name{color:rgba(255,255,255,.9);font-size:10px;font-weight:800;text-align:center;line-height:1.15;width:94%;pointer-events:none;position:relative;z-index:2}
 .ecost{position:absolute;top:-8px;left:-8px;background:var(--pu);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;border:2px solid #fff;z-index:10;color:#fff;font-family:'Orbitron',sans-serif;pointer-events:none;box-shadow:0 2px 5px rgba(0,0,0,0.5)}
 .elwrap{width:85%;max-width:400px;display:flex;align-items:center;gap:5px;margin-bottom:8px;flex-shrink:0}
@@ -191,7 +205,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .finput, .ainput {width:100%; padding:14px; border-radius:12px; border:1px solid var(--br); background:rgba(0,0,0,0.3); color:#fff; font-size:15px; margin-bottom:12px; outline:none;}
 .finput:focus, .ainput:focus {border-color:var(--pr);}
 
-/* Chests & Gacha Animation (Оптимизировано для iOS) */
+/* Chests & Gacha Animation */
 .gacha-item { animation: gachaReveal 0.4s ease-out forwards; will-change: transform, opacity; }
 .draft-card { width:120px; height:160px; background:linear-gradient(155deg,#2a2d45,#1e2030); border-radius:15px; border:2px solid var(--br); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; box-shadow:0 10px 20px rgba(0,0,0,0.5); }
 .draft-card:hover { transform:scale(1.05); box-shadow:0 15px 30px rgba(0,0,0,0.7); }
@@ -253,7 +267,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #qpanel.open { transform: translateY(0); }
 
 /* Карточка мира (Центрированная) */
-#world-tooltip { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); opacity: 0; pointer-events: none; background: var(--bg); border: 2px solid var(--pr); border-radius: 20px; padding: 20px; z-index: 9999; box-shadow: 0 10px 40px rgba(0,0,0,0.8); text-align: center; transition: 0.3s; width: 85%; max-width: 320px; }
+#world-tooltip { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); opacity: 0; pointer-events: none; background: var(--bg); border: 2px solid var(--pr); border-radius: 20px; padding: 20px; z-index: 9999; box-shadow: 0 10px 40px rgba(0,0,0,0.8); text-align: center; transition: 0.3s; width: 85%; max-width: 320px; }
 #world-tooltip.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
 
 </style>
@@ -261,439 +275,442 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 </head>
 <body>
-<div id="app-cover"></div>
-<div id="toast-c"></div>
-<div id="dghost"><div id="dg-icon" style="font-size:36px"></div><div id="dg-name" style="font-size:10px;font-weight:bold;margin-top:4px"></div></div>
-<div id="intro"><h1>TERROV<br>STUDIO</h1><p>Game Development</p></div>
-<div id="loading"><h1>CLASH<br><span>ARENA</span></h1><div class="lbar"><div id="lprog"></div></div><div id="ltxt">ИНИЦИАЛИЗАЦИЯ...</div></div>
+<div id="app-container">
+  <div id="app-cover"></div>
+  <div id="toast-c"></div>
+  <div id="dghost"><div id="dg-icon" style="font-size:36px"></div><div id="dg-name" style="font-size:10px;font-weight:bold;margin-top:4px"></div></div>
+  <div id="intro"><h1>TERROV<br>STUDIO</h1><p>Game Development</p></div>
+  <div id="loading"><h1>CLASH<br><span>ARENA</span></h1><div class="lbar"><div id="lprog"></div></div><div id="ltxt">ИНИЦИАЛИЗАЦИЯ...</div></div>
 
-<div id="m-profile" class="ov" style="z-index:5500">
-  <div class="mbox" style="padding:24px;align-items:center;overflow-y:auto">
-    <div style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:var(--pr);margin-bottom:8px">ПРОФИЛЬ</div>
-    <h2 id="prof-name" style="font-size:20px;font-weight:800;margin-bottom:0">Игрок</h2>
-    <div id="prof-title" class="p-title" style="margin-bottom:4px">Искатель</div>
-    <div id="prof-tr" style="color:var(--ac);font-weight:900;font-size:16px;margin-bottom:16px;font-family:'Orbitron',sans-serif">🏆 0</div>
-    <div class="sec" style="width:100%;margin:0 0 12px 0;padding:15px">
-      <div class="stit">Любимая карта</div>
-      <div id="prof-fav" style="display:flex;justify-content:center;margin-bottom:10px"></div>
-      <button class="pbtn" style="margin-top:4px" onclick="openFavPicker()">🎯 ВЫБРАТЬ КАРТУ</button>
-    </div>
-    <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px"><span>Всего боёв:</span><b id="prof-matches">0</b></div>
-    <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:18px;font-size:14px"><span>Побед:</span><b id="prof-wins" style="color:var(--ok)">0</b></div>
-    <button class="pbtn" onclick="ss('m-profile','display','none')">ЗАКРЫТЬ</button>
-  </div>
-</div>
-
-<div id="m-other-profile" class="ov" style="z-index:5600">
-  <div class="mbox" style="padding:24px;align-items:center;overflow-y:auto">
-    <div style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:var(--pr);margin-bottom:8px">ИНФО ИГРОКА</div>
-    <h2 id="op-name" style="font-size:20px;font-weight:800;margin-bottom:0">Игрок</h2>
-    <div id="op-title" class="p-title" style="margin-bottom:4px">Искатель</div>
-    <div id="op-tr" style="color:var(--ac);font-weight:900;font-size:16px;margin-bottom:16px;font-family:'Orbitron',sans-serif">🏆 0</div>
-    <div class="sec" style="width:100%;margin:0 0 12px 0;padding:15px">
-      <div class="stit">Любимая карта</div>
-      <div id="op-fav" style="display:flex;justify-content:center;"></div>
-    </div>
-    <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px"><span>Всего боёв:</span><b id="op-matches">0</b></div>
-    <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:18px;font-size:14px"><span>Побед:</span><b id="op-wins" style="color:var(--ok)">0</b></div>
-    <button class="pbtn" onclick="ss('m-other-profile','display','none')">ЗАКРЫТЬ</button>
-  </div>
-</div>
-
-<div id="m-favpick" class="ov" style="z-index:5600">
-  <div class="mbox">
-    <div style="padding:18px 18px 10px;display:flex;justify-content:space-between;align-items:center">
-      <span style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#ff6b9d">💖 ЛЮБИМАЯ КАРТА</span>
-      <span onclick="ss('m-favpick','display','none')" style="font-size:22px;cursor:pointer;color:rgba(255,255,255,.4)">✕</span>
-    </div>
-    <p style="font-size:12px;color:rgba(255,255,255,.4);text-align:center;padding:0 18px 10px">Выбери карту -- она будет показана в баннере боя</p>
-    <div class="grid" id="fav-pick-grid" style="overflow-y:auto;max-height:55vh"></div>
-    <button class="pbtn dn" style="margin:10px 18px 18px;width:calc(100% - 36px)" onclick="ss('m-favpick','display','none')">ОТМЕНА</button>
-  </div>
-</div>
-
-<div id="roulette-ov" class="ov">
-  <div class="mbox" style="padding:24px;align-items:center">
-    <div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--ac);margin-bottom:4px">🎰 РУЛЕТКА</div>
-    <div style="font-size:12px;color:rgba(255,255,255,.35);margin-bottom:18px">Ежедневная бесплатная прокрутка</div>
-    <div style="position:relative;margin-bottom:22px;width:100%;">
-      <div class="rl-machine"><div class="rl-track" id="rl-track"></div><div class="rl-highlight"></div></div>
-      <div class="rl-arrow">◀</div>
-    </div>
-    <div id="rl-result" style="min-height:44px;text-align:center;font-size:15px;font-weight:800;color:var(--ac);font-family:'Orbitron',sans-serif"></div>
-    <button class="pbtn ok" id="rl-btn" onclick="spinRoulette()" style="max-width:220px;margin:8px auto 0">🎰 КРУТИТЬ!</button>
-    <div id="rl-timer" style="font-size:12px;color:rgba(255,255,255,.3);margin-top:10px;text-align:center"></div>
-    <button class="pbtn" style="background:#2a2d45;max-width:220px;margin:8px auto 0" onclick="ss('roulette-ov','display','none')">ЗАКРЫТЬ</button>
-  </div>
-</div>
-
-<div id="m-bet" class="ov" style="z-index:6500">
-  <div class="mbox" style="padding:24px; text-align:center">
-    <h2 style="color:var(--ac); font-family:'Orbitron',sans-serif; margin-bottom:5px">🔴 АРЕНА СТАВОК</h2>
-    <p style="font-size:12px; color:rgba(255,255,255,.5); margin-bottom:15px">Ставка: 100 💰. В случае победы: 200 💰.</p>
-    <div id="bet-players" style="display:flex; flex-direction:column; gap:10px;"></div>
-    <button class="pbtn dn" style="margin-top:15px" onclick="ss('m-bet','display','none')">ОТМЕНА</button>
-  </div>
-</div>
-
-<div id="draft-ov" class="ov" style="z-index:6600">
-  <div class="mbox" style="padding:24px; text-align:center; max-width:480px">
-    <h2 style="color:var(--pr); font-family:'Orbitron',sans-serif; margin-bottom:5px">🃏 ДРАФТ-ВЫБОР</h2>
-    <p style="font-size:12px; color:rgba(255,255,255,.5); margin-bottom:20px" id="draft-title">Выбери 1 карту себе, вторая достанется противнику!</p>
-    <div style="display:flex; justify-content:center; gap:20px; margin-bottom:25px" id="draft-choices"></div>
-    <div style="display:flex; justify-content:space-between; margin-bottom:10px">
-       <div style="flex:1; border-right: 1px solid var(--br); padding-right:5px">
-         <div style="font-size:11px; color:rgba(255,255,255,.7); margin-bottom:8px; font-weight:bold">ТВОЯ КОЛОДА</div>
-         <div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center" id="draft-my-deck"></div>
-       </div>
-       <div style="flex:1; padding-left:5px">
-         <div style="font-size:11px; color:rgba(255,255,255,.7); margin-bottom:8px; font-weight:bold">ВРАГ</div>
-         <div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center" id="draft-en-deck"></div>
-       </div>
-    </div>
-  </div>
-</div>
-
-<div id="m-nick" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
-  <div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--pr);margin-bottom:6px">ВЫБЕРИ НИК</div>
-  <input type="text" id="tnick" class="ainput" placeholder="Никнейм" maxlength="16">
-  <button class="pbtn" onclick="saveTutNick()">ПОЕХАЛИ ▶</button>
-</div></div></div>
-<div id="m-reg" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
-  <div style="font-family:'Orbitron',sans-serif;font-size:19px;font-weight:900;color:var(--ac);margin-bottom:8px;text-align:center">СОХРАНИТЬ ПРОГРЕСС?</div>
-  <button class="pbtn ok" onclick="openReg()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
-  <button class="pbtn" style="background:#333" onclick="skipReg()">Позже (Гость)</button>
-</div></div></div>
-<div id="m-regemail" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
-  <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px">РЕГИСТРАЦИЯ</div>
-  <input type="email" id="remail" class="ainput" placeholder="Email">
-  <input type="password" id="rpass" class="ainput" placeholder="Пароль (мин. 5)">
-  <button class="pbtn ok" onclick="submitReg()">ДАЛЕЕ</button>
-  <button class="pbtn" style="background:#333" onclick="ss('m-regemail','display','none')">Закрыть</button>
-</div></div></div>
-<div id="m-code" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
-  <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:8px">КОД ИЗ ПИСЬМА</div>
-  <input type="text" id="rcode" class="ainput" placeholder="Код">
-  <button class="pbtn ok" onclick="submitCode()">ПОДТВЕРДИТЬ</button>
-</div></div></div>
-<div id="m-login" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
-  <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px">ВХОД</div>
-  <input type="email" id="lemail" class="ainput" placeholder="Email">
-  <input type="password" id="lpass" class="ainput" placeholder="Пароль">
-  <button class="pbtn ok" onclick="doLogin()">ВОЙТИ</button>
-  <button class="pbtn" style="background:#333" onclick="ss('m-login','display','none')">Отмена</button>
-</div></div></div>
-
-<div class="topbar" id="topbar" style="display:none">
-  <div class="tstat">🏆 <span id="ui-tr">0</span></div>
-  <div class="tstat" style="color:var(--ac)">💰 <span id="ui-go">0</span></div>
-  <div class="tstat" style="color:#7be0a8">💎 <span id="ui-ge">0</span></div>
-</div>
-
-<div id="s-shop" class="scr" data-i="0">
-  <h2 style="text-align:center;font-family:'Orbitron',sans-serif;font-size:18px;margin:5px 0 3px">МАГАЗИН</h2>
-  <div class="sec" style="cursor:pointer; background: linear-gradient(145deg, #1e2030, #2c1a3b); border-color: #9b5de5;" onclick="openRoulette()">
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div><div style="font-size:16px;font-weight:800; color:#fff">🎰 Ежедневная рулетка</div><div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px" id="roulette-status">Загрузка...</div></div>
-      <div style="font-size:36px; filter: drop-shadow(0 0 10px rgba(155,93,229,0.8))">🎁</div>
-    </div>
-  </div>
-  <div class="sec"><div class="stit">Смайлики (100 💎)</div><div class="grid" id="emote-grid"></div></div>
-  <div class="sec"><div class="stit">Ежедневный подарок</div>
-    <div style="text-align:center;padding:12px">
-      <div style="font-size:52px;margin-bottom:8px">🎁</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px" id="gift-timer"></div>
-      <button class="pbtn" onclick="dailyGift()" style="max-width:210px;margin:auto">ЗАБРАТЬ</button>
-    </div>
-  </div>
-  <div class="sec"><div class="stit">Магазин Ящиков</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:4px">
-      <div style="background:var(--p2);padding:15px;border-radius:13px;border:1px solid rgba(245,197,24,.22);text-align:center"><div style="font-size:42px;margin-bottom:8px">📦</div><div style="font-size:13px;color:var(--ac);margin-bottom:10px;font-weight:700">Золотой</div><button class="pbtn" onclick="buyChest('g')" style="background:linear-gradient(135deg,#c4920e,#a07008)">1000 💰</button></div>
-      <div style="background:var(--p2);padding:15px;border-radius:13px;border:1px solid rgba(155,93,229,.3);text-align:center"><div style="font-size:42px;margin-bottom:8px">✨</div><div style="font-size:13px;color:var(--pu);margin-bottom:10px;font-weight:700">Магический</div><button class="pbtn" onclick="buyChest('m')" style="background:linear-gradient(135deg,#6b20d8,#a845e8)">100 💎</button></div>
-    </div>
-  </div>
-  <div class="sec"><div class="stit">Очки силы (ежедневно)</div><div class="grid" id="pow-grid"></div></div>
-  <div class="sec"><div class="stit">Активация промокода</div>
-    <div style="display:flex;gap:8px;padding:4px">
-      <input type="text" id="promo-inp" class="finput" style="margin:0" placeholder="Введи код..." maxlength="12">
-      <button class="pbtn ok" style="margin:0;width:auto;padding:0 20px" onclick="applyPromo()">OK</button>
-    </div>
-  </div>
-</div>
-
-<div id="s-deck" class="scr" data-i="1">
-  <div class="dtabs">
-    <div id="dt0" class="dtab active" onclick="switchDeck(0)">Колода</div>
-    <div id="dt1" class="dtab" onclick="switchDeck(1)">Башня</div>
-    <div id="dt2" class="dtab" onclick="switchDeck(2)">Закл.</div>
-  </div>
-  <div style="width:100%;overflow-x:hidden">
-    <div id="dslider" style="display:flex;width:300%;transition:transform .3s ease">
-      <div style="width:33.33%;flex-shrink:0">
-        <div class="sec"><div class="stit">Боевая колода</div><div class="grid" id="ui-deck"></div></div>
-        <div class="sec"><div class="stit">Коллекция</div><div class="grid" id="ui-coll"></div></div>
-        <div class="sec"><div class="stit">Заблокировано</div><div class="grid" id="ui-lock"></div></div>
+  <div id="m-profile" class="ov" style="z-index:5500">
+    <div class="mbox" style="padding:24px;align-items:center;overflow-y:auto">
+      <div style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:var(--pr);margin-bottom:8px">ПРОФИЛЬ</div>
+      <h2 id="prof-name" style="font-size:20px;font-weight:800;margin-bottom:0">Игрок</h2>
+      <div id="prof-title" class="p-title" style="margin-bottom:4px">Искатель</div>
+      <div id="prof-tr" style="color:var(--ac);font-weight:900;font-size:16px;margin-bottom:16px;font-family:'Orbitron',sans-serif">🏆 0</div>
+      <div class="sec" style="width:100%;margin:0 0 12px 0;padding:15px">
+        <div class="stit">Любимая карта</div>
+        <div id="prof-fav" style="display:flex;justify-content:center;margin-bottom:10px"></div>
+        <button class="pbtn" style="margin-top:4px" onclick="openFavPicker()">🎯 ВЫБРАТЬ КАРТУ</button>
       </div>
-      <div style="width:33.33%;flex-shrink:0"><div style="padding:12px" id="ui-tower"></div></div>
-      <div style="width:33.33%;flex-shrink:0"><div class="sec"><div class="stit">Заклинания</div><div class="grid" id="ui-spells"></div></div></div>
+      <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px"><span>Всего боёв:</span><b id="prof-matches">0</b></div>
+      <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:18px;font-size:14px"><span>Побед:</span><b id="prof-wins" style="color:var(--ok)">0</b></div>
+      <button class="pbtn" onclick="ss('m-profile','display','none')">ЗАКРЫТЬ</button>
     </div>
   </div>
-</div>
 
-<div id="s-main" class="scr active" data-i="2">
-  <div id="arenabox" onclick="nav('s-world',7)"><div class="arenaoverlay"></div><div class="arenacont"><h1 class="arenatit" id="ui-aname">АРЕНА 1</h1><p class="arenadesc" id="ui-adesc">Лужайка</p></div></div>
-  
-  <div class="p-info-card" onclick="openProfile()">
-    <div class="p-info-top">
-      <div class="p-info-name-block">
-        <span id="ui-pname" style="font-size:18px;font-weight:900;">Игрок</span>
-        <span id="ui-title-main" class="p-title">Искатель</span>
+  <div id="m-other-profile" class="ov" style="z-index:5600">
+    <div class="mbox" style="padding:24px;align-items:center;overflow-y:auto">
+      <div style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:var(--pr);margin-bottom:8px">ИНФО ИГРОКА</div>
+      <h2 id="op-name" style="font-size:20px;font-weight:800;margin-bottom:0">Игрок</h2>
+      <div id="op-title" class="p-title" style="margin-bottom:4px">Искатель</div>
+      <div id="op-tr" style="color:var(--ac);font-weight:900;font-size:16px;margin-bottom:16px;font-family:'Orbitron',sans-serif">🏆 0</div>
+      <div class="sec" style="width:100%;margin:0 0 12px 0;padding:15px">
+        <div class="stit">Любимая карта</div>
+        <div id="op-fav" style="display:flex;justify-content:center;"></div>
       </div>
-      <div id="ui-streak" style="display:none; font-size:12px; font-weight:800" class="streak-fire">🔥 Серия: <span>0</span></div>
+      <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px"><span>Всего боёв:</span><b id="op-matches">0</b></div>
+      <div style="width:100%;display:flex;justify-content:space-between;margin-bottom:18px;font-size:14px"><span>Побед:</span><b id="op-wins" style="color:var(--ok)">0</b></div>
+      <button class="pbtn" onclick="ss('m-other-profile','display','none')">ЗАКРЫТЬ</button>
     </div>
-    <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-top:4px">
-      <span>Ур. <span id="ui-lvl" style="color:var(--ac);font-weight:900">1</span></span>
-      <span id="ui-xp">0/100 XP</span>
-    </div>
-    <div class="xpwrap" style="margin-bottom:0; height:8px;"><div class="xpfill" id="ui-xpb" style="width:0%"></div></div>
   </div>
 
-  <div style="display:flex;gap:8px;width:92%;max-width:440px">
-    <div class="mfbtn" onclick="openFriends()">👥 Друзья <span id="ndot" style="display:none;background:var(--dn);width:8px;height:8px;border-radius:50%;margin-left:4px"></span></div>
-    <div class="mfbtn" onclick="nav('s-stats',5)">📊 Статы</div>
-    <div class="mfbtn" onclick="nav('s-lb',6)">🏆 Топ</div>
+  <div id="m-favpick" class="ov" style="z-index:5600">
+    <div class="mbox">
+      <div style="padding:18px 18px 10px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#ff6b9d">💖 ЛЮБИМАЯ КАРТА</span>
+        <span onclick="ss('m-favpick','display','none')" style="font-size:22px;cursor:pointer;color:rgba(255,255,255,.4)">✕</span>
+      </div>
+      <p style="font-size:12px;color:rgba(255,255,255,.4);text-align:center;padding:0 18px 10px">Выбери карту -- она будет показана в баннере боя</p>
+      <div class="grid" id="fav-pick-grid" style="overflow-y:auto;max-height:55vh"></div>
+      <button class="pbtn dn" style="margin:10px 18px 18px;width:calc(100% - 36px)" onclick="ss('m-favpick','display','none')">ОТМЕНА</button>
+    </div>
   </div>
-  <div style="background:var(--panel);border:1px solid var(--br);border-radius:15px;padding:13px 18px;width:92%;max-width:420px;display:flex;justify-content:space-between;align-items:center">
-    <div><h4 style="color:var(--ac);margin-bottom:4px;font-size:14px;font-weight:800">Ящики за победы</h4><p style="font-size:11px;color:rgba(255,255,255,.33)" id="ctimer">Обновится через...</p></div>
-    <div style="display:flex;gap:6px" id="cslots"></div>
-  </div>
-  
-  <div style="display:flex;flex-direction:column;align-items:center;width:100%">
-    <button class="bigbtn" onclick="prepMM(false, false)">⚔️ В БОЙ</button>
-    <button class="bigbtn dr" onclick="prepMM(false, true)">🃏 РЕЖИМ ДРАФТ</button>
-    <button class="bigbtn sd" onclick="prepMM(true, false)">☠️ ВНЕЗАПНАЯ СМЕРТЬ</button>
-  </div>
-</div>
 
-<div id="s-pass" class="scr" data-i="3">
-  <div id="pass-controls">
-    <button class="pbtn" style="width:auto;padding:9px 22px;border-radius:20px;margin:0;font-size:13px" onclick="toggleQ()">📋 ЗАДАНИЯ (<span id="qbadge">0/0</span>)</button>
-    <div style="background:rgba(30,32,48,0.85);border:1px solid var(--br);border-radius:11px;padding:7px 11px;font-size:14px;font-weight:800">👑 <span id="ui-cr">0</span></div>
+  <div id="roulette-ov" class="ov">
+    <div class="mbox" style="padding:24px;align-items:center">
+      <div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--ac);margin-bottom:4px">🎰 РУЛЕТКА</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.35);margin-bottom:18px">Ежедневная бесплатная прокрутка</div>
+      <div style="position:relative;margin-bottom:22px;width:100%;">
+        <div class="rl-machine"><div class="rl-track" id="rl-track"></div><div class="rl-highlight"></div></div>
+        <div class="rl-arrow">◀</div>
+      </div>
+      <div id="rl-result" style="min-height:44px;text-align:center;font-size:15px;font-weight:800;color:var(--ac);font-family:'Orbitron',sans-serif"></div>
+      <button class="pbtn ok" id="rl-btn" onclick="spinRoulette()" style="max-width:220px;margin:8px auto 0">🎰 КРУТИТЬ!</button>
+      <div id="rl-timer" style="font-size:12px;color:rgba(255,255,255,.3);margin-top:10px;text-align:center"></div>
+      <button class="pbtn" style="background:#2a2d45;max-width:220px;margin:8px auto 0" onclick="ss('roulette-ov','display','none')">ЗАКРЫТЬ</button>
+    </div>
   </div>
-  
-  <div id="pass-wrap">
-    <div id="pass-map-container" style="position:relative; width:100%; min-height: 4000px; overflow:hidden;">
-      <svg id="pass-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none;"></svg>
-      <div id="pass-layer" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:5; pointer-events:none;"></div>
-      <div id="season-title-block" style="position:absolute; bottom:0; left:0; width:100%; padding:120px 20px 60px; text-align:center; z-index:10; background: linear-gradient(to top, rgba(13,92,46,1), rgba(13,92,46,0)); pointer-events:none;">
-        <h1 style="font-family:'Orbitron',sans-serif; color:#f5c518; text-shadow: 0 4px 10px rgba(0,0,0,0.8); font-size:36px; margin:0;">СЕЗОН 1</h1>
-        <h2 style="color:#fff; font-size:22px; letter-spacing:4px; margin-top:5px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">ДЖУНГЛИ</h2>
+
+  <div id="m-bet" class="ov" style="z-index:6500">
+    <div class="mbox" style="padding:24px; text-align:center">
+      <h2 style="color:var(--ac); font-family:'Orbitron',sans-serif; margin-bottom:5px">🔴 АРЕНА СТАВОК</h2>
+      <p style="font-size:12px; color:rgba(255,255,255,.5); margin-bottom:15px">Ставка: 100 💰. В случае победы: 200 💰.</p>
+      <div id="bet-players" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <button class="pbtn dn" style="margin-top:15px" onclick="ss('m-bet','display','none')">ОТМЕНА</button>
+    </div>
+  </div>
+
+  <div id="draft-ov" class="ov" style="z-index:6600">
+    <div class="mbox" style="padding:24px; text-align:center; max-width:480px">
+      <h2 style="color:var(--pr); font-family:'Orbitron',sans-serif; margin-bottom:5px">🃏 ДРАФТ-ВЫБОР</h2>
+      <p style="font-size:12px; color:rgba(255,255,255,.5); margin-bottom:20px" id="draft-title">Выбери 1 карту себе, вторая достанется противнику!</p>
+      <div style="display:flex; justify-content:center; gap:20px; margin-bottom:25px" id="draft-choices"></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:10px">
+         <div style="flex:1; border-right: 1px solid var(--br); padding-right:5px">
+           <div style="font-size:11px; color:rgba(255,255,255,.7); margin-bottom:8px; font-weight:bold">ТВОЯ КОЛОДА</div>
+           <div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center" id="draft-my-deck"></div>
+         </div>
+         <div style="flex:1; padding-left:5px">
+           <div style="font-size:11px; color:rgba(255,255,255,.7); margin-bottom:8px; font-weight:bold">ВРАГ</div>
+           <div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center" id="draft-en-deck"></div>
+         </div>
       </div>
     </div>
   </div>
 
-  <div id="qpanel">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 18px 9px;border-bottom:1px solid var(--br)">
-      <span style="font-weight:800;font-size:16px">📋 Задания</span>
-      <div style="display:flex;gap:10px;align-items:center">
-        <button id="reroll-btn" class="pbtn small" onclick="rerollQuest()" style="background:#2a2d45;">🔄 Обновить</button>
-        <span onclick="toggleQ()" style="font-size:24px;cursor:pointer;color:rgba(255,255,255,.35)">✕</span>
+  <div id="m-nick" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
+    <div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--pr);margin-bottom:6px">ВЫБЕРИ НИК</div>
+    <input type="text" id="tnick" class="ainput" placeholder="Никнейм" maxlength="16">
+    <button class="pbtn" onclick="saveTutNick()">ПОЕХАЛИ ▶</button>
+  </div></div></div>
+  <div id="m-reg" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
+    <div style="font-family:'Orbitron',sans-serif;font-size:19px;font-weight:900;color:var(--ac);margin-bottom:8px;text-align:center">СОХРАНИТЬ ПРОГРЕСС?</div>
+    <button class="pbtn ok" onclick="openReg()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+    <button class="pbtn" style="background:#333" onclick="skipReg()">Позже (Гость)</button>
+  </div></div></div>
+  <div id="m-regemail" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
+    <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px">РЕГИСТРАЦИЯ</div>
+    <input type="email" id="remail" class="ainput" placeholder="Email">
+    <input type="password" id="rpass" class="ainput" placeholder="Пароль (мин. 5)">
+    <button class="pbtn ok" onclick="submitReg()">ДАЛЕЕ</button>
+    <button class="pbtn" style="background:#333" onclick="ss('m-regemail','display','none')">Закрыть</button>
+  </div></div></div>
+  <div id="m-code" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
+    <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:8px">КОД ИЗ ПИСЬМА</div>
+    <input type="text" id="rcode" class="ainput" placeholder="Код">
+    <button class="pbtn ok" onclick="submitCode()">ПОДТВЕРДИТЬ</button>
+  </div></div></div>
+  <div id="m-login" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
+    <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px">ВХОД</div>
+    <input type="email" id="lemail" class="ainput" placeholder="Email">
+    <input type="password" id="lpass" class="ainput" placeholder="Пароль">
+    <button class="pbtn ok" onclick="doLogin()">ВОЙТИ</button>
+    <button class="pbtn" style="background:#333" onclick="ss('m-login','display','none')">Отмена</button>
+  </div></div></div>
+
+  <div class="topbar" id="topbar" style="display:none">
+    <div class="tstat">🏆 <span id="ui-tr">0</span></div>
+    <div class="tstat" style="color:var(--ac)">💰 <span id="ui-go">0</span></div>
+    <div class="tstat" style="color:#7be0a8">💎 <span id="ui-ge">0</span></div>
+  </div>
+
+  <div id="s-shop" class="scr" data-i="0">
+    <h2 style="text-align:center;font-family:'Orbitron',sans-serif;font-size:18px;margin:5px 0 3px">МАГАЗИН</h2>
+    <div class="sec" style="cursor:pointer; background: linear-gradient(145deg, #1e2030, #2c1a3b); border-color: #9b5de5;" onclick="openRoulette()">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div><div style="font-size:16px;font-weight:800; color:#fff">🎰 Ежедневная рулетка</div><div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px" id="roulette-status">Загрузка...</div></div>
+        <div style="font-size:36px; filter: drop-shadow(0 0 10px rgba(155,93,229,0.8))">🎁</div>
       </div>
     </div>
-    <div id="ui-quests" style="padding:13px; overflow-y:auto; flex:1;"></div>
-    <div style="padding:0 13px 13px;color:rgba(255,255,255,.3);font-size:11px;text-align:center">Побед сегодня: <span id="ui-wins">0</span>/5</div>
-  </div>
-</div>
-
-<div id="s-set" class="scr" data-i="4">
-  <h2 style="text-align:center;font-family:'Orbitron',sans-serif;font-size:18px;margin:5px 0 3px">НАСТРОЙКИ</h2>
-  <div style="padding:0 15px 20px">
-    <div class="sec" id="guest-btns" style="display:none">
-      <div class="stit">Аккаунт (Гость)</div>
-      <button class="pbtn ok" onclick="openReg()">Зарегистрироваться</button>
-      <button class="pbtn" style="background:var(--pr)" onclick="ss('m-login','display','flex')">Войти</button>
-    </div>
-    <div class="sec">
-      <div class="stit">Звук</div>
-      <button class="pbtn" id="sfx-btn" onclick="toggleSfx()" style="background:var(--pr)">🔊 Озвучка: ВКЛ</button>
-    </div>
-    <div class="sec">
-      <div class="stit">Слоты Медалей</div>
-      <div style="display:flex;justify-content:center;gap:20px;margin-bottom:15px">
-        <div id="msl0" class="mslot" onclick="unequipMedal(0)"></div>
-        <div id="msl1" class="mslot" onclick="unequipMedal(1)"></div>
-      </div>
-      <div class="stit">Медали</div>
-      <div id="ui-medals" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
-    </div>
-    <div class="sec">
-      <div class="stit">Слоты Смайликов</div>
-      <div style="display:flex;justify-content:center;gap:11px;margin-bottom:15px">
-        <div id="esl0" class="eslot" onclick="unequipEmote(0)"></div>
-        <div id="esl1" class="eslot" onclick="unequipEmote(1)"></div>
-        <div id="esl2" class="eslot" onclick="unequipEmote(2)"></div>
-      </div>
-      <div class="stit">Смайлики</div>
-      <div id="ui-emotes" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
-    </div>
-    <div class="sec">
-      <div class="stit">Флаг</div>
-      <div id="banner-prev" style="width:100%;height:50px;border-radius:11px;margin-bottom:11px;border:1px solid rgba(255,255,255,.1);transition:.3s"></div>
-      <div class="grid" id="ui-banners" style="padding:4px;grid-template-columns:repeat(auto-fit,minmax(80px,1fr))"></div>
-    </div>
-    <div class="sec">
-      <div class="stit">Сменить никнейм (5000 💰)</div>
-      <input type="text" id="newnick" class="ainput" placeholder="Новый никнейм" maxlength="16">
-      <button class="pbtn" onclick="changeNick()">Сменить</button>
-    </div>
-    <p style="color:rgba(255,255,255,.2);font-size:11px;text-align:center;margin-top:11px" id="ui-uid"></p>
-    <button class="pbtn dn" style="margin-top:11px" onclick="logout()">ВЫЙТИ</button>
-  </div>
-</div>
-
-<div id="s-stats" class="scr" data-i="5">
-  <div style="padding:15px">
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:18px;text-align:center;margin-bottom:15px">МОЯ СТАТИСТИКА</h2>
-    <div class="scard" id="ui-stats"></div>
-    <div class="sec" style="margin:11px 0 0"><div class="stit">Все медали</div><div id="ui-allmedals" style="display:flex;flex-wrap:wrap;gap:11px;padding:4px;justify-content:center"></div></div>
-  </div>
-</div>
-
-<div id="s-lb" class="scr" data-i="6">
-  <div style="padding:15px">
-    <div style="background:var(--p2); border:1px solid rgba(245,197,24,.4); border-radius:15px; padding:15px; margin-bottom:20px; text-align:center; box-shadow:0 4px 15px rgba(245,197,24,.15);">
-      <h3 style="color:var(--ac); margin-bottom:5px; font-family:'Orbitron',sans-serif;">🔴 ТУРНИР (СТАВКИ)</h3>
-      <p style="font-size:12px; color:rgba(255,255,255,.5); margin-bottom:12px;">Смотри бои топ-игроков и угадывай победителя!</p>
-      <button class="pbtn ok" style="width:auto; padding:10px 25px" onclick="openBettingMenu()">СТАВКА (100 💰)</button>
-    </div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:18px;text-align:center;margin-bottom:9px;color:var(--ac)">ТОП ИГРОКОВ</h2>
-    <div id="ui-lb" style="margin-top:11px"></div>
-  </div>
-</div>
-
-<div id="s-world" class="scr" data-i="7">
-  <div id="world-container">
-    <svg id="world-svg" viewBox="0 0 360 700" preserveAspectRatio="xMidYMid meet"></svg>
-    <div id="world-tooltip">
-      <h3 id="wt-name" style="font-family:'Orbitron',sans-serif; color:var(--pr); margin-bottom:8px;">Арена</h3>
-      <p id="wt-desc" style="font-size:13px; color:rgba(255,255,255,0.8); margin-bottom:15px;">Информация</p>
-      <button class="pbtn ok" style="padding:10px; margin:0;" onclick="document.getElementById('world-tooltip').classList.remove('active')">ПОНЯТНО</button>
-    </div>
-  </div>
-</div>
-
-<div id="friends-ov" class="ov" style="z-index:5000">
-  <div class="fbox">
-    <div style="padding:16px 18px 0;border-bottom:1px solid var(--br)">
-      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:var(--pr);margin-bottom:12px">👥 ДРУЗЬЯ</div>
-      <div style="display:flex;gap:0">
-        <div class="ftab active" id="ft-list" onclick="fTab('list')">Друзья</div>
-        <div class="ftab" id="ft-req" onclick="fTab('req')">Запросы <span id="req-count" style="display:none;background:var(--dn);color:#fff;border-radius:8px;padding:1px 6px;font-size:10px;margin-left:4px">0</span></div>
-        <div class="ftab" id="ft-add" onclick="fTab('add')">Добавить</div>
+    <div class="sec"><div class="stit">Смайлики (100 💎)</div><div class="grid" id="emote-grid"></div></div>
+    <div class="sec"><div class="stit">Ежедневный подарок</div>
+      <div style="text-align:center;padding:12px">
+        <div style="font-size:52px;margin-bottom:8px">🎁</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px" id="gift-timer"></div>
+        <button class="pbtn" onclick="dailyGift()" style="max-width:210px;margin:auto">ЗАБРАТЬ</button>
       </div>
     </div>
-    <div style="padding:15px;overflow-y:auto;flex:1">
-      <div id="fc-list"></div>
-      <div id="fc-req" style="display:none"></div>
-      <div id="fc-add" style="display:none">
-        <div style="background:rgba(61,155,233,.08);border:1px solid rgba(61,155,233,.2);border-radius:12px;padding:12px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,.5);text-align:center">
-          Твой ID: <span id="my-id-show" style="font-weight:800;color:var(--pr);font-family:'Orbitron',sans-serif;font-size:13px"></span>
+    <div class="sec"><div class="stit">Магазин Ящиков</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:4px">
+        <div style="background:var(--p2);padding:15px;border-radius:13px;border:1px solid rgba(245,197,24,.22);text-align:center"><div style="font-size:42px;margin-bottom:8px">📦</div><div style="font-size:13px;color:var(--ac);margin-bottom:10px;font-weight:700">Золотой</div><button class="pbtn" onclick="buyChest('g')" style="background:linear-gradient(135deg,#c4920e,#a07008)">1000 💰</button></div>
+        <div style="background:var(--p2);padding:15px;border-radius:13px;border:1px solid rgba(155,93,229,.3);text-align:center"><div style="font-size:42px;margin-bottom:8px">✨</div><div style="font-size:13px;color:var(--pu);margin-bottom:10px;font-weight:700">Магический</div><button class="pbtn" onclick="buyChest('m')" style="background:linear-gradient(135deg,#6b20d8,#a845e8)">100 💎</button></div>
+      </div>
+    </div>
+    <div class="sec"><div class="stit">Очки силы (ежедневно)</div><div class="grid" id="pow-grid"></div></div>
+    <div class="sec"><div class="stit">Активация промокода</div>
+      <div style="display:flex;gap:8px;padding:4px">
+        <input type="text" id="promo-inp" class="finput" style="margin:0" placeholder="Введи код..." maxlength="12">
+        <button class="pbtn ok" style="margin:0;width:auto;padding:0 20px" onclick="applyPromo()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="s-deck" class="scr" data-i="1">
+    <div class="dtabs">
+      <div id="dt0" class="dtab active" onclick="switchDeck(0)">Колода</div>
+      <div id="dt1" class="dtab" onclick="switchDeck(1)">Башня</div>
+      <div id="dt2" class="dtab" onclick="switchDeck(2)">Закл.</div>
+    </div>
+    <div style="width:100%;overflow-x:hidden">
+      <div id="dslider" style="display:flex;width:300%;transition:transform .3s ease">
+        <div style="width:33.33%;flex-shrink:0">
+          <div class="sec"><div class="stit">Боевая колода</div><div class="grid" id="ui-deck"></div></div>
+          <div class="sec"><div class="stit">Коллекция</div><div class="grid" id="ui-coll"></div></div>
+          <div class="sec"><div class="stit">Заблокировано</div><div class="grid" id="ui-lock"></div></div>
         </div>
-        <input type="text" id="fid-inp" class="finput" placeholder="Введи ID друга" maxlength="9" style="text-transform:uppercase">
-        <button class="fbtn" onclick="searchFriend()">🔍 НАЙТИ ИГРОКА</button>
-        <div id="fres" style="margin-top:9px"></div>
-      </div>
-    </div>
-    <button class="fbtn" style="border-radius:0;margin:0" onclick="ss('friends-ov','display','none')">ЗАКРЫТЬ</button>
-  </div>
-</div>
-
-<div id="chest-ov" class="ov" style="z-index:7000; background:rgba(0,0,0,0.95)">
-  <div id="chest-box" class="chestbox" onclick="chestTap()" style="filter: drop-shadow(0 0 30px rgba(245,197,24,0.4))">📦</div>
-  <div class="chestrev" id="chest-rev" onclick="nextChestItem()">
-    <div id="ci-icon" class="gacha-item" style="font-size:120px; filter:drop-shadow(0 0 20px rgba(245,197,24,0.5))"></div>
-    <div id="ci-text" class="gacha-item" style="color:var(--ac);font-size:22px;font-weight:900;margin-top:15px;text-align:center;font-family:'Orbitron',sans-serif;text-shadow:0 2px 5px rgba(0,0,0,0.8)"></div>
-    <div id="ci-cnt" class="gacha-item" style="font-size:32px;font-weight:900;color:#fff;margin-top:5px;font-family:'Orbitron',sans-serif;text-shadow:0 2px 5px rgba(0,0,0,0.8)"></div>
-  </div>
-  <div style="color:rgba(255,255,255,.6);font-size:14px;margin-top:25px;font-weight:bold" id="chest-tip">Нажмите чтобы открыть</div>
-</div>
-
-<div id="arena-unlock" class="ov" style="z-index:6000">
-  <div class="mbox"><div style="padding:22px;text-align:center">
-    <div style="font-size:52px;margin-bottom:8px">🏆</div>
-    <h1 style="font-family:'Orbitron',sans-serif;color:var(--pr);font-size:20px">НОВАЯ АРЕНА!</h1>
-    <h2 id="unlock-name" style="color:#fff;margin:11px 0;font-size:18px"></h2>
-    <div class="grid" id="unlock-cards" style="padding:0"></div>
-    <button class="bigbtn" style="width:100%;height:52px;font-size:16px;margin-top:15px" onclick="ss('arena-unlock','display','none')">ОК!</button>
-  </div></div>
-</div>
-
-<div id="mmov" class="ov">
-  <div class="mbox" style="padding:30px;align-items:center;text-align:center">
-    <div style="font-size:60px;margin-bottom:15px;animation:mmPulse 1s infinite alternate" id="mm-ic">⚔️</div>
-    <h2 style="font-family:'Orbitron',sans-serif;color:var(--pr);margin-bottom:8px" id="mm-tit">ПОИСК</h2>
-    <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:18px" id="mm-sub">Ищем соперника...</p>
-    <div class="mmdot"><span></span><span></span><span></span></div>
-    <button class="pbtn dn" style="max-width:190px;margin:18px auto 0" onclick="cancelMM()">Отмена</button>
-  </div>
-</div>
-
-<div id="bscr">
-  <div id="sd-aura"></div>
-  <div id="weather-layer" style="position:absolute;inset:0;pointer-events:none;z-index:4;"></div>
-  <div id="dmg-container" style="position:absolute;inset:0;pointer-events:none;z-index:25;"></div>
-  
-  <div class="bban bban-e" id="bban-e">
-    <div style="display:flex;flex-direction:column;align-items:flex-end">
-      <span id="bban-e-name" style="font-size:13px">ВРАГ</span>
-      <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
-        <span id="bban-e-fav" style="font-size:16px"></span>
-        <span id="bban-e-tr" style="font-size:11px;color:var(--ac);text-shadow:0 1px 3px rgba(0,0,0,1)">🏆 0</span>
+        <div style="width:33.33%;flex-shrink:0"><div style="padding:12px" id="ui-tower"></div></div>
+        <div style="width:33.33%;flex-shrink:0"><div class="sec"><div class="stit">Заклинания</div><div class="grid" id="ui-spells"></div></div></div>
       </div>
     </div>
   </div>
-  <div class="bban bban-p" id="bban-p">
-    <div style="display:flex;flex-direction:column;align-items:flex-start">
-      <span id="bban-p-name" style="display:flex;align-items:center;gap:4px;font-size:13px">ИГРОК</span>
-      <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
-        <span id="bban-p-fav" style="font-size:16px"></span>
-        <span id="bban-p-tr" style="font-size:11px;color:var(--ac);text-shadow:0 1px 3px rgba(0,0,0,1)">🏆 0</span>
+
+  <div id="s-main" class="scr active" data-i="2">
+    <div id="arenabox" onclick="nav('s-world',7)"><div class="arenaoverlay"></div><div class="arenacont"><h1 class="arenatit" id="ui-aname">АРЕНА 1</h1><p class="arenadesc" id="ui-adesc">Лужайка</p></div></div>
+    
+    <div class="p-info-card" onclick="openProfile()">
+      <div class="p-info-top">
+        <div class="p-info-name-block">
+          <span id="ui-pname" style="font-size:18px;font-weight:900;">Игрок</span>
+          <span id="ui-title-main" class="p-title">Искатель</span>
+        </div>
+        <div id="ui-streak" style="display:none; font-size:12px; font-weight:800" class="streak-fire">🔥 Серия: <span>0</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-top:4px">
+        <span>Ур. <span id="ui-lvl" style="color:var(--ac);font-weight:900">1</span></span>
+        <span id="ui-xp">0/100 XP</span>
+      </div>
+      <div class="xpwrap" style="margin-bottom:0; height:8px;"><div class="xpfill" id="ui-xpb" style="width:0%"></div></div>
+    </div>
+
+    <div style="display:flex;gap:8px;width:92%;max-width:440px">
+      <div class="mfbtn" onclick="openFriends()">👥 Друзья <span id="ndot" style="display:none;background:var(--dn);width:8px;height:8px;border-radius:50%;margin-left:4px"></span></div>
+      <div class="mfbtn" onclick="nav('s-stats',5)">📊 Статы</div>
+      <div class="mfbtn" onclick="nav('s-lb',6)">🏆 Топ</div>
+    </div>
+    <div style="background:var(--panel);border:1px solid var(--br);border-radius:15px;padding:13px 18px;width:92%;max-width:420px;display:flex;justify-content:space-between;align-items:center">
+      <div><h4 style="color:var(--ac);margin-bottom:4px;font-size:14px;font-weight:800">Ящики за победы</h4><p style="font-size:11px;color:rgba(255,255,255,.33)" id="ctimer">Обновится через...</p></div>
+      <div style="display:flex;gap:6px" id="cslots"></div>
+    </div>
+    
+    <div style="display:flex;flex-direction:column;align-items:center;width:100%">
+      <button class="bigbtn" onclick="prepMM(false, false)">⚔️ В БОЙ</button>
+      <button class="bigbtn dr" onclick="prepMM(false, true)">🃏 РЕЖИМ ДРАФТ</button>
+      <button class="bigbtn sd" onclick="prepMM(true, false)">☠️ ВНЕЗАПНАЯ СМЕРТЬ</button>
+    </div>
+  </div>
+
+  <div id="s-pass" class="scr" data-i="3">
+    <div id="pass-controls">
+      <button class="pbtn" style="width:auto;padding:9px 22px;border-radius:20px;margin:0;font-size:13px" onclick="toggleQ()">📋 ЗАДАНИЯ (<span id="qbadge">0/0</span>)</button>
+      <div style="background:rgba(30,32,48,0.85);border:1px solid var(--br);border-radius:11px;padding:7px 11px;font-size:14px;font-weight:800">👑 <span id="ui-cr">0</span></div>
+    </div>
+    
+    <div id="pass-wrap">
+      <div id="pass-map-container" style="position:relative; width:100%; min-height: 4000px; overflow:hidden;">
+        <svg id="pass-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none;"></svg>
+        <div id="pass-layer" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:5; pointer-events:none;"></div>
+        <div id="season-title-block" style="position:absolute; bottom:0; left:0; width:100%; padding:120px 20px 60px; text-align:center; z-index:10; background: linear-gradient(to top, rgba(13,92,46,1), rgba(13,92,46,0)); pointer-events:none;">
+          <h1 style="font-family:'Orbitron',sans-serif; color:#f5c518; text-shadow: 0 4px 10px rgba(0,0,0,0.8); font-size:36px; margin:0;">СЕЗОН 1</h1>
+          <h2 style="color:#fff; font-size:22px; letter-spacing:4px; margin-top:5px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">ДЖУНГЛИ</h2>
+        </div>
+      </div>
+    </div>
+
+    <div id="qpanel">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 18px 9px;border-bottom:1px solid var(--br)">
+        <span style="font-weight:800;font-size:16px">📋 Задания</span>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button id="reroll-btn" class="pbtn small" onclick="rerollQuest()" style="background:#2a2d45;">🔄 Обновить</button>
+          <span onclick="toggleQ()" style="font-size:24px;cursor:pointer;color:rgba(255,255,255,.35)">✕</span>
+        </div>
+      </div>
+      <div id="ui-quests" style="padding:13px; overflow-y:auto; flex:1;"></div>
+      <div style="padding:0 13px 13px;color:rgba(255,255,255,.3);font-size:11px;text-align:center">Побед сегодня: <span id="ui-wins">0</span>/5</div>
+    </div>
+  </div>
+
+  <div id="s-set" class="scr" data-i="4">
+    <h2 style="text-align:center;font-family:'Orbitron',sans-serif;font-size:18px;margin:5px 0 3px">НАСТРОЙКИ</h2>
+    <div style="padding:0 15px 20px">
+      <div class="sec" id="guest-btns" style="display:none">
+        <div class="stit">Аккаунт (Гость)</div>
+        <button class="pbtn ok" onclick="openReg()">Зарегистрироваться</button>
+        <button class="pbtn" style="background:var(--pr)" onclick="ss('m-login','display','flex')">Войти</button>
+      </div>
+      <div class="sec">
+        <div class="stit">Звук</div>
+        <button class="pbtn" id="sfx-btn" onclick="toggleSfx()" style="background:var(--pr)">🔊 Озвучка: ВКЛ</button>
+      </div>
+      <div class="sec">
+        <div class="stit">Слоты Медалей</div>
+        <div style="display:flex;justify-content:center;gap:20px;margin-bottom:15px">
+          <div id="msl0" class="mslot" onclick="unequipMedal(0)"></div>
+          <div id="msl1" class="mslot" onclick="unequipMedal(1)"></div>
+        </div>
+        <div class="stit">Медали</div>
+        <div id="ui-medals" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
+      </div>
+      <div class="sec">
+        <div class="stit">Слоты Смайликов</div>
+        <div style="display:flex;justify-content:center;gap:11px;margin-bottom:15px">
+          <div id="esl0" class="eslot" onclick="unequipEmote(0)"></div>
+          <div id="esl1" class="eslot" onclick="unequipEmote(1)"></div>
+          <div id="esl2" class="eslot" onclick="unequipEmote(2)"></div>
+        </div>
+        <div class="stit">Смайлики</div>
+        <div id="ui-emotes" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
+      </div>
+      <div class="sec">
+        <div class="stit">Флаг</div>
+        <div id="banner-prev" style="width:100%;height:50px;border-radius:11px;margin-bottom:11px;border:1px solid rgba(255,255,255,.1);transition:.3s"></div>
+        <div class="grid" id="ui-banners" style="padding:4px;grid-template-columns:repeat(auto-fit,minmax(80px,1fr))"></div>
+      </div>
+      <div class="sec">
+        <div class="stit">Сменить никнейм (5000 💰)</div>
+        <input type="text" id="newnick" class="ainput" placeholder="Новый никнейм" maxlength="16">
+        <button class="pbtn" onclick="changeNick()">Сменить</button>
+      </div>
+      <p style="color:rgba(255,255,255,.2);font-size:11px;text-align:center;margin-top:11px" id="ui-uid"></p>
+      <button class="pbtn dn" style="margin-top:11px" onclick="logout()">ВЫЙТИ</button>
+    </div>
+  </div>
+
+  <div id="s-stats" class="scr" data-i="5">
+    <div style="padding:15px">
+      <h2 style="font-family:'Orbitron',sans-serif;font-size:18px;text-align:center;margin-bottom:15px">МОЯ СТАТИСТИКА</h2>
+      <div class="scard" id="ui-stats"></div>
+      <div class="sec" style="margin:11px 0 0"><div class="stit">Все медали</div><div id="ui-allmedals" style="display:flex;flex-wrap:wrap;gap:11px;padding:4px;justify-content:center"></div></div>
+    </div>
+  </div>
+
+  <div id="s-lb" class="scr" data-i="6">
+    <div style="padding:15px">
+      <div style="background:var(--p2); border:1px solid rgba(245,197,24,.4); border-radius:15px; padding:15px; margin-bottom:20px; text-align:center; box-shadow:0 4px 15px rgba(245,197,24,.15);">
+        <h3 style="color:var(--ac); margin-bottom:5px; font-family:'Orbitron',sans-serif;">🔴 ТУРНИР (СТАВКИ)</h3>
+        <p style="font-size:12px; color:rgba(255,255,255,.5); margin-bottom:12px;">Смотри бои топ-игроков и угадывай победителя!</p>
+        <button class="pbtn ok" style="width:auto; padding:10px 25px" onclick="openBettingMenu()">СТАВКА (100 💰)</button>
+      </div>
+      <h2 style="font-family:'Orbitron',sans-serif;font-size:18px;text-align:center;margin-bottom:9px;color:var(--ac)">ТОП ИГРОКОВ</h2>
+      <div id="ui-lb" style="margin-top:11px"></div>
+    </div>
+  </div>
+
+  <div id="s-world" class="scr" data-i="7">
+    <div id="world-container">
+      <svg id="world-svg" viewBox="0 0 360 700" preserveAspectRatio="xMidYMid meet"></svg>
+      <div id="world-tooltip">
+        <h3 id="wt-name" style="font-family:'Orbitron',sans-serif; color:var(--pr); margin-bottom:8px;">Арена</h3>
+        <p id="wt-desc" style="font-size:13px; color:rgba(255,255,255,0.8); margin-bottom:15px;">Информация</p>
+        <button class="pbtn ok" style="padding:10px; margin:0;" onclick="document.getElementById('world-tooltip').classList.remove('active')">ПОНЯТНО</button>
       </div>
     </div>
   </div>
-  
-  <div id="btimer">3:00</div>
-  <div id="bscore"><span id="sc-e" style="color:var(--dn)">0</span> - <span id="sc-p" style="color:var(--pr)">0</span></div>
-  
-  <div id="emote-btn" onclick="toggleEmote()">💬</div>
-  <div id="emote-panel"></div>
-  <div class="ebubble" id="pe" style="bottom:175px;left:56px"></div>
-  <div class="ebubble" id="ee" style="top:160px;right:18px"></div>
-  
-  <div id="cvs-c"><canvas id="gc"></canvas></div>
-  
-  <div class="bui" id="bui-c">
-    <div class="elwrap" id="bui-elwrap"><div class="elsegs" id="elsegs"></div><div class="elcnt" id="elcnt">5</div></div>
-    <div class="hand" id="hand"></div>
-    <div id="spec-info" style="display:none; font-family:'Orbitron',sans-serif; color:var(--ac); font-size:18px; text-align:center;">Режим Трансляции</div>
-  </div>
-  
-  <div id="bend">
-    <h1 style="font-family:'Orbitron',sans-serif;color:#fff;font-size:32px;margin-bottom:6px" id="bend-title">КОНЕЦ БОЯ</h1>
-    <div style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:15px" id="bend-sub">+0 XP</div>
-    <div class="ebanner"><div class="ebc" id="en-color"></div><div class="ebi"><span id="en-name-end">Враг</span><span class="etro lose" id="en-tro">-20 🏆</span></div></div>
-    <div class="ebanner"><div class="ebc" id="ep-color"></div><div class="ebi"><span id="ep-name-end">Игрок</span><span class="etro win" id="ep-tro">+30 🏆</span></div></div>
-    <button class="bigbtn" onclick="exitBattle()" style="margin-top:18px">ВЫЙТИ</button>
-  </div>
-</div>
 
-<nav id="mainnav" style="display:none">
-  <div class="nb" onclick="nav('s-shop',0)"><span class="ni">🏪</span>Магазин</div>
-  <div class="nb" onclick="nav('s-deck',1)"><span class="ni">🃏</span>Колода</div>
-  <div class="nb active" onclick="nav('s-main',2)"><span class="ni">⚔️</span>Бой</div>
-  <div class="nb" onclick="nav('s-pass',3)"><span class="ni">👑</span>Пропуск</div>
-  <div class="nb" onclick="nav('s-set',4)"><span class="ni">⚙️</span>Настройки</div>
-</nav>
+  <div id="friends-ov" class="ov" style="z-index:5000">
+    <div class="fbox">
+      <div style="padding:16px 18px 0;border-bottom:1px solid var(--br)">
+        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:var(--pr);margin-bottom:12px">👥 ДРУЗЬЯ</div>
+        <div style="display:flex;gap:0">
+          <div class="ftab active" id="ft-list" onclick="fTab('list')">Друзья</div>
+          <div class="ftab" id="ft-req" onclick="fTab('req')">Запросы <span id="req-count" style="display:none;background:var(--dn);color:#fff;border-radius:8px;padding:1px 6px;font-size:10px;margin-left:4px">0</span></div>
+          <div class="ftab" id="ft-add" onclick="fTab('add')">Добавить</div>
+        </div>
+      </div>
+      <div style="padding:15px;overflow-y:auto;flex:1">
+        <div id="fc-list"></div>
+        <div id="fc-req" style="display:none"></div>
+        <div id="fc-add" style="display:none">
+          <div style="background:rgba(61,155,233,.08);border:1px solid rgba(61,155,233,.2);border-radius:12px;padding:12px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,.5);text-align:center">
+            Твой ID: <span id="my-id-show" style="font-weight:800;color:var(--pr);font-family:'Orbitron',sans-serif;font-size:13px"></span>
+          </div>
+          <input type="text" id="fid-inp" class="finput" placeholder="Введи ID друга" maxlength="9" style="text-transform:uppercase">
+          <button class="fbtn" onclick="searchFriend()">🔍 НАЙТИ ИГРОКА</button>
+          <div id="fres" style="margin-top:9px"></div>
+        </div>
+      </div>
+      <button class="fbtn" style="border-radius:0;margin:0" onclick="ss('friends-ov','display','none')">ЗАКРЫТЬ</button>
+    </div>
+  </div>
+
+  <div id="chest-ov" class="ov" style="z-index:7000; background:rgba(0,0,0,0.95)">
+    <div id="chest-box" class="chestbox" onclick="chestTap()" style="filter: drop-shadow(0 0 30px rgba(245,197,24,0.4))">📦</div>
+    <div class="chestrev" id="chest-rev" onclick="nextChestItem()">
+      <div id="ci-icon" class="gacha-item" style="font-size:120px; filter:drop-shadow(0 0 20px rgba(245,197,24,0.5))"></div>
+      <div id="ci-text" class="gacha-item" style="color:var(--ac);font-size:22px;font-weight:900;margin-top:15px;text-align:center;font-family:'Orbitron',sans-serif;text-shadow:0 2px 5px rgba(0,0,0,0.8)"></div>
+      <div id="ci-cnt" class="gacha-item" style="font-size:32px;font-weight:900;color:#fff;margin-top:5px;font-family:'Orbitron',sans-serif;text-shadow:0 2px 5px rgba(0,0,0,0.8)"></div>
+    </div>
+    <div style="color:rgba(255,255,255,.6);font-size:14px;margin-top:25px;font-weight:bold" id="chest-tip">Нажмите чтобы открыть</div>
+  </div>
+
+  <div id="arena-unlock" class="ov" style="z-index:6000">
+    <div class="mbox"><div style="padding:22px;text-align:center">
+      <div style="font-size:52px;margin-bottom:8px">🏆</div>
+      <h1 style="font-family:'Orbitron',sans-serif;color:var(--pr);font-size:20px">НОВАЯ АРЕНА!</h1>
+      <h2 id="unlock-name" style="color:#fff;margin:11px 0;font-size:18px"></h2>
+      <div class="grid" id="unlock-cards" style="padding:0"></div>
+      <button class="bigbtn" style="width:100%;height:52px;font-size:16px;margin-top:15px" onclick="ss('arena-unlock','display','none')">ОК!</button>
+    </div></div>
+  </div>
+
+  <div id="mmov" class="ov">
+    <div class="mbox" style="padding:30px;align-items:center;text-align:center">
+      <div style="font-size:60px;margin-bottom:15px;animation:mmPulse 1s infinite alternate" id="mm-ic">⚔️</div>
+      <h2 style="font-family:'Orbitron',sans-serif;color:var(--pr);margin-bottom:8px" id="mm-tit">ПОИСК</h2>
+      <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:18px" id="mm-sub">Ищем соперника...</p>
+      <div class="mmdot"><span></span><span></span><span></span></div>
+      <button class="pbtn dn" style="max-width:190px;margin:18px auto 0" onclick="cancelMM()">Отмена</button>
+    </div>
+  </div>
+
+  <div id="bscr">
+    <div id="sd-aura"></div>
+    <div id="weather-layer" style="position:absolute;inset:0;pointer-events:none;z-index:4;"></div>
+    <div id="dmg-container" style="position:absolute;inset:0;pointer-events:none;z-index:25;"></div>
+    
+    <div class="bban bban-e" id="bban-e">
+      <div style="display:flex;flex-direction:column;align-items:flex-end">
+        <span id="bban-e-name" style="font-size:13px">ВРАГ</span>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
+          <span id="bban-e-fav" style="font-size:16px"></span>
+          <span id="bban-e-tr" style="font-size:11px;color:var(--ac);text-shadow:0 1px 3px rgba(0,0,0,1)">🏆 0</span>
+        </div>
+      </div>
+    </div>
+    <div class="bban bban-p" id="bban-p">
+      <div style="display:flex;flex-direction:column;align-items:flex-start">
+        <span id="bban-p-name" style="display:flex;align-items:center;gap:4px;font-size:13px">ИГРОК</span>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
+          <span id="bban-p-fav" style="font-size:16px"></span>
+          <span id="bban-p-tr" style="font-size:11px;color:var(--ac);text-shadow:0 1px 3px rgba(0,0,0,1)">🏆 0</span>
+        </div>
+      </div>
+    </div>
+    
+    <div id="btimer">3:00</div>
+    <div id="bscore"><span id="sc-e" style="color:var(--dn)">0</span> - <span id="sc-p" style="color:var(--pr)">0</span></div>
+    
+    <div id="emote-btn" onclick="toggleEmote()">💬</div>
+    <div id="emote-panel"></div>
+    <div class="ebubble" id="pe" style="bottom:175px;left:56px"></div>
+    <div class="ebubble" id="ee" style="top:160px;right:18px"></div>
+    
+    <div id="cvs-c"><canvas id="gc"></canvas></div>
+    
+    <div class="bui" id="bui-c">
+      <div class="elwrap" id="bui-elwrap"><div class="elsegs" id="elsegs"></div><div class="elcnt" id="elcnt">5</div></div>
+      <div class="hand" id="hand"></div>
+      <div id="spec-info" style="display:none; font-family:'Orbitron',sans-serif; color:var(--ac); font-size:18px; text-align:center;">Режим Трансляции</div>
+    </div>
+    
+    <div id="bend">
+      <h1 style="font-family:'Orbitron',sans-serif;color:#fff;font-size:32px;margin-bottom:6px" id="bend-title">КОНЕЦ БОЯ</h1>
+      <div style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:15px" id="bend-sub">+0 XP</div>
+      <div class="ebanner"><div class="ebc" id="en-color"></div><div class="ebi"><span id="en-name-end">Враг</span><span class="etro lose" id="en-tro">-20 🏆</span></div></div>
+      <div class="ebanner"><div class="ebc" id="ep-color"></div><div class="ebi"><span id="ep-name-end">Игрок</span><span class="etro win" id="ep-tro">+30 🏆</span></div></div>
+      <button class="bigbtn" onclick="exitBattle()" style="margin-top:18px">ВЫЙТИ</button>
+    </div>
+  </div>
+
+  <nav id="mainnav" style="display:none">
+    <div class="nb" onclick="nav('s-shop',0)"><span class="ni">🏪</span>Магазин</div>
+    <div class="nb" onclick="nav('s-deck',1)"><span class="ni">🃏</span>Колода</div>
+    <div class="nb active" onclick="nav('s-main',2)"><span class="ni">⚔️</span>Бой</div>
+    <div class="nb" onclick="nav('s-pass',3)"><span class="ni">👑</span>Пропуск</div>
+    <div class="nb" onclick="nav('s-set',4)"><span class="ni">⚙️</span>Настройки</div>
+  </nav>
+
+</div> </body>
 <script>
 'use strict';
 const ss=(id,p,v)=>{const e=document.getElementById(id);if(e)e.style[p]=v;};
@@ -817,6 +834,7 @@ const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
 
+// Надежные фоны с картинкой и градиентным фоллбеком
 const ARENAS=[
 {n:'Лужайка',     th:0,    bg:"url('img/arena_0.JPG'), radial-gradient(circle at top, #1e3c1a, #12131a)",col:'#2ebd6b',em:'🌿'},
 {n:'Пустыня',     th:600,  bg:"url('img/arena_1.JPG'), radial-gradient(circle at top, #4a2e00, #12131a)",col:'#e67e22',em:'🏜️'},
@@ -1034,6 +1052,7 @@ function renderFavCard(containerId, userData){
   fc.innerHTML=`<div class="ci rr-${card.rr} ${isFoil?'foil':''}" style="height:160px;width:110px;cursor:default">${isFoil?'<div class="foil-fx"></div>':''}<div class="fav-badge">💖 FAV</div><div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div></div>`;
   }else fc.innerHTML='<p style="color:rgba(255,255,255,.3);font-size:12px">Нет карты</p>';
 }
+
 function openFavPicker(){
   const grid=document.getElementById('fav-pick-grid');if(!grid)return;grid.innerHTML='';
   Object.keys(U.cards||{}).forEach(id=>{
@@ -1077,8 +1096,7 @@ function updateUI(){
   const ci=arenaIdx(), ao=ARENAS[ci]||ARENAS[0];
   const ab=document.getElementById('arenabox');
   if(ab) { ab.style.backgroundImage = ao.bg; ab.style.backgroundColor = ao.col; }
-  document.body.style.backgroundImage = ao.bg;
-  document.body.style.backgroundColor = '#12131a';
+  document.getElementById('app-container').style.backgroundImage = ao.bg;
 
   st('ui-aname',`АРЕНА ${ci+1}`);st('ui-adesc',`${ao.n} (${ao.th}+ 🏆)`);
   const cs=document.getElementById('cslots');if(cs){cs.innerHTML='';for(let i=0;i<3;i++)cs.innerHTML+=`<div class="cslot ${i<U.winsToday?'filled':''}">${i<U.winsToday?'📦':'🔒'}</div>`;}
@@ -1152,7 +1170,7 @@ function renderPassUI(){
 
   const svg=document.getElementById('pass-svg'), lay=document.getElementById('pass-layer'), cont=document.getElementById('pass-map-container');
   if(!svg || !lay || !cont) return;
-  const W = window.innerWidth || 360;
+  const W = document.getElementById('app-container').clientWidth || window.innerWidth || 360;
   const H = 4000; 
   cont.style.minHeight = H + 'px';
   let pts = [];
@@ -1573,9 +1591,10 @@ function startSpectatorMatch(p1, p2) {
   document.getElementById('sd-aura')?.classList.remove('active');
   
   const cont=document.getElementById('cvs-c');
-  let realW = cont?.clientWidth || window.innerWidth || 360;
-  let realH = cont?.clientHeight || (window.innerHeight - 176) || 530;
-  if (realH < 100) realH = window.innerHeight > 300 ? window.innerHeight - 176 : 530;
+  const appContainer=document.getElementById('app-container');
+  let realW = cont?.clientWidth || appContainer?.clientWidth || 360;
+  let realH = cont?.clientHeight || (appContainer?.clientHeight - 176) || 530;
+  if (realH < 100) realH = appContainer?.clientHeight > 300 ? appContainer?.clientHeight - 176 : 530;
   if (realW < 100) realW = 360;
   
   cw = 360; 
@@ -1697,9 +1716,10 @@ try{if(!isTut&&U&&U.stats){U.stats.matches=(U.stats.matches||0)+1;if(isSD)U.stat
 setTimeout(()=>{
 try{
 const cont=document.getElementById('cvs-c');if(!cont)return;
-let realW = cont.clientWidth || window.innerWidth || 360;
-let realH = cont.clientHeight || (window.innerHeight - 176) || 530;
-if (realH < 100) realH = window.innerHeight > 300 ? window.innerHeight - 176 : 530;
+const appContainer=document.getElementById('app-container');
+let realW = cont.clientWidth || appContainer.clientWidth || 360;
+let realH = cont.clientHeight || (appContainer.clientHeight - 176) || 530;
+if (realH < 100) realH = appContainer.clientHeight > 300 ? appContainer.clientHeight - 176 : 530;
 if (realW < 100) realW = 360;
 
 cw = 360; 
@@ -2244,7 +2264,7 @@ if(!unlocked&&node.ai>0){
 }
 });
 svg.innerHTML=d;
-const wt=document.getElementById('world-tooltip');if(wt)wt.style.opacity='0';
+const wt=document.getElementById('world-tooltip');if(wt)wt.classList.remove('active');
 }
 
 function worldClick(ai){
