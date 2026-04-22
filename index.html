@@ -25,26 +25,24 @@
 }
 *{box-sizing:border-box;user-select:none;margin:0;padding:0;font-family:'Exo 2',sans-serif;-webkit-tap-highlight-color:transparent}
 
-/* --- АДАПТАЦИЯ ДЛЯ ПК И ТЕЛЕФОНОВ --- */
 html, body {
   width: 100%; height: 100%;
   margin: 0; padding: 0;
-  background-color: #05070a; /* Темный фон вокруг игры на ПК */
+  background-color: #05070a;
   display: flex; justify-content: center; align-items: center;
   color: var(--tx); 
 }
 
 #app-container {
   width: 100%; height: 100%;
-  max-width: 480px; /* Максимальная ширина для ПК-версии */
+  max-width: 480px;
   position: relative;
   background-color: var(--bg);
   background-size: cover; background-position: center;
   overflow: hidden;
-  box-shadow: 0 0 40px rgba(0,0,0,0.9); /* Тень по бокам */
+  box-shadow: 0 0 40px rgba(0,0,0,0.9);
   transition: background 0.8s ease, background-color 0.8s ease;
 }
-/* ------------------------------------- */
 
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
@@ -56,6 +54,10 @@ html, body {
 @keyframes gachaReveal{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes mmPulse{from{transform:scale(0.9);opacity:0.8;}to{transform:scale(1.1);opacity:1;}}
 @keyframes sdPulse { from { box-shadow: inset 0 0 30px rgba(232,65,90,0.2); } to { box-shadow: inset 0 0 80px rgba(232,65,90,0.7); } }
+
+/* Анимации для Welcome Экрана 2026 */
+@keyframes slideRightSkew { from { transform: translateX(-150%) skewX(-15deg); opacity:0; } to { transform: translateX(0) skewX(-15deg); opacity:1; } }
+@keyframes slideLeftSkew { from { transform: translateX(150%) skewX(-15deg); opacity:0; } to { transform: translateX(0) skewX(-15deg); opacity:1; } }
 
 .dmg-txt { position: absolute; color: #ff4757; font-weight: 900; font-size: 18px; text-shadow: 0 2px 5px #000; pointer-events: none; z-index: 25; font-family: 'Orbitron', sans-serif; transition: transform 0.8s ease-out, opacity 0.8s ease-out; }
 .streak-fire { text-shadow: 0 0 10px #ff9800, 0 0 20px #ff5722 !important; color: #ffeb3b !important; }
@@ -75,6 +77,19 @@ html, body {
 #lprog{height:100%;background:linear-gradient(90deg,var(--pr),var(--ac));width:0%;transition:width .2s;border-radius:4px}
 #ltxt{color:rgba(255,255,255,.4);font-size:12px;margin-top:14px;letter-spacing:2px}
 
+/* PWA Blocker */
+#pwa-blocker { position:fixed; inset:0; background:#05070a; z-index:999999; display:none; flex-direction:column; align-items:center; justify-content:center; padding:30px; text-align:center; }
+#pwa-blocker h2 { font-family:'Orbitron',sans-serif; color:var(--pr); margin-bottom:15px; font-size:24px; }
+#pwa-blocker p { color:rgba(255,255,255,0.7); font-size:14px; margin-bottom:30px; line-height:1.4; }
+.pwa-bar-bg { width:100%; max-width:300px; height:12px; background:rgba(255,255,255,0.1); border-radius:6px; overflow:hidden; }
+#pwa-bar-fill { width:0%; height:100%; background:linear-gradient(90deg, var(--pr), var(--ok)); transition:width 0.5s ease; }
+
+/* Welcome Screen 2026 */
+#welcome-2026 { position:absolute; inset:0; background:radial-gradient(circle at center, rgba(0,0,0,0.8), #000); z-index:99999; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center; cursor:pointer; }
+.w-title { font-family:'Orbitron',sans-serif; font-size:38px; font-weight:900; color:#fff; text-shadow:0 5px 15px rgba(0,0,0,1); transform:skewX(-15deg); margin-bottom:5px; animation:slideRightSkew 0.8s cubic-bezier(0.175,0.885,0.32,1.275) forwards; opacity:0; }
+.w-sub { font-family:'Orbitron',sans-serif; font-size:46px; font-weight:900; color:var(--ac); text-shadow:0 5px 15px rgba(0,0,0,1); transform:skewX(-15deg); animation:slideLeftSkew 0.8s cubic-bezier(0.175,0.885,0.32,1.275) 0.2s forwards; opacity:0; }
+.w-tap { font-size:12px; color:rgba(255,255,255,0.4); margin-top:50px; animation:fadeIn 1s 1.5s forwards; opacity:0; }
+
 .topbar{position:absolute;top:0;left:0;right:0;height:var(--top-bar);padding-top:var(--safe-top);background:rgba(18,19,26,.6);display:flex;justify-content:space-between;align-items:center;padding-left:14px;padding-right:14px;z-index:2000;border-bottom:1px solid var(--br);backdrop-filter:blur(10px)}
 .tstat{display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;background:var(--panel);padding:7px 12px;border-radius:20px;border:1px solid var(--br)}
 
@@ -86,7 +101,6 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 .scr.active{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2}
 .scr.past{transform:translateX(-100%);opacity:0;pointer-events:none}
 
-/* --- MAIN MENU FIXES --- */
 #s-main{display:flex!important;flex-direction:column;justify-content:flex-start;gap:12px;align-items:center;padding:12px 0 calc(15px + var(--safe-bot))!important;overflow-y:auto;overflow-x:hidden}
 .p-info-card { background: var(--p2); border: 1px solid var(--br); border-radius: 18px; padding: 14px 18px; width: 92%; max-width: 440px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 6px 15px rgba(0,0,0,0.4); cursor: pointer; transition: transform 0.1s;}
 .p-info-card:active { transform: scale(0.98); }
@@ -112,7 +126,6 @@ nav{position:absolute;bottom:0;left:0;right:0;height:var(--nav-bar);background:r
 .bigbtn.sd{background:linear-gradient(145deg,#e8415a,#9d1828);color:#fff;font-size:15px;height:7.5vh;min-height:54px;box-shadow:0 6px 0 #6b0f1a, 0 10px 20px rgba(0,0,0,0.4)}
 .bigbtn.dr{background:linear-gradient(145deg,#9b5de5,#5e2a99);color:#fff;font-size:15px;height:7.5vh;min-height:54px;box-shadow:0 6px 0 #3a1466, 0 10px 20px rgba(0,0,0,0.4)}
 
-/* --- Battle UI Classes --- */
 #bscr{display:none;position:absolute;top:0;left:0;right:0;bottom:0;background-size:cover;background-position:center;z-index:6000;flex-direction:column;overflow:hidden;opacity:0;transition:opacity .3s ease;touch-action:none;padding-top:var(--safe-top);padding-bottom:var(--safe-bot)}
 #bscr.active{display:flex;opacity:1}
 #cvs-c{flex:1;width:100%;position:relative;overflow:hidden;}
@@ -131,7 +144,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #btimer {position:absolute; top:calc(15px + var(--safe-top)); right:15px; font-family:'Orbitron',sans-serif; font-size:22px; font-weight:900; color:#fff; z-index:10; text-shadow:0 2px 6px #000, 0 0 10px rgba(0,0,0,0.8);}
 #bscore {position:absolute; top:calc(15px + var(--safe-top)); left:15px; font-family:'Orbitron',sans-serif; font-size:20px; font-weight:900; z-index:10; background:rgba(0,0,0,0.6); padding:6px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; gap:8px;}
 
-/* --- Emote Classes --- */
 #emote-btn {position:absolute; bottom:160px; left:15px; font-size:28px; width:48px; height:48px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.3); border-radius:50%; display:flex; justify-content:center; align-items:center; z-index:20; cursor:pointer; backdrop-filter:blur(5px); box-shadow:0 4px 10px rgba(0,0,0,0.4); transition: transform 0.1s;}
 #emote-btn:active {transform:scale(0.9);}
 #emote-btn.cd {opacity:0.5; cursor:not-allowed;}
@@ -141,7 +153,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #pe::after {left:15px; border-width:10px 10px 0 0; border-color:#fff transparent transparent transparent;}
 #ee::after {right:15px; border-width:10px 0 0 10px; border-color:#fff transparent transparent transparent;}
 
-/* --- End Battle Classes --- */
 #bend {display:none; position:absolute; inset:0; background:rgba(0,0,0,0.9); z-index:30; flex-direction:column; align-items:center; justify-content:center; opacity:0; transition:opacity 0.4s ease; padding:20px;}
 #bend.active {display:flex; opacity:1;}
 .ebanner {display:flex; align-items:center; background:var(--panel); border:1px solid var(--br); border-radius:15px; overflow:hidden; width:90%; max-width:340px; margin-bottom:12px; box-shadow:0 8px 20px rgba(0,0,0,0.6);}
@@ -152,7 +163,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .etro.lose {color:var(--dn);}
 .etro.tie {color:#ccc;}
 
-/* --- Deck & In-Game Hand --- */
 .bui{flex:0 0 auto;width:100%;min-height:140px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 10px calc(5px + var(--safe-bot));position:relative;z-index:10;box-sizing:border-box}
 .hand{display:flex;flex-direction:row;gap:8px;justify-content:center;align-items:center;width:100%;overflow:visible;}
 .gc{width:23%;max-width:90px;height:auto;aspect-ratio:1/1.4;flex-shrink:0;background:linear-gradient(155deg,#2a2d45,#1a1d30);border-radius:13px;border:1.5px solid rgba(255,255,255,.12);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:4px;box-sizing:border-box;cursor:grab;touch-action:none;transition:border-color .15s,opacity .15s,transform .15s;}
@@ -170,7 +180,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .elseg.on{background:#c084fc;box-shadow:0 0 6px #c084fc}.elseg.half{background:rgba(192,132,252,.5)}
 .elcnt{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#eab308;min-width:26px;text-align:right;text-shadow:0 1px 3px rgba(0,0,0,0.8)}
 
-/* --- Misc UI --- */
 #arenabox{width:92%;max-width:440px;aspect-ratio:16/9;max-height:25vh;position:relative;border-radius:18px;border:2px solid rgba(255,255,255,.2);overflow:hidden;margin:0 auto;flex-shrink:1;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,0.5); background-size:cover; background-position:center;}
 .arenaoverlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1),rgba(0,0,0,.7));z-index:1;pointer-events:none;}
 .arenacont{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;}
@@ -186,7 +195,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .dtab{flex:1;font-size:14px;font-weight:800;color:rgba(255,255,255,.4);cursor:pointer;transition:.2s;padding:16px 0;text-align:center;text-transform:uppercase;letter-spacing:1px;border-bottom:3px solid transparent}
 .dtab.active{color:#fff;border-bottom-color:var(--pr);text-shadow:0 0 8px rgba(61,155,233,0.5)}
 
-/* Rarity & Foils */
 .rr-c{border:1.5px solid rgba(255,255,255,0.2)!important}
 .rr-r{border:1.5px solid #3d9be9!important;box-shadow:inset 0 0 15px rgba(61,155,233,0.2)}
 .rr-e{border:1.5px solid #9b5de5!important;box-shadow:inset 0 0 15px rgba(155,93,229,0.2)}
@@ -196,7 +204,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .fav-badge {position:absolute; bottom:5px; left:50%; transform:translateX(-50%); background:rgba(232,65,90,0.9); font-size:9px; font-weight:800; padding:2px 6px; border-radius:6px; z-index:10; color:#fff; white-space:nowrap; border:1px solid rgba(255,255,255,0.3);}
 .fav-sel {border-color:#e8415a !important; box-shadow:0 0 15px rgba(232,65,90,0.6) !important;}
 
-/* Modal Overlay & Buttons */
 .ov{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:4500;flex-direction:column;justify-content:center;align-items:center;backdrop-filter:blur(6px)}
 .mbox{width:92%;max-width:420px;background:var(--bg);border-radius:22px;border:1px solid var(--br);overflow:hidden;display:flex;flex-direction:column;max-height:88vh;animation:popIn .3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;box-shadow:0 25px 50px rgba(0,0,0,.8)}
 .pbtn{width:100%;padding:14px;border-radius:14px;border:none;background:var(--pr);color:#fff;font-size:14px;font-weight:800;cursor:pointer;margin-top:10px;transition:.15s;text-transform:uppercase;letter-spacing:1px;box-shadow:0 4px 10px rgba(0,0,0,0.3)}
@@ -206,7 +213,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .finput, .ainput {width:100%; padding:14px; border-radius:12px; border:1px solid var(--br); background:rgba(0,0,0,0.3); color:#fff; font-size:15px; margin-bottom:12px; outline:none;}
 .finput:focus, .ainput:focus {border-color:var(--pr);}
 
-/* Chests & Gacha Animation */
 .gacha-item { animation: gachaReveal 0.4s ease-out forwards; will-change: transform, opacity; }
 .draft-card { width:120px; height:160px; background:linear-gradient(155deg,#2a2d45,#1e2030); border-radius:15px; border:2px solid var(--br); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; box-shadow:0 10px 20px rgba(0,0,0,0.5); }
 .draft-card:hover { transform:scale(1.05); box-shadow:0 15px 30px rgba(0,0,0,0.7); }
@@ -214,7 +220,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .chestbox {font-size:120px; display:flex; justify-content:center; align-items:center; cursor:pointer; animation:pulse 1.5s infinite; text-shadow:0 0 30px rgba(245,197,24,0.6); will-change: transform;}
 .chestrev {display:none; flex-direction:column; align-items:center; justify-content:center; perspective:1000px;}
 
-/* XP & Medals & Stats */
 .xpwrap {width:100%; height:14px; background:rgba(255,255,255,0.1); border-radius:7px; overflow:hidden; box-shadow:inset 0 2px 5px rgba(0,0,0,0.5); margin-bottom:10px;}
 .xpfill {height:100%; background:linear-gradient(90deg, #3d9be9, #9b5de5); transition:width 0.3s ease;}
 .mslot, .eslot {width:55px; height:55px; background:rgba(0,0,0,0.4); border:2px dashed rgba(255,255,255,0.3); border-radius:15px; display:flex; justify-content:center; align-items:center; font-size:28px; color:rgba(255,255,255,0.2); cursor:pointer; transition:0.3s;}
@@ -229,14 +234,12 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .sval {font-size:15px; font-weight:800; color:#fff;}
 .qcard {background:var(--p2); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--br); box-shadow:0 4px 10px rgba(0,0,0,0.2);}
 
-/* Leaderboard */
 .lbi {display:flex; align-items:center; background:var(--p2); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--br); box-shadow:0 4px 8px rgba(0,0,0,0.2); cursor:pointer;}
 .lbr {font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; color:rgba(255,255,255,0.3); width:35px; text-align:center;}
 .lbr.gold {color:#f5c518; text-shadow:0 0 10px rgba(245,197,24,0.6);}
 .lbr.silver {color:#e0e0e0; text-shadow:0 0 10px rgba(224,224,224,0.6);}
 .lbr.bronze {color:#cd7f32; text-shadow:0 0 10px rgba(205,127,50,0.6);}
 
-/* Friends Module */
 .fbox {width:92%; max-width:440px; max-height:85vh; background:var(--bg); border-radius:22px; border:1px solid var(--br); display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.8);}
 .ftab {flex:1; text-align:center; padding:12px 0; font-size:13px; font-weight:800; color:rgba(255,255,255,0.4); border-bottom:3px solid transparent; cursor:pointer; text-transform:uppercase; transition:0.2s;}
 .ftab.active {color:#fff; border-bottom-color:var(--pr); text-shadow:0 0 8px rgba(61,155,233,0.5);}
@@ -252,7 +255,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .notif-banner {background:rgba(61,155,233,0.1); border:1px solid rgba(61,155,233,0.3); border-radius:14px; padding:14px; margin-bottom:12px;}
 .fbtn {width:100%; padding:15px; background:var(--pr); color:#fff; font-weight:800; font-size:14px; border:none; border-radius:12px; margin-top:10px; cursor:pointer; text-transform:uppercase;}
 
-/* Roulette UI Fixes */
 .rl-machine { height: 120px; background: #0a0d14; border: 2px solid var(--br); border-radius: 15px; position: relative; overflow: hidden; width: 100%; box-shadow: inset 0 0 20px #000; }
 .rl-track { display: flex; flex-direction: column; width: 100%; transition: transform 3.5s cubic-bezier(0.17, 0.67, 0.12, 1.0); }
 .rl-item { height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; }
@@ -260,16 +262,20 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .rl-highlight { position: absolute; inset: 0; border: 3px solid var(--ok); border-radius: 13px; box-shadow: inset 0 0 25px rgba(46,189,107,0.4); pointer-events: none; z-index: 2; }
 .rl-arrow { position: absolute; right: -12px; top: 50%; transform: translateY(-50%); font-size: 28px; color: var(--ok); z-index: 3; text-shadow: -2px 0 5px #000; }
 
-/* Battle Pass Scrolling & Quests Fixes */
 #s-pass { padding: 0 !important; overflow: hidden; } 
 #pass-controls { position: absolute; top: 0; left: 0; right: 0; height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; background: rgba(18,19,26,0.85); border-bottom: 1px solid var(--br); z-index: 100; backdrop-filter: blur(10px); }
 #pass-wrap { position: absolute; top: 60px; bottom: 0; left: 0; right: 0; overflow-y: auto; scroll-behavior: auto; }
 #qpanel { position: absolute; bottom: 0; left: 0; right: 0; background: var(--bg); border-top-left-radius: 24px; border-top-right-radius: 24px; z-index: 200; transform: translateY(110%); transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -10px 40px rgba(0,0,0,0.8); max-height: 80vh; display: flex; flex-direction: column; border-top: 1px solid var(--br); }
 #qpanel.open { transform: translateY(0); }
 
-/* Карточка мира (Центрированная) */
 #world-tooltip { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); opacity: 0; pointer-events: none; background: var(--bg); border: 2px solid var(--pr); border-radius: 20px; padding: 20px; z-index: 9999; box-shadow: 0 10px 40px rgba(0,0,0,0.8); text-align: center; transition: 0.3s; width: 85%; max-width: 320px; }
 #world-tooltip.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+
+/* Admin UI */
+.admin-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; display:flex; justify-content:space-between; align-items:center; }
+.admin-item:active { background: rgba(255,255,255,0.1); }
+#admin-gifts-c { width: 100%; display: flex; flex-direction: column; gap: 8px; padding: 10px 15px; }
+.admin-gift-card { background: linear-gradient(135deg, #2e0a4f, #8e24aa); border: 2px solid #f5c518; border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 0 15px rgba(142,36,170,0.5); }
 
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -277,11 +283,54 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 </head>
 <body>
 <div id="app-container">
+  
+  <div id="pwa-blocker">
+    <h2>УСТАНОВИТЕ PWA</h2>
+    <p>Игра в браузере не поддерживается для защиты серверов.<br><br>Пожалуйста, нажмите «Поделиться» ➦ и выберите <b>«На экран "Домой"»</b> (Add to Home Screen), чтобы установить игру.</p>
+    <div class="pwa-bar-bg"><div id="pwa-bar-fill"></div></div>
+    <p style="margin-top:15px; font-size:11px; opacity:0.5;">Ожидание запуска через приложение...</p>
+  </div>
+
+  <div id="welcome-2026" onclick="this.style.display='none'">
+    <div class="w-title">ДОБРО ПОЖАЛОВАТЬ!</div>
+    <div class="w-sub">СЕЗОН 1</div>
+    <div class="w-tap">Нажмите, чтобы продолжить</div>
+  </div>
+
   <div id="app-cover"></div>
   <div id="toast-c"></div>
   <div id="dghost"><div id="dg-icon" style="font-size:36px"></div><div id="dg-name" style="font-size:10px;font-weight:bold;margin-top:4px"></div></div>
   <div id="intro"><h1>TERROV<br>STUDIO</h1><p>Game Development</p></div>
   <div id="loading"><h1>CLASH<br><span>ARENA</span></h1><div class="lbar"><div id="lprog"></div></div><div id="ltxt">ИНИЦИАЛИЗАЦИЯ...</div></div>
+
+  <div id="m-admin" class="ov" style="z-index:9000">
+    <div class="mbox" style="padding:20px; max-height:80vh; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center;">
+        <h2 style="color:var(--pr); font-family:'Orbitron',sans-serif; font-size:18px;">АДМИН ПАНЕЛЬ</h2>
+        <span onclick="ss('m-admin','display','none')" style="font-size:24px;cursor:pointer;color:rgba(255,255,255,0.5)">✕</span>
+      </div>
+      <button class="pbtn ok" style="margin-bottom:10px;" onclick="openAdminGive('ALL', 'ВСЕМ ИГРОКАМ')">🎁 ВЫДАТЬ ПОДАРОК ВСЕМ</button>
+      <div class="stit" style="margin-top:5px; text-align:left;">Список игроков:</div>
+      <div id="admin-user-list" style="overflow-y:auto; flex:1; border:1px solid var(--br); padding:8px; border-radius:12px; background:rgba(0,0,0,0.3);"></div>
+    </div>
+  </div>
+
+  <div id="m-admin-give" class="ov" style="z-index:9100">
+    <div class="mbox" style="padding:20px">
+      <h2 style="color:var(--ac); margin-bottom:15px; font-size:16px; text-align:center;">КОМУ: <span id="admin-target-name"></span></h2>
+      <select id="admin-gift-type" class="ainput" style="background:#222; margin-bottom:10px; padding:12px;">
+        <option value="g">📦 Маленький ящик</option>
+        <option value="m">✨ Большой ящик</option>
+        <option value="gold">💰 Монеты</option>
+        <option value="gems">💎 Гемы</option>
+        <option value="crowns">👑 Короны</option>
+        <option value="power">⚡ Очки силы</option>
+      </select>
+      <input type="number" id="admin-gift-amount" class="ainput" placeholder="Количество (для сундуков ставь 1)" value="1">
+      <button class="pbtn ok" onclick="sendAdminGift()">ОТПРАВИТЬ</button>
+      <button class="pbtn" style="background:#333" onclick="ss('m-admin-give','display','none')">Отмена</button>
+    </div>
+  </div>
 
   <div id="m-profile" class="ov" style="z-index:5500">
     <div class="mbox" style="padding:24px;align-items:center;overflow-y:auto">
@@ -408,7 +457,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 
   <div id="s-shop" class="scr" data-i="0">
     <h2 style="text-align:center;font-family:'Orbitron',sans-serif;font-size:18px;margin:5px 0 3px">МАГАЗИН</h2>
-    <div class="sec" style="cursor:pointer; background: linear-gradient(145deg, #1e2030, #2c1a3b); border-color: #9b5de5;" onclick="openRoulette()">
+    <div id="admin-gifts-c"></div> <div class="sec" style="cursor:pointer; background: linear-gradient(145deg, #1e2030, #2c1a3b); border-color: #9b5de5;" onclick="openRoulette()">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div><div style="font-size:16px;font-weight:800; color:#fff">🎰 Ежедневная рулетка</div><div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px" id="roulette-status">Загрузка...</div></div>
         <div style="font-size:36px; filter: drop-shadow(0 0 10px rgba(155,93,229,0.8))">🎁</div>
@@ -524,6 +573,8 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div id="s-set" class="scr" data-i="4">
     <h2 style="text-align:center;font-family:'Orbitron',sans-serif;font-size:18px;margin:5px 0 3px">НАСТРОЙКИ</h2>
     <div style="padding:0 15px 20px">
+      <button id="admin-btn" class="pbtn" style="background:#e8415a; display:none; margin-bottom:15px; border:2px solid #fff; font-size:16px; box-shadow:0 0 15px rgba(232,65,90,0.8);" onclick="openAdminPanel()">⚙️ АДМИН ПАНЕЛЬ</button>
+
       <div class="sec" id="guest-btns" style="display:none">
         <div class="stit">Аккаунт (Гость)</div>
         <button class="pbtn ok" onclick="openReg()">Зарегистрироваться</button>
@@ -710,8 +761,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <div class="nb" onclick="nav('s-pass',3)"><span class="ni">👑</span>Пропуск</div>
     <div class="nb" onclick="nav('s-set',4)"><span class="ni">⚙️</span>Настройки</div>
   </nav>
-
-</div> </body>
 <script>
 'use strict';
 const ss=(id,p,v)=>{const e=document.getElementById(id);if(e)e.style[p]=v;};
@@ -834,7 +883,6 @@ const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
 
-// Массив арен: добавлены 4 новые крутые арены
 const ARENAS=[
 {n:'Лужайка',     th:0,    bg:"url('img/arena_0.JPG'), radial-gradient(circle at top, #1e3c1a, #12131a)",col:'#2ebd6b',em:'🌿'},
 {n:'Пустыня',     th:600,  bg:"url('img/arena_1.JPG'), radial-gradient(circle at top, #4a2e00, #12131a)",col:'#e67e22',em:'🏜️'},
@@ -854,7 +902,6 @@ const ARENAS=[
 {n:'Колизей Легенд',th:9800,bg:"url('img/arena_15.JPG'), radial-gradient(circle at top, #4a3a10, #12131a)",col:'#ffd54f',em:'🏟️'}
 ];
 
-// Массив карт: добавлены 12 новых карт для новых арен
 const CARDS=[
 {id:'spear_g',a:0,n:'Копейщики',  c:2,hp:110, d:25, sp:0.70,r:120,t:'ground',tg:'all',    ic:'👺',pr:'🏹',rr:'c'},
 {id:'fire_s', a:0,n:'Огн.Духи',   c:2,hp:90,  d:80, sp:0.90,r:40, t:'ground',tg:'all',    ic:'🔥',pr:null,rr:'c'},
@@ -954,14 +1001,17 @@ const RL_PRIZES=[
 {ic:'📦',lbl:'Ящик',       tp:'chest',v:'g', w:10},{ic:'✨',lbl:'Маг.Ящик', tp:'chest',v:'m', w:3},
 {ic:'👑',lbl:'5 Корон',   tp:'crowns',v:5,  w:8}, {ic:'⚡',lbl:'30 Очков',  tp:'power',v:30, w:14},
 ];
+
+// УРЕЗАННЫЕ НАГРАДЫ BATTLE PASS
 const PASS_R=Array.from({length:50},(_,i)=>{
 const c=(i+1)*8;
 if((i+1)%10===0)return{crowns:c,t:'chest',v:'m',ic:'✨',n:'МЕГА ЯЩИК'};
 if((i+1)%5===0) return{crowns:c,t:'chest',v:'g',ic:'📦',n:'Ящик'};
-if(i%3===0)     return{crowns:c,t:'gold', v:400+i*40,ic:'💰',n:`${400+i*40} Золота`};
-if(i%3===1)     return{crowns:c,t:'gems', v:8+i,ic:'💎',n:`${8+i} Гемов`};
-return{crowns:c,t:'gems',v:15+i*2,ic:'💎',n:`${15+i*2} Гемов`};
+if(i%3===0)     return{crowns:c,t:'gold', v:150+i*20,ic:'💰',n:`${150+i*20} Золота`};
+if(i%3===1)     return{crowns:c,t:'gems', v:3+i,ic:'💎',n:`${3+i} Гемов`};
+return{crowns:c,t:'gems',v:10+i,ic:'💎',n:`${10+i} Гемов`};
 });
+
 const XP_T=[0,100,250,500,900,1500,2400,3700,5500,8000,12000];
 const getLevel=xp=>{let l=1;for(let i=1;i<XP_T.length;i++){if(xp>=XP_T[i])l=i+1;else break;}return Math.min(l,10);};
 const xpProg=xp=>{const l=getLevel(xp);if(l>=10)return{cur:XP_T[9],max:XP_T[9]};return{cur:xp-XP_T[l-1],max:XP_T[l]-XP_T[l-1]};};
@@ -973,8 +1023,42 @@ catch(e){db={ref:()=>({once:()=>Promise.reject('offline'),set:()=>Promise.resolv
 
 function hideCover(){const c=document.getElementById('app-cover');if(c){c.style.opacity='0';setTimeout(()=>c.style.display='none',400);}}
 
+// PWA ЗАЩИТА
+function checkPWA() {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  const isLocal = location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol.includes('capacitor') || location.protocol.includes('chrome-extension');
+  if (!isStandalone && !isLocal) {
+    document.getElementById('pwa-blocker').style.display = 'flex';
+    let w = 0;
+    setInterval(() => {
+      w += 1 + Math.random()*2;
+      if (w > 100) w = 0;
+      document.getElementById('pwa-bar-fill').style.width = w + '%';
+    }, 150);
+    return false;
+  }
+  return true;
+}
+
+// 2026 ИВЕНТ
+function checkEvent2026() {
+  const d = new Date();
+  if(d.getFullYear() === 2026 && d.getMonth() === 3 && d.getDate() === 30) {
+     if(!ls('seen_2026_event')) {
+        const w = document.getElementById('welcome-2026');
+        if(w) {
+          w.style.display = 'flex';
+          w.onclick = () => { w.style.display = 'none'; lw('seen_2026_event', '1'); };
+        }
+     }
+  }
+}
+
 function startApp(){
-  if(appStarted)return;appStarted=true;
+  if(appStarted)return;
+  if(!checkPWA()) return; // Останавливаем загрузку, если не PWA
+  
+  appStarted=true;
   const intro=document.getElementById('intro'),loader=document.getElementById('loading');
   if(intro)intro.style.opacity='1';
   setTimeout(()=>{if(intro)intro.style.opacity='0';setTimeout(()=>{if(intro)intro.style.display='none';if(loader){loader.style.display='flex';setTimeout(()=>loader.style.opacity='1',10);}doLoad('Загрузка данных…',()=>initApp());},500);},1500);
@@ -1042,7 +1126,6 @@ function openProfile(){
   renderFavCard('prof-fav', U);ss('m-profile','display','flex');
 }
 
-// Обновленная функция чужого профиля
 function viewPlayer(uid) {
   if(uid === U.uid) return openProfile();
   doLoad('Загрузка профиля...', () => {
@@ -1142,13 +1225,84 @@ function updateUI(){
   for(let i=0;i<2;i++){const ms=document.getElementById(`um${i}`);if(!ms)continue;const mid=(U.equippedMedals&&U.equippedMedals[i])?U.equippedMedals[i]:null;if(mid){const m=MEDALS.find(x=>x.id===mid);ms.style.display='inline-flex';ms.textContent=m?m.ic:'';}else ms.style.display='none';}
   ss('guest-btns','display',U.isGuest?'block':'none');
   
+  // Кнопка Админа
+  const abtn = document.getElementById('admin-btn');
+  if(abtn) { if(U.email === 'danildovz@gmail.com') abtn.style.display = 'block'; else abtn.style.display = 'none'; }
+  
   renderDeck();renderTower();renderColl();renderBanners();renderShop();if(navIdx===3)renderPassUI();renderMedals();renderEmotes();
 }
 
 function startUI(){
+  checkEvent2026();
   ss('topbar','display','flex');ss('mainnav','display','flex');
   checkDailyReset();if(!U.quests)U.quests=genQuests();if(!U.dailyEmotes||!U.dailyEmotes.length)genShop();if(!U.dsp)U.dsp={};
   checkArena();checkMedals();updateUI();saveU();nav('s-main',2);setTimeout(hideCover,150);
+}
+
+// АДМИН ФУНКЦИИ
+function openAdminPanel() {
+  if(!U || U.email !== 'danildovz@gmail.com') return notify('У вас нет доступа!');
+  ss('m-admin','display','flex');
+  const list = document.getElementById('admin-user-list');
+  list.innerHTML = '<p style="color:#fff;text-align:center;padding:10px;">Загрузка игроков...</p>';
+  db.ref('users').once('value').then(snap => {
+    list.innerHTML = '';
+    snap.forEach(c => {
+       const u = c.val();
+       if(u && u.nickname) {
+           list.innerHTML += `<div class="admin-item">
+             <div><b style="color:var(--ac)">${u.nickname}</b><br><span style="font-size:10px;color:gray">ID: ${c.key}</span></div>
+             <button class="pbtn ok small" onclick="openAdminGive('${c.key}', '${u.nickname.replace(/'/g,"")}')">ВЫДАТЬ</button>
+           </div>`;
+       }
+    });
+  }).catch(() => list.innerHTML = '<p style="color:red;text-align:center;">Ошибка базы</p>');
+}
+
+let adminTargetUid = '';
+function openAdminGive(uid, name) {
+  adminTargetUid = uid;
+  st('admin-target-name', name);
+  ss('m-admin-give','display','flex');
+}
+
+function sendAdminGift() {
+  if(!U || U.email !== 'danildovz@gmail.com') return;
+  const type = document.getElementById('admin-gift-type').value;
+  const amt = parseInt(document.getElementById('admin-gift-amount').value) || 1;
+  const gId = 'g_' + Date.now();
+  const giftObj = { t: type, v: amt, id: gId };
+  
+  if(adminTargetUid === 'ALL') {
+     db.ref('globalGifts/' + gId).set(giftObj).then(()=>notify('Подарок выдан всем!','ok'));
+  } else {
+     db.ref(`users/${adminTargetUid}/adminGifts/${gId}`).set(giftObj).then(()=>notify('Подарок выдан игроку!','ok'));
+  }
+  ss('m-admin-give','display','none');
+}
+
+function claimAdminGift(k) {
+  const g = U.adminGifts[k];
+  if(!g) return;
+  if(g.t==='g') genChest('g');
+  else if(g.t==='m') genChest('m');
+  else if(g.t==='gold') { U.gold += g.v; notify('+'+g.v+' Золота','ok'); }
+  else if(g.t==='gems') { U.gems += g.v; notify('+'+g.v+' Гемов','ok'); }
+  else if(g.t==='crowns') { U.crowns += g.v; notify('+'+g.v+' Корон','ok'); }
+  else if(g.t==='power') { 
+      const own = Object.keys(U.cards||{});
+      if(own.length) {
+          const cid = own[Math.floor(Math.random()*own.length)];
+          U.cards[cid].power += g.v;
+          notify('+'+g.v+' очков на '+CARDS.find(x=>x.id===cid).n,'ok');
+      } else notify('Очки сгорели, нет карт!','err');
+  }
+  delete U.adminGifts[k];
+  if(!U.claimedGlobalGifts) U.claimedGlobalGifts = {};
+  U.claimedGlobalGifts[k] = true;
+  saveU();
+  renderShop();
+  if(navIdx===3) renderPassUI();
 }
 
 function genQuests(){return[{id:0,tp:'play',desc:'Сыграть 3 боя',tg:3,pg:0,cr:5,cl:false},{id:1,tp:'destroy',desc:'Уничтожить 3 башни',tg:3,pg:0,cr:5,cl:false},{id:2,tp:'win',desc:'Выиграть 2 боя',tg:2,pg:0,cr:8,cl:false},{id:3,tp:'play',desc:'Сыграть 5 боёв',tg:5,pg:0,cr:10,cl:false}];}
@@ -1282,7 +1436,6 @@ function nav(id,idx){
 }
 function switchDeck(i){deckTab=i;['dt0','dt1','dt2'].forEach((id,j)=>document.getElementById(id)?.classList.toggle('active',j===i));document.getElementById('dslider').style.transform=`translateX(-${i*33.333}%)`;if(i===2)renderSpells();}
 
-// Исправленные координаты для ПК и телефонов
 function setupDrag(){
   const hand=document.getElementById('hand');if(!hand)return;
   const ghost=document.getElementById('dghost');
@@ -1433,7 +1586,37 @@ function applyRLPrize(p){
   else if(p.tp==='power'){const d=U.deck||[];if(d.length>0){const cid=d[Math.floor(Math.random()*d.length)];if(!U.cards[cid])U.cards[cid]={level:1,power:0,played:0};U.cards[cid].power+=p.v;const card=CARDS.find(c=>c.id===cid);notify(`🎰 +${p.v} очков ${card?card.n:''}!`,'ok');}else notify('🎰 +30 Очков!','ok');}
 }
 function dailyGift(){if(U.lastGiftKey===dailyKey())return notify('Подарок уже забран! Следующий в 10:00');U.lastGiftKey=dailyKey();const r=Math.random()<0.2?{t:'gems',v:15}:{t:'gold',v:300};if(r.t==='gems')U.gems+=r.v;else U.gold+=r.v;notify(`+${r.v} ${r.t==='gems'?'Гемов 💎':'Золота 💰'}!`,'ok');saveU();}
+
 function renderShop(){
+  const adminGiftsCont = document.getElementById('admin-gifts-c');
+  if(adminGiftsCont) {
+      adminGiftsCont.innerHTML = '';
+      if(U.adminGifts) {
+         Object.entries(U.adminGifts).forEach(([k, g]) => {
+            let gName = ''; let gIc = '';
+            if(g.t==='g'){ gName='Маленький ящик'; gIc='📦';}
+            else if(g.t==='m'){ gName='Большой ящик'; gIc='✨';}
+            else if(g.t==='gold'){ gName=g.v+' Золота'; gIc='💰';}
+            else if(g.t==='gems'){ gName=g.v+' Гемов'; gIc='💎';}
+            else if(g.t==='crowns'){ gName=g.v+' Корон'; gIc='👑';}
+            else if(g.t==='power'){ gName=g.v+' Очков силы'; gIc='⚡';}
+            
+            adminGiftsCont.innerHTML += `
+              <div class="admin-gift-card">
+                 <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="font-size:32px;">${gIc}</div>
+                    <div>
+                      <div style="color:#f5c518; font-weight:900; font-size:11px;">ПОДАРОК ОТ АДМИНА!</div>
+                      <div style="color:#fff; font-weight:700; font-size:15px;">${gName}</div>
+                    </div>
+                 </div>
+                 <button class="pbtn ok small" style="width:auto" onclick="claimAdminGift('${k}')">ЗАБРАТЬ</button>
+              </div>
+            `;
+         });
+      }
+  }
+
   const g=document.getElementById('pow-grid');if(!g||!U.dailyShop)return;g.innerHTML='';
   U.dailyShop.forEach(id=>{const card=CARDS.find(c=>c.id===id);if(!card)return;const b=U.dsp[id]||0,left=2-b;g.innerHTML+=`<div class="ci rr-${card.rr}" style="cursor:default"><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div><div style="font-size:10px;color:rgba(255,255,255,.38);margin:3px 0">+15 очков</div><div style="font-size:9px;color:var(--ac)">Ост.: ${left}</div>${left>0?`<button class="pbtn" style="padding:6px;font-size:10px" onclick="buyPow('${id}')">200💰</button>`:`<button class="pbtn" style="padding:6px;font-size:10px;background:#2a2d45;color:rgba(255,255,255,.2)" disabled>Продано</button>`}</div>`;});
   const eg=document.getElementById('emote-grid');if(!eg||!U.dailyEmotes)return;eg.innerHTML='';
@@ -1908,13 +2091,11 @@ function botAI(dt){
 if(isBotFrozen || isTieBreaker)return;
 botElix=Math.min(10,botElix+(isOvertime?0.016:0.008)*dt);botCd+=dt;
 
-// УМНЫЕ БОТЫ (Ускоряются каждые 100 кубков)
 const tr = U.trophies || 0;
 const skill = Math.min(1, tr / 10000);
 let delay = Math.max(30, 300 - Math.floor(tr / 100) * 3);
 if(isOvertime) delay /= 2;
 
-// Пассивный чит-бонус эликсира на 7000+ кубках
 if(tr > 7000) {
     botElix = Math.min(10, botElix + (((tr - 7000)/1000) * 0.003) * dt);
 }
@@ -1974,7 +2155,6 @@ if(!isSpectator){
 
 const pt=towers.filter(t=>t.team===0).length, et=towers.filter(t=>t.team===1).length;
 
-// Мгновенная победа/поражение в Овертайме при разбитой башне
 if(isOvertime || isTieBreaker || isSD) {
     if(pt !== et) { endBattle(pt > et); return; }
 }
@@ -2073,7 +2253,6 @@ function renderGame(){
 if(!bCtx||!cw||!ch)return;
 bCtx.clearRect(0,0,cw,ch);
 
-// Более светлый фон травы поверх арены
 bCtx.fillStyle='rgba(58, 100, 40, 0.45)';
 bCtx.fillRect(0,0,cw,ch);
 bCtx.fillStyle='rgba(0,0,0,0.1)';
@@ -2091,7 +2270,6 @@ bCtx.fillStyle='rgba(255,255,255,0.055)';for(let i=0;i<cw;i+=52)bCtx.fillRect(i,
 bCtx.fillStyle='rgba(80,0,0,0.25)';bCtx.fillRect(0,ch/2-3,cw,6);
 }
 
-// Отрисовка траектории броска карты (с фиксом для SD)
 if(dragOn&&dragIdx>=0){
   const cid=bHand[dragIdx],dc=cid?CARDS.find(c=>c.id===cid):null,isSp=dc&&dc.t==='spell';
   if(!isSp){
@@ -2166,18 +2344,16 @@ function endBattle(win){
   if(bState==='ended')return;
   bState='ended';
   
-  // Мгновенно стираем всех персонажей с поля
   ents = []; projs = []; parts = []; dragOn = false; dragIdx = -1;
   const ghost=document.getElementById('dghost');if(ghost)ghost.style.display='none';
   if(bLoopId){cancelAnimationFrame(bLoopId);bLoopId=null;}
-  renderGame(); // Финальный рендер пустого поля
+  renderGame(); 
   
-  // Выводим эпичный текст победы поверх поля на 2.5 секунды
   const bscr = document.getElementById('bscr');
   const wipeOverlay = document.createElement('div');
   wipeOverlay.id = 'wipe-overlay';
   const txtColor = win === true ? '#2ebd6b' : win === false ? '#e8415a' : '#f5c518';
-  const txtContent = isSpectator ? (myBetWon?'СТАВКА СЫГРАЛА':'ПРОИГРЫШ') : (win===true?'ПОБЕДА!':win===false?'ПОРАЖЕНИЕ':'НИЧЬЯ');
+  const txtContent = isSpectator ? (specBetOn===1?'СИНЯЯ КОМАНДА':'КРАСНАЯ КОМАНДА') : (win===true?'ПОБЕДА!':win===false?'ПОРАЖЕНИЕ':'НИЧЬЯ');
   wipeOverlay.style.cssText = `position:absolute;inset:0;z-index:9000;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,0.65);font-family:'Orbitron',sans-serif;font-size:46px;font-weight:900;text-transform:uppercase;color:${txtColor};text-shadow:0 0 20px #000, 0 0 40px ${txtColor};animation:popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);`;
   wipeOverlay.textContent = txtContent;
   bscr.appendChild(wipeOverlay);
@@ -2190,7 +2366,6 @@ function endBattle(win){
     });
   }
 
-  // Через 2.5 секунды показываем итоговое окно
   setTimeout(() => {
     if(wipeOverlay) wipeOverlay.remove();
     const bend=document.getElementById('bend');if(!bend)return;
@@ -2273,7 +2448,7 @@ function endBattle(win){
       ss('en-color','background','linear-gradient(135deg,#8b0000,#e8415a)');
       ss('ep-color','background','linear-gradient(135deg,#1a6eb5,#3d9be9)');
     }
-  }, 2500); // Задержка в 2.5 секунды перед показом итогов
+  }, 2500); 
 }
 
 function exitBattle(){
@@ -2298,175 +2473,6 @@ if(winChestPending){winChestPending=false;setTimeout(()=>genChest('g'),600);}
 }
 });
 }
-function renderWorldMap(){
-  const svg=document.getElementById('world-svg');if(!svg)return;
-  const ci=arenaIdx();
-  const W=360,H=950; // Увеличили высоту карты для 16 арен
-  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  let d='';
-  d+=`<defs> <radialGradient id="wbg" cx="40%" cy="30%"><stop offset="0%" stop-color="#0d1e3a"/><stop offset="60%" stop-color="#07111f"/><stop offset="100%" stop-color="#020609"/></radialGradient> <radialGradient id="neb1" cx="15%" cy="20%" r="40%"><stop offset="0%" stop-color="#3d9be9" stop-opacity=".1"/><stop offset="100%" stop-color="transparent"/></radialGradient> <radialGradient id="neb2" cx="85%" cy="75%" r="35%"><stop offset="0%" stop-color="#9b5de5" stop-opacity=".08"/><stop offset="100%" stop-color="transparent"/></radialGradient> <radialGradient id="neb3" cx="50%" cy="95%" r="30%"><stop offset="0%" stop-color="#2ebd6b" stop-opacity=".07"/><stop offset="100%" stop-color="transparent"/></radialGradient> <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"> <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/> <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge> </filter> <filter id="softglow" x="-30%" y="-30%" width="160%" height="160%"> <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/> <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge> </filter> ${ARENAS.map((a,i)=>`<radialGradient id="ng${i}" cx="38%" cy="32%"><stop offset="0%" stop-color="white" stop-opacity=".35"/><stop offset="100%" stop-color="${a.col}"/></radialGradient>`).join('')} </defs>`;
-  d+=`<rect width="${W}" height="${H}" fill="url(#wbg)"/>`;
-  d+=`<rect width="${W}" height="${H}" fill="url(#neb1)"/>`;
-  d+=`<rect width="${W}" height="${H}" fill="url(#neb2)"/>`;
-  d+=`<rect width="${W}" height="${H}" fill="url(#neb3)"/>`;
-  
-  // Звезды на фоне (сдвинуты под новый размер)
-  const STARS=[[18,22,1.1,1],[45,68,0.8,2],[88,18,1.3,3],[118,55,0.7,4],[165,28,1.0,5],[208,42,0.6,6],[248,19,1.2,7],[292,58,0.9,8],[335,32,0.8,9],[348,78,1.1,10],[12,105,0.7,11],[340,130,1.2,12],[58,155,0.8,13],[315,168,0.6,14],[22,240,1.0,15],[348,210,0.9,16],[10,318,0.7,17],[340,295,1.1,18],[28,408,0.8,19],[345,382,0.6,20],[15,478,1.0,21],[348,455,0.9,22],[55,548,0.7,23],[318,528,0.8,24],[180,15,1.2,25],[80,340,0.6,26],[295,440,0.7,27]];
-  d+=STARS.map(([x,y,r,i])=>`<circle cx="${x}" cy="${y+250}" r="${r}" fill="white" opacity="${0.2+Math.random()*0.5}"><animate attributeName="opacity" values="${0.15+i%3*0.1};${0.6+i%4*0.15};${0.15+i%3*0.1}" dur="${1.8+i%5*0.4}s" repeatCount="indefinite"/></circle>`).join('');
-  d+=`<line x1="300" y1="300" x2="240" y2="340" stroke="white" stroke-width="1.5" opacity="0"><animate attributeName="opacity" values="0;0.8;0" dur="4s" begin="3s" repeatCount="indefinite"/></line>`;
-  
-  // Путь по всем 16 аренам
-  const WORLD_NODES=[
-    {ai:0,x:180,y:895}, {ai:1,x:88, y:842}, {ai:2,x:268,y:820}, {ai:3,x:68, y:758},
-    {ai:4,x:225,y:735}, {ai:5,x:298,y:665}, {ai:6,x:108,y:628}, {ai:7,x:238,y:578},
-    {ai:8,x:78, y:518}, {ai:9,x:188,y:438}, {ai:10,x:280,y:360}, {ai:11,x:140,y:290},
-    {ai:12,x:250,y:220}, {ai:13,x:90,y:150}, {ai:14,x:210,y:90}, {ai:15,x:180,y:30}
-  ];
-
-  for(let i=0;i<WORLD_NODES.length-1;i++){
-    const a=WORLD_NODES[i],b=WORLD_NODES[i+1],unlocked=i<ci;
-    if(unlocked){
-      d+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(245,197,24,0.6)" stroke-width="2" stroke-dasharray="6 4"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.2s" repeatCount="indefinite"/></line>`;
-      d+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(245,197,24,0.15)" stroke-width="5"/>`;
-    }else{
-      d+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-dasharray="4 5"/>`;
-    }
-  }
-  
-  WORLD_NODES.forEach((node,ni)=>{
-    const ar=ARENAS[node.ai],unlocked=node.ai<=ci,isCurr=node.ai===ci;
-    const r=isCurr?20:14;
-    d+=`<ellipse cx="${node.x+2}" cy="${node.y+4}" rx="${r+3}" ry="${r*.5}" fill="rgba(0,0,0,0.5)"/>`;
-    if(isCurr){
-      d+=`<circle cx="${node.x}" cy="${node.y}" r="${r+10}" fill="${ar.col}" opacity="0.12" filter="url(#glow)"><animate attributeName="r" values="${r+8};${r+16};${r+8}" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.12;0.04;0.12" dur="2s" repeatCount="indefinite"/></circle>`;
-      d+=`<circle cx="${node.x}" cy="${node.y}" r="${r+4}" fill="none" stroke="${ar.col}" stroke-width="1.5" opacity="0.4"><animate attributeName="r" values="${r+2};${r+8};${r+2}" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/></circle>`;
-    }
-    d+=`<circle cx="${node.x}" cy="${node.y}" r="${r}" fill="${unlocked?`url(#ng${node.ai})`:'#1e2535'}" stroke="${isCurr?'#f5c518':unlocked?ar.col:'rgba(255,255,255,0.18)'}" stroke-width="${isCurr?3:2}" filter="${unlocked?'url(#softglow)':''}" onclick="worldClick(${node.ai})" style="cursor:pointer" class="world-node"/>`;
-    d+=`<text x="${node.x}" y="${node.y+5}" font-size="${isCurr?15:11}" text-anchor="middle" opacity="${unlocked?1:0.35}" onclick="worldClick(${node.ai})" style="cursor:pointer">${unlocked?ar.em:'🔒'}</text>`;
-    const labelY=node.y+r+15;
-    d+=`<text x="${node.x}" y="${labelY}" font-size="9" font-weight="700" font-family="Orbitron,sans-serif" text-anchor="middle" fill="${isCurr?'#f5c518':unlocked?'rgba(255,255,255,0.75)':'rgba(255,255,255,0.25)'}" onclick="worldClick(${node.ai})" style="cursor:pointer">А${node.ai+1}</text>`;
-    if(isCurr){
-      d+=`<text x="${node.x}" y="${node.y-r-5}" font-size="16" text-anchor="middle"><animate attributeName="y" values="${node.y-r-5};${node.y-r-12};${node.y-r-5}" dur="1.6s" repeatCount="indefinite"/>📍</text>`;
-      d+=`<rect x="${node.x-26}" y="${node.y-r-34}" width="52" height="16" rx="8" fill="rgba(245,197,24,0.9)"/>`;
-      d+=`<text x="${node.x}" y="${node.y-r-23}" font-size="8.5" font-weight="700" font-family="Orbitron,sans-serif" text-anchor="middle" fill="#1a1000">ВЫ ЗДЕСЬ</text>`;
-    }
-    if(!unlocked&&node.ai>0){
-      d+=`<text x="${node.x}" y="${labelY+12}" font-size="8" text-anchor="middle" fill="rgba(245,197,24,0.5)">${ar.th}🏆</text>`;
-    }
-  });
-  svg.innerHTML=d;
-  const wt=document.getElementById('world-tooltip');if(wt)wt.classList.remove('active');
-}
-
-function worldClick(ai){
-  const ar=ARENAS[ai],ci=arenaIdx(),unlocked=ai<=ci;
-  const wt=document.getElementById('world-tooltip');if(!wt)return;
-  document.getElementById('wt-name').textContent=`${ar.em} Арена ${ai+1}: ${ar.n}`;
-  document.getElementById('wt-desc').textContent=unlocked?`${ar.th}+ 🏆 · Разблокирована · ${CARDS.filter(c=>c.a===ai).length} карт`:`🔒 Нужно ${ar.th} 🏆`;
-  wt.classList.add('active');
-}
-
-function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
-function skipReg(){ss('m-reg','display','none');U.isGuest=true;lw('clash_uid',U.uid);startUI();}
-function openReg(){ss('m-reg','display','none');ss('m-regemail','display','flex');}
-function submitReg(){
-  const email=document.getElementById('remail').value.trim(),pass=document.getElementById('rpass').value;
-  if(!email||pass.length<5)return notify('Введите почту и пароль (мин. 5 симв.)');
-  db.ref('users').orderByChild('email').equalTo(email).once('value').then(s=>{if(s.exists())return notify('Почта занята!');U.email=email;U.password=pass;ss('m-regemail','display','none');ss('m-code','display','flex');notify('Код отправлен!','ok');}).catch(()=>notify('Ошибка связи'));
-}
-function submitCode(){
-  if(document.getElementById('rcode').value.length<4)return notify('Мин. 4 символа');
-  U.isGuest=false;ss('m-code','display','none');lw('clash_uid',U.uid);
-  db.ref('users/'+U.uid).set(U).then(()=>{notify('Аккаунт сохранён!','ok');startUI();listenRealtime();}).catch(()=>notify('Ошибка сохранения'));
-}
-function doLogin(){
-  const email=document.getElementById('lemail').value,pass=document.getElementById('lpass').value;
-  if(!email||!pass)return notify('Заполните поля');
-  db.ref('users').once('value').then(snap=>{
-    let fu=null,fk=null;
-    snap.forEach(c=>{const u=c.val();if(u.email&&u.email.toLowerCase().trim()===email.toLowerCase().trim()){fu=u;fk=c.key;}});
-    if(fu&&fu.password===pass){
-      if(U?.isGuest&&U.uid!==fk)db.ref('users/'+U.uid).remove();
-      U=migrate(fu);lw('clash_uid',fk);notify('Добро пожаловать!','ok');ss('m-login','display','none');
-      doLoad('Загрузка профиля…',()=>{startUI();listenRealtime();});
-    }else notify('Неверный пароль или аккаунт не найден');
-  }).catch(()=>notify('БД недоступна'));
-}
-function logout(){ld('clash_uid');location.reload();}
-
-function listenRealtime(){
-  if(!U||U.isGuest)return;
-  if(_friendReqRef)_friendReqRef.off();
-  _friendReqRef=db.ref(`users/${U.uid}/friendReqs`);
-  _friendReqRef.on('value',snap=>{
-    const n=snap.exists()?Object.keys(snap.val()||{}).length:0;
-    const badge=document.getElementById('req-count'),dot=document.getElementById('ndot');
-    if(badge){badge.textContent=n;badge.style.display=n>0?'inline':'none';}
-    if(dot)dot.style.display=n>0?'block':'none';
-  });
-}
-
-function openFriends(){if(!U)return;const myEl=document.getElementById('my-id-show');if(myEl)myEl.textContent=U.uid;ss('friends-ov','display','flex');fTab('list');}
-function fTab(t){['list','req','add'].forEach(x=>{document.getElementById('ft-'+x)?.classList.toggle('active',x===t);ss('fc-'+x,'display',x===t?'block':'none');});if(t==='list')renderFriendList();if(t==='req')renderFriendReqs();}
-
-function renderFriendList(){
-  const c=document.getElementById('fc-list');if(!c||!U)return;
-  c.innerHTML='<p style="color:rgba(255,255,255,.28);font-size:11px;margin-bottom:8px;text-align:center">Загрузка…</p>';
-  db.ref(`users/${U.uid}/friends`).once('value').then(fsnap => {
-    const friendsObj = fsnap.val() || {}; U.friends = friendsObj;
-    const friends=Object.keys(friendsObj).filter(k=>friendsObj[k]===true);
-    if(!friends.length){c.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.38);font-size:13px;padding:24px 10px">Друзей пока нет.<br>Перейди во вкладку «Добавить»</p>';return;}
-    Promise.all(friends.map(uid=>db.ref('users/'+uid).once('value').catch(()=>null))).then(snaps=>{
-      c.innerHTML=''; let added=0;
-      snaps.forEach((snap,i)=>{
-        if(!snap||!snap.exists())return;added++;
-        const fr=snap.val(),fuid=friends[i],arI=ARENAS.findIndex(a=>a.th>(fr.trophies||0)),arN=arI>0?ARENAS[arI-1].n:'Лужайка';
-        c.innerHTML+=`<div class="friend-card" onclick="viewPlayer('${fuid}')"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${fr.nickname||'?'}</div> <div class="fc-sub">🏆 ${fr.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${fuid}</div> </div> <div class="fc-actions"> <button class="fc-btn red" onclick="event.stopPropagation(); removeFriend('${fuid}')">✕ Удалить</button> </div> </div>`;
-      });
-      if(!added)c.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.38);font-size:13px;padding:20px">Нет друзей</p>';
-    }).catch(()=>{c.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">Ошибка загрузки</p>';});
-  });
-}
-
-function renderFriendReqs(){
-  const c=document.getElementById('fc-req');if(!c||!U)return;
-  c.innerHTML='<p style="color:rgba(255,255,255,.28);font-size:11px;margin-bottom:8px;text-align:center">Загрузка…</p>';
-  db.ref(`users/${U.uid}/friendReqs`).once('value').then(snap=>{
-    c.innerHTML='';
-    if(!snap.exists()||!Object.keys(snap.val()||{}).length){c.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.38);font-size:13px;padding:24px">Входящих запросов нет</p>';return;}
-    Object.entries(snap.val()).forEach(([fromUid,req])=>{
-      c.innerHTML+=`<div class="notif-banner"> <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"> <span style="font-size:26px">👤</span> <div> <div style="font-weight:700;font-size:14px">${req.name||fromUid}</div> <div style="font-size:11px;color:rgba(255,255,255,.4)">Хочет добавить вас в друзья</div> </div> </div> <div style="display:flex;gap:8px"> <button class="fc-btn green" style="flex:1" onclick="acceptFriendReq('${fromUid}','${(req.name||'').replace(/'/g,'').replace(/"/g,'')}')">✓ Принять</button> <button class="fc-btn red" style="flex:1" onclick="declineFriendReq('${fromUid}')">✗ Отклонить</button> </div> </div>`;
-    });
-  }).catch(()=>{c.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">Ошибка загрузки</p>';});
-}
-
-function searchFriend(){
-  const inp=document.getElementById('fid-inp');if(!inp)return;
-  const id=inp.value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-  if(!id)return notify('Введи ID игрока');if(id===U.uid)return notify('Это твой собственный ID');if(U.friends&&U.friends[id]===true)return notify('Этот игрок уже в друзьях');
-  const res=document.getElementById('fres');if(!res)return;
-  res.innerHTML='<p style="color:rgba(255,255,255,.4);font-size:13px;text-align:center">🔍 Поиск…</p>';
-  db.ref('users/'+id).once('value').then(snap=>{
-    if(!snap.exists()){res.innerHTML='<p style="color:var(--dn);font-size:13px;text-align:center">❌ Игрок не найден</p>';return;}
-    const u=snap.val(),arI=ARENAS.findIndex(a=>a.th>(u.trophies||0)),arN=arI>0?ARENAS[arI-1].n:'Лужайка';
-    res.innerHTML=`<div class="friend-card" onclick="viewPlayer('${id}')"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${u.nickname||'?'}</div> <div class="fc-sub">🏆 ${u.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${id}</div> </div> <div class="fc-actions"> <button class="fc-btn green" onclick="event.stopPropagation(); sendFriendReq('${id}','${(u.nickname||'').replace(/'/g,'').replace(/"/g,'')}')">➕ Добавить</button> </div> </div>`;
-  }).catch(()=>{res.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">⚠️ Ошибка</p>';});
-}
-
-function sendFriendReq(toUid,name){
-  if(!toUid)return;
-  db.ref(`users/${toUid}/friendReqs/${U.uid}`).set({name:U.nickname,ts:Date.now()}).then(()=>{
-    notify('Запрос отправлен!','ok');const res=document.getElementById('fres');if(res)res.innerHTML='<p style="color:var(--ok);font-size:13px;text-align:center">✅ Запрос дружбы отправлен!</p>';
-  }).catch(()=>notify('Ошибка отправки запроса'));
-}
-
-function acceptFriendReq(fromUid,fromName){
-  if(!U.friends)U.friends={};U.friends[fromUid]=true;
-  Promise.all([db.ref(`users/${U.uid}/friends/${fromUid}`).set(true),db.ref(`users/${fromUid}/friends/${U.uid}`).set(true),db.ref(`users/${U.uid}/friendReqs/${fromUid}`).remove()]).then(()=>{checkMedals();saveU();notify(`${fromName||'Игрок'} добавлен в друзья!`,'ok');renderFriendReqs();renderFriendList();}).catch(()=>notify('Ошибка'));
-}
-
-function declineFriendReq(fromUid){db.ref(`users/${U.uid}/friendReqs/${fromUid}`).remove().then(()=>{notify('Запрос отклонён');renderFriendReqs();});}
-function removeFriend(fuid){if(!U.friends)return;delete U.friends[fuid];Promise.all([db.ref(`users/${U.uid}/friends/${fuid}`).remove(),db.ref(`users/${fuid}/friends/${U.uid}`).remove()]).then(()=>{saveU();renderFriendList();notify('Друг удалён');});}
 
 </script>
 </body>
