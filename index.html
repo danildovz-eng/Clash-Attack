@@ -2298,6 +2298,175 @@ if(winChestPending){winChestPending=false;setTimeout(()=>genChest('g'),600);}
 }
 });
 }
+function renderWorldMap(){
+  const svg=document.getElementById('world-svg');if(!svg)return;
+  const ci=arenaIdx();
+  const W=360,H=950; // Увеличили высоту карты для 16 арен
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  let d='';
+  d+=`<defs> <radialGradient id="wbg" cx="40%" cy="30%"><stop offset="0%" stop-color="#0d1e3a"/><stop offset="60%" stop-color="#07111f"/><stop offset="100%" stop-color="#020609"/></radialGradient> <radialGradient id="neb1" cx="15%" cy="20%" r="40%"><stop offset="0%" stop-color="#3d9be9" stop-opacity=".1"/><stop offset="100%" stop-color="transparent"/></radialGradient> <radialGradient id="neb2" cx="85%" cy="75%" r="35%"><stop offset="0%" stop-color="#9b5de5" stop-opacity=".08"/><stop offset="100%" stop-color="transparent"/></radialGradient> <radialGradient id="neb3" cx="50%" cy="95%" r="30%"><stop offset="0%" stop-color="#2ebd6b" stop-opacity=".07"/><stop offset="100%" stop-color="transparent"/></radialGradient> <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"> <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/> <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge> </filter> <filter id="softglow" x="-30%" y="-30%" width="160%" height="160%"> <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/> <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge> </filter> ${ARENAS.map((a,i)=>`<radialGradient id="ng${i}" cx="38%" cy="32%"><stop offset="0%" stop-color="white" stop-opacity=".35"/><stop offset="100%" stop-color="${a.col}"/></radialGradient>`).join('')} </defs>`;
+  d+=`<rect width="${W}" height="${H}" fill="url(#wbg)"/>`;
+  d+=`<rect width="${W}" height="${H}" fill="url(#neb1)"/>`;
+  d+=`<rect width="${W}" height="${H}" fill="url(#neb2)"/>`;
+  d+=`<rect width="${W}" height="${H}" fill="url(#neb3)"/>`;
+  
+  // Звезды на фоне (сдвинуты под новый размер)
+  const STARS=[[18,22,1.1,1],[45,68,0.8,2],[88,18,1.3,3],[118,55,0.7,4],[165,28,1.0,5],[208,42,0.6,6],[248,19,1.2,7],[292,58,0.9,8],[335,32,0.8,9],[348,78,1.1,10],[12,105,0.7,11],[340,130,1.2,12],[58,155,0.8,13],[315,168,0.6,14],[22,240,1.0,15],[348,210,0.9,16],[10,318,0.7,17],[340,295,1.1,18],[28,408,0.8,19],[345,382,0.6,20],[15,478,1.0,21],[348,455,0.9,22],[55,548,0.7,23],[318,528,0.8,24],[180,15,1.2,25],[80,340,0.6,26],[295,440,0.7,27]];
+  d+=STARS.map(([x,y,r,i])=>`<circle cx="${x}" cy="${y+250}" r="${r}" fill="white" opacity="${0.2+Math.random()*0.5}"><animate attributeName="opacity" values="${0.15+i%3*0.1};${0.6+i%4*0.15};${0.15+i%3*0.1}" dur="${1.8+i%5*0.4}s" repeatCount="indefinite"/></circle>`).join('');
+  d+=`<line x1="300" y1="300" x2="240" y2="340" stroke="white" stroke-width="1.5" opacity="0"><animate attributeName="opacity" values="0;0.8;0" dur="4s" begin="3s" repeatCount="indefinite"/></line>`;
+  
+  // Путь по всем 16 аренам
+  const WORLD_NODES=[
+    {ai:0,x:180,y:895}, {ai:1,x:88, y:842}, {ai:2,x:268,y:820}, {ai:3,x:68, y:758},
+    {ai:4,x:225,y:735}, {ai:5,x:298,y:665}, {ai:6,x:108,y:628}, {ai:7,x:238,y:578},
+    {ai:8,x:78, y:518}, {ai:9,x:188,y:438}, {ai:10,x:280,y:360}, {ai:11,x:140,y:290},
+    {ai:12,x:250,y:220}, {ai:13,x:90,y:150}, {ai:14,x:210,y:90}, {ai:15,x:180,y:30}
+  ];
+
+  for(let i=0;i<WORLD_NODES.length-1;i++){
+    const a=WORLD_NODES[i],b=WORLD_NODES[i+1],unlocked=i<ci;
+    if(unlocked){
+      d+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(245,197,24,0.6)" stroke-width="2" stroke-dasharray="6 4"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.2s" repeatCount="indefinite"/></line>`;
+      d+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(245,197,24,0.15)" stroke-width="5"/>`;
+    }else{
+      d+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-dasharray="4 5"/>`;
+    }
+  }
+  
+  WORLD_NODES.forEach((node,ni)=>{
+    const ar=ARENAS[node.ai],unlocked=node.ai<=ci,isCurr=node.ai===ci;
+    const r=isCurr?20:14;
+    d+=`<ellipse cx="${node.x+2}" cy="${node.y+4}" rx="${r+3}" ry="${r*.5}" fill="rgba(0,0,0,0.5)"/>`;
+    if(isCurr){
+      d+=`<circle cx="${node.x}" cy="${node.y}" r="${r+10}" fill="${ar.col}" opacity="0.12" filter="url(#glow)"><animate attributeName="r" values="${r+8};${r+16};${r+8}" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.12;0.04;0.12" dur="2s" repeatCount="indefinite"/></circle>`;
+      d+=`<circle cx="${node.x}" cy="${node.y}" r="${r+4}" fill="none" stroke="${ar.col}" stroke-width="1.5" opacity="0.4"><animate attributeName="r" values="${r+2};${r+8};${r+2}" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/></circle>`;
+    }
+    d+=`<circle cx="${node.x}" cy="${node.y}" r="${r}" fill="${unlocked?`url(#ng${node.ai})`:'#1e2535'}" stroke="${isCurr?'#f5c518':unlocked?ar.col:'rgba(255,255,255,0.18)'}" stroke-width="${isCurr?3:2}" filter="${unlocked?'url(#softglow)':''}" onclick="worldClick(${node.ai})" style="cursor:pointer" class="world-node"/>`;
+    d+=`<text x="${node.x}" y="${node.y+5}" font-size="${isCurr?15:11}" text-anchor="middle" opacity="${unlocked?1:0.35}" onclick="worldClick(${node.ai})" style="cursor:pointer">${unlocked?ar.em:'🔒'}</text>`;
+    const labelY=node.y+r+15;
+    d+=`<text x="${node.x}" y="${labelY}" font-size="9" font-weight="700" font-family="Orbitron,sans-serif" text-anchor="middle" fill="${isCurr?'#f5c518':unlocked?'rgba(255,255,255,0.75)':'rgba(255,255,255,0.25)'}" onclick="worldClick(${node.ai})" style="cursor:pointer">А${node.ai+1}</text>`;
+    if(isCurr){
+      d+=`<text x="${node.x}" y="${node.y-r-5}" font-size="16" text-anchor="middle"><animate attributeName="y" values="${node.y-r-5};${node.y-r-12};${node.y-r-5}" dur="1.6s" repeatCount="indefinite"/>📍</text>`;
+      d+=`<rect x="${node.x-26}" y="${node.y-r-34}" width="52" height="16" rx="8" fill="rgba(245,197,24,0.9)"/>`;
+      d+=`<text x="${node.x}" y="${node.y-r-23}" font-size="8.5" font-weight="700" font-family="Orbitron,sans-serif" text-anchor="middle" fill="#1a1000">ВЫ ЗДЕСЬ</text>`;
+    }
+    if(!unlocked&&node.ai>0){
+      d+=`<text x="${node.x}" y="${labelY+12}" font-size="8" text-anchor="middle" fill="rgba(245,197,24,0.5)">${ar.th}🏆</text>`;
+    }
+  });
+  svg.innerHTML=d;
+  const wt=document.getElementById('world-tooltip');if(wt)wt.classList.remove('active');
+}
+
+function worldClick(ai){
+  const ar=ARENAS[ai],ci=arenaIdx(),unlocked=ai<=ci;
+  const wt=document.getElementById('world-tooltip');if(!wt)return;
+  document.getElementById('wt-name').textContent=`${ar.em} Арена ${ai+1}: ${ar.n}`;
+  document.getElementById('wt-desc').textContent=unlocked?`${ar.th}+ 🏆 · Разблокирована · ${CARDS.filter(c=>c.a===ai).length} карт`:`🔒 Нужно ${ar.th} 🏆`;
+  wt.classList.add('active');
+}
+
+function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
+function skipReg(){ss('m-reg','display','none');U.isGuest=true;lw('clash_uid',U.uid);startUI();}
+function openReg(){ss('m-reg','display','none');ss('m-regemail','display','flex');}
+function submitReg(){
+  const email=document.getElementById('remail').value.trim(),pass=document.getElementById('rpass').value;
+  if(!email||pass.length<5)return notify('Введите почту и пароль (мин. 5 симв.)');
+  db.ref('users').orderByChild('email').equalTo(email).once('value').then(s=>{if(s.exists())return notify('Почта занята!');U.email=email;U.password=pass;ss('m-regemail','display','none');ss('m-code','display','flex');notify('Код отправлен!','ok');}).catch(()=>notify('Ошибка связи'));
+}
+function submitCode(){
+  if(document.getElementById('rcode').value.length<4)return notify('Мин. 4 символа');
+  U.isGuest=false;ss('m-code','display','none');lw('clash_uid',U.uid);
+  db.ref('users/'+U.uid).set(U).then(()=>{notify('Аккаунт сохранён!','ok');startUI();listenRealtime();}).catch(()=>notify('Ошибка сохранения'));
+}
+function doLogin(){
+  const email=document.getElementById('lemail').value,pass=document.getElementById('lpass').value;
+  if(!email||!pass)return notify('Заполните поля');
+  db.ref('users').once('value').then(snap=>{
+    let fu=null,fk=null;
+    snap.forEach(c=>{const u=c.val();if(u.email&&u.email.toLowerCase().trim()===email.toLowerCase().trim()){fu=u;fk=c.key;}});
+    if(fu&&fu.password===pass){
+      if(U?.isGuest&&U.uid!==fk)db.ref('users/'+U.uid).remove();
+      U=migrate(fu);lw('clash_uid',fk);notify('Добро пожаловать!','ok');ss('m-login','display','none');
+      doLoad('Загрузка профиля…',()=>{startUI();listenRealtime();});
+    }else notify('Неверный пароль или аккаунт не найден');
+  }).catch(()=>notify('БД недоступна'));
+}
+function logout(){ld('clash_uid');location.reload();}
+
+function listenRealtime(){
+  if(!U||U.isGuest)return;
+  if(_friendReqRef)_friendReqRef.off();
+  _friendReqRef=db.ref(`users/${U.uid}/friendReqs`);
+  _friendReqRef.on('value',snap=>{
+    const n=snap.exists()?Object.keys(snap.val()||{}).length:0;
+    const badge=document.getElementById('req-count'),dot=document.getElementById('ndot');
+    if(badge){badge.textContent=n;badge.style.display=n>0?'inline':'none';}
+    if(dot)dot.style.display=n>0?'block':'none';
+  });
+}
+
+function openFriends(){if(!U)return;const myEl=document.getElementById('my-id-show');if(myEl)myEl.textContent=U.uid;ss('friends-ov','display','flex');fTab('list');}
+function fTab(t){['list','req','add'].forEach(x=>{document.getElementById('ft-'+x)?.classList.toggle('active',x===t);ss('fc-'+x,'display',x===t?'block':'none');});if(t==='list')renderFriendList();if(t==='req')renderFriendReqs();}
+
+function renderFriendList(){
+  const c=document.getElementById('fc-list');if(!c||!U)return;
+  c.innerHTML='<p style="color:rgba(255,255,255,.28);font-size:11px;margin-bottom:8px;text-align:center">Загрузка…</p>';
+  db.ref(`users/${U.uid}/friends`).once('value').then(fsnap => {
+    const friendsObj = fsnap.val() || {}; U.friends = friendsObj;
+    const friends=Object.keys(friendsObj).filter(k=>friendsObj[k]===true);
+    if(!friends.length){c.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.38);font-size:13px;padding:24px 10px">Друзей пока нет.<br>Перейди во вкладку «Добавить»</p>';return;}
+    Promise.all(friends.map(uid=>db.ref('users/'+uid).once('value').catch(()=>null))).then(snaps=>{
+      c.innerHTML=''; let added=0;
+      snaps.forEach((snap,i)=>{
+        if(!snap||!snap.exists())return;added++;
+        const fr=snap.val(),fuid=friends[i],arI=ARENAS.findIndex(a=>a.th>(fr.trophies||0)),arN=arI>0?ARENAS[arI-1].n:'Лужайка';
+        c.innerHTML+=`<div class="friend-card" onclick="viewPlayer('${fuid}')"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${fr.nickname||'?'}</div> <div class="fc-sub">🏆 ${fr.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${fuid}</div> </div> <div class="fc-actions"> <button class="fc-btn red" onclick="event.stopPropagation(); removeFriend('${fuid}')">✕ Удалить</button> </div> </div>`;
+      });
+      if(!added)c.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.38);font-size:13px;padding:20px">Нет друзей</p>';
+    }).catch(()=>{c.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">Ошибка загрузки</p>';});
+  });
+}
+
+function renderFriendReqs(){
+  const c=document.getElementById('fc-req');if(!c||!U)return;
+  c.innerHTML='<p style="color:rgba(255,255,255,.28);font-size:11px;margin-bottom:8px;text-align:center">Загрузка…</p>';
+  db.ref(`users/${U.uid}/friendReqs`).once('value').then(snap=>{
+    c.innerHTML='';
+    if(!snap.exists()||!Object.keys(snap.val()||{}).length){c.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.38);font-size:13px;padding:24px">Входящих запросов нет</p>';return;}
+    Object.entries(snap.val()).forEach(([fromUid,req])=>{
+      c.innerHTML+=`<div class="notif-banner"> <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"> <span style="font-size:26px">👤</span> <div> <div style="font-weight:700;font-size:14px">${req.name||fromUid}</div> <div style="font-size:11px;color:rgba(255,255,255,.4)">Хочет добавить вас в друзья</div> </div> </div> <div style="display:flex;gap:8px"> <button class="fc-btn green" style="flex:1" onclick="acceptFriendReq('${fromUid}','${(req.name||'').replace(/'/g,'').replace(/"/g,'')}')">✓ Принять</button> <button class="fc-btn red" style="flex:1" onclick="declineFriendReq('${fromUid}')">✗ Отклонить</button> </div> </div>`;
+    });
+  }).catch(()=>{c.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">Ошибка загрузки</p>';});
+}
+
+function searchFriend(){
+  const inp=document.getElementById('fid-inp');if(!inp)return;
+  const id=inp.value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(!id)return notify('Введи ID игрока');if(id===U.uid)return notify('Это твой собственный ID');if(U.friends&&U.friends[id]===true)return notify('Этот игрок уже в друзьях');
+  const res=document.getElementById('fres');if(!res)return;
+  res.innerHTML='<p style="color:rgba(255,255,255,.4);font-size:13px;text-align:center">🔍 Поиск…</p>';
+  db.ref('users/'+id).once('value').then(snap=>{
+    if(!snap.exists()){res.innerHTML='<p style="color:var(--dn);font-size:13px;text-align:center">❌ Игрок не найден</p>';return;}
+    const u=snap.val(),arI=ARENAS.findIndex(a=>a.th>(u.trophies||0)),arN=arI>0?ARENAS[arI-1].n:'Лужайка';
+    res.innerHTML=`<div class="friend-card" onclick="viewPlayer('${id}')"> <div style="font-size:26px;flex-shrink:0">👤</div> <div class="fc-info"> <div class="fc-name">${u.nickname||'?'}</div> <div class="fc-sub">🏆 ${u.trophies||0} · ${arN}</div> <div class="fc-sub" style="font-size:10px;opacity:.6">ID: ${id}</div> </div> <div class="fc-actions"> <button class="fc-btn green" onclick="event.stopPropagation(); sendFriendReq('${id}','${(u.nickname||'').replace(/'/g,'').replace(/"/g,'')}')">➕ Добавить</button> </div> </div>`;
+  }).catch(()=>{res.innerHTML='<p style="color:var(--dn);text-align:center;font-size:13px">⚠️ Ошибка</p>';});
+}
+
+function sendFriendReq(toUid,name){
+  if(!toUid)return;
+  db.ref(`users/${toUid}/friendReqs/${U.uid}`).set({name:U.nickname,ts:Date.now()}).then(()=>{
+    notify('Запрос отправлен!','ok');const res=document.getElementById('fres');if(res)res.innerHTML='<p style="color:var(--ok);font-size:13px;text-align:center">✅ Запрос дружбы отправлен!</p>';
+  }).catch(()=>notify('Ошибка отправки запроса'));
+}
+
+function acceptFriendReq(fromUid,fromName){
+  if(!U.friends)U.friends={};U.friends[fromUid]=true;
+  Promise.all([db.ref(`users/${U.uid}/friends/${fromUid}`).set(true),db.ref(`users/${fromUid}/friends/${U.uid}`).set(true),db.ref(`users/${U.uid}/friendReqs/${fromUid}`).remove()]).then(()=>{checkMedals();saveU();notify(`${fromName||'Игрок'} добавлен в друзья!`,'ok');renderFriendReqs();renderFriendList();}).catch(()=>notify('Ошибка'));
+}
+
+function declineFriendReq(fromUid){db.ref(`users/${U.uid}/friendReqs/${fromUid}`).remove().then(()=>{notify('Запрос отклонён');renderFriendReqs();});}
+function removeFriend(fuid){if(!U.friends)return;delete U.friends[fuid];Promise.all([db.ref(`users/${U.uid}/friends/${fuid}`).remove(),db.ref(`users/${fuid}/friends/${U.uid}`).remove()]).then(()=>{saveU();renderFriendList();notify('Друг удалён');});}
 
 </script>
 </body>
