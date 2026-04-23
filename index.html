@@ -23,14 +23,24 @@
   --nav-bar: calc(56px + var(--safe-bot));
   --br:rgba(255,255,255,0.15);
 }
-*{box-sizing:border-box;user-select:none;margin:0;padding:0;font-family:'Exo 2',sans-serif;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;margin:0;padding:0;font-family:'Exo 2',sans-serif;-webkit-tap-highlight-color:transparent}
+input, textarea, select { user-select:text; -webkit-user-select:text; }
 
 html, body {
+  position: fixed; /* Жестко фиксируем фон от скролла на iOS */
+  top: 0; left: 0; right: 0; bottom: 0;
   width: 100%; height: 100%;
   margin: 0; padding: 0;
   background-color: #05070a;
   display: flex; justify-content: center; align-items: center;
   color: var(--tx); 
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Блокируем передачу скролла от окон к фону */
+.scr, #pass-wrap, #world-container, #fav-pick-grid, #admin-player-list {
+  overscroll-behavior-y: contain;
 }
 
 #app-container {
@@ -839,6 +849,8 @@ let winChestPending=false,appStarted=false,loading=false;
 let navIdx=2,deckTab=0,mmTimer=null;
 let botTrophies=0,botFavCard=null,botBanner=null,rlSpinning=false;
 
+// ВОТ ЗДЕСЬ ИСПРАВЛЕНА ОШИБКА БЕСКОНЕЧНОГО ПОИСКА! МАССИВ ВЕРНУЛСЯ.
+const BOT_NAMES = ['Destroyer99', 'pro_gamer', 'DarkKnight', 'ShadowNinja', 'Alex2010', 'KingOfArena', 'GigaChad', 'PekkaLover', 'Toxic_Boy', 'NoobMaster', 'John_Doe', 'ClashGod', 'CyberDemon', 'GhostRider'];
 const ADMIN_EMAIL = 'danildovz@gmail.com';
 let adminTarget = null;
 let allUsersData = null;
@@ -1230,7 +1242,6 @@ function updateUI(){
   for(let i=0;i<2;i++){const ms=document.getElementById(`um${i}`);if(!ms)continue;const mid=(U.equippedMedals&&U.equippedMedals[i])?U.equippedMedals[i]:null;if(mid){const m=MEDALS.find(x=>x.id===mid);ms.style.display='inline-flex';ms.textContent=m?m.ic:'';}else ms.style.display='none';}
   ss('guest-btns','display',U.isGuest?'block':'none');
   
-  // Показ кнопки Админки
   const adminBtn = document.getElementById('admin-btn');
   if(adminBtn) adminBtn.style.display = (U.email === ADMIN_EMAIL) ? 'inline-block' : 'none';
 
@@ -1242,7 +1253,7 @@ function startUI(){
   checkDailyReset();
   if(!U.quests)U.quests=genQuests();if(!U.dailyEmotes||!U.dailyEmotes.length)genShop();if(!U.dsp)U.dsp={};
   
-  checkAprilWelcome(); // Проверка на анимацию приветствия
+  checkAprilWelcome(); 
   checkArena();checkMedals();updateUI();saveU();nav('s-main',2);setTimeout(hideCover,150);
 }
 
