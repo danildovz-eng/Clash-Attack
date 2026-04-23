@@ -27,7 +27,7 @@
 input, textarea, select { user-select:text; -webkit-user-select:text; }
 
 html, body {
-  position: fixed; /* Жестко фиксируем фон от скролла на iOS */
+  position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   width: 100%; height: 100%;
   margin: 0; padding: 0;
@@ -38,8 +38,7 @@ html, body {
   overscroll-behavior: none;
 }
 
-/* Блокируем передачу скролла от окон к фону */
-.scr, #pass-wrap, #world-container, #fav-pick-grid, #admin-player-list {
+.scr, #pass-wrap, #world-container, #fav-pick-grid, #admin-player-list, #admin-bugs-list {
   overscroll-behavior-y: contain;
 }
 
@@ -65,9 +64,13 @@ html, body {
 @keyframes mmPulse{from{transform:scale(0.9);opacity:0.8;}to{transform:scale(1.1);opacity:1;}}
 @keyframes sdPulse { from { box-shadow: inset 0 0 30px rgba(232,65,90,0.2); } to { box-shadow: inset 0 0 80px rgba(232,65,90,0.7); } }
 
-/* Анимации для экрана 30 апреля */
-@keyframes slideInLeftSkew { from { transform: translateX(-100%) skewX(-15deg); opacity: 0; } to { transform: translateX(0) skewX(-15deg); opacity: 1; } }
-@keyframes slideInRightSkew { from { transform: translateX(100%) skewX(-15deg); opacity: 0; } to { transform: translateX(0) skewX(-15deg); opacity: 1; } }
+/* Анимация руки для туториала */
+@keyframes pointHand { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(0,-100px) scale(0.9); } 100% { transform: translate(0,0) scale(1); } }
+#tut-hand { position:absolute; font-size:60px; z-index:9999; pointer-events:none; display:none; filter:drop-shadow(0 5px 10px rgba(0,0,0,0.5)); animation: pointHand 1.5s infinite ease-in-out; }
+
+/* Анимации для нового экрана СЕЗОН 1 ДЖУНГЛИ */
+@keyframes jungleTitleIn { from { transform: scale(1.5); opacity: 0; filter: blur(10px); } to { transform: scale(1); opacity: 1; filter: blur(0); } }
+@keyframes jungleSubIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 .dmg-txt { position: absolute; color: #ff4757; font-weight: 900; font-size: 18px; text-shadow: 0 2px 5px #000; pointer-events: none; z-index: 25; font-family: 'Orbitron', sans-serif; transition: transform 0.8s ease-out, opacity 0.8s ease-out; }
 .streak-fire { text-shadow: 0 0 10px #ff9800, 0 0 20px #ff5722 !important; color: #ffeb3b !important; }
@@ -279,10 +282,61 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .pwa-prog-wrap { width: 80%; height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 20px 0; display: none; }
 .pwa-prog-fill { height: 100%; background: var(--pr); width: 0%; transition: width 0.1s linear; }
 
-/* Стили экрана Добро Пожаловать */
-#welcome-s1 { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 80000; display: none; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; cursor: pointer; }
-.welc-t1 { font-family: 'Orbitron', sans-serif; font-size: 38px; font-weight: 900; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,0.8); margin-bottom: 10px; text-transform: uppercase; text-align: center; line-height: 1.1; animation: slideInLeftSkew 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; }
-.welc-t2 { font-family: 'Orbitron', sans-serif; font-size: 52px; font-weight: 900; color: var(--ac); text-shadow: 0 5px 20px rgba(245,197,24,0.6); text-transform: uppercase; animation: slideInRightSkew 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards; opacity: 0; }
+/* Стили админки багов */
+#admin-bug-btn { background: linear-gradient(145deg, #FF6B6B, #EE5253); border: 1px solid #ff9f9f; }
+.bug-item { background:var(--p2); border:1px solid var(--br); border-radius:14px; padding:15px; margin-bottom:12px; cursor:pointer; transition:0.2s; position:relative; }
+.bug-item:hover { border-color:rgba(255,255,255,0.3); background:rgba(255,255,255,0.03); }
+.bug-item.read { opacity: 0.6; border-style: dashed; }
+.bug-meta { font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:6px; display:flex; justify-content:space-between; }
+.bug-text-preview { font-size:13px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.admin-reply-area { margin-top:10px; padding-top:10px; border-top:1px solid var(--br); }
+
+/* Стили обновленного приветственного экрана "СЕЗОН 1 ДЖУНГЛИ" */
+#welcome-s1 {
+  position: fixed; inset: 0;
+  background: #000;
+  background-image: url('img/jungle_bg.JPG'); /* Предполагаем, что есть фон */
+  background-size: cover; background-position: center;
+  z-index: 80000; display: none;
+  flex-direction: column; justify-content: center; align-items: center;
+  overflow: hidden; cursor: pointer;
+  text-align: center;
+}
+#welcome-s1::before { /* Затемнение фона */
+  content:''; position:absolute; inset:0; background:rgba(0,0,0,0.6); z-index:1;
+}
+.welc-box {
+  position:relative; z-index:2;
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+}
+.welc-t1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 42px; font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 15px rgba(255,255,255,0.5), 0 5px 15px rgba(0,0,0,0.8);
+  margin:0; text-transform: uppercase;
+  animation: jungleTitleIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+}
+.welc-t2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 58px; font-weight: 900;
+  color: var(--ok); /* Ярко-зеленый */
+  text-shadow: 0 0 20px rgba(46,189,107,0.7), 0 5px 20px rgba(0,0,0,0.8);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: jungleTitleIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards;
+  opacity: 0;
+}
+.welc-sub {
+  color: rgba(255,255,255,0.6);
+  font-size: 14px; font-weight: 700;
+  margin-top: 15px;
+  text-transform: uppercase; letter-spacing: 3px;
+  animation: jungleSubIn 0.8s ease-out 1s forwards;
+  opacity: 0;
+}
+
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -299,9 +353,12 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <p id="pwa-txt" style="color:var(--ac);font-size:12px;margin-top:10px;font-weight:bold;display:none">Ожидание установки...</p>
 </div>
 
-<div id="welcome-s1" onclick="this.style.display='none'">
-  <div class="welc-t1">Добро пожаловать!</div>
-  <div class="welc-t2">СЕЗОН 1</div>
+<div id="welcome-s1" onclick="this.style.display='none'" style="background: radial-gradient(circle at center, #0a2e15, #000000);">
+  <div class="welc-box" style="transform: skewX(-15deg);">
+    <div class="welc-t1" style="color: #00ff33; text-shadow: 0 0 30px rgba(0,255,51,0.6);">СЕЗОН 1</div>
+    <div class="welc-t2" style="color: #00ff33; text-shadow: 0 0 30px rgba(0,255,51,0.6); font-size: 50px;">ДЖУНГЛИ</div>
+  </div>
+  <div class="welc-sub">нажмите чтобы продолжить</div>
 </div>
 
 <div id="app-container">
@@ -310,6 +367,8 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div id="dghost"><div id="dg-icon" style="font-size:36px"></div><div id="dg-name" style="font-size:10px;font-weight:bold;margin-top:4px"></div></div>
   <div id="intro"><h1>TERROV<br>STUDIO</h1><p>Game Development</p></div>
   <div id="loading"><h1>CLASH<br><span>ARENA</span></h1><div class="lbar"><div id="lprog"></div></div><div id="ltxt">ИНИЦИАЛИЗАЦИЯ...</div></div>
+
+  <div id="tut-hand">👆</div>
 
   <div id="m-profile" class="ov" style="z-index:5500">
     <div class="mbox" style="padding:24px;align-items:center;overflow-y:auto">
@@ -420,353 +479,34 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     </div>
   </div>
 
+  <div id="m-bug" class="ov" style="z-index:7000">
+    <div class="mbox" style="padding:24px">
+      <h2 style="color:var(--dn);font-family:'Orbitron',sans-serif;margin-bottom:10px;text-align:center">СООБЩИТЬ О БАГЕ</h2>
+      <p style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:15px;text-align:center">Опиши максимально подробно, как и при каких условиях произошел баг.</p>
+      <textarea id="bug-text" class="ainput" style="height:120px;resize:none;font-size:14px" placeholder="Я нажал на кнопку боя, а затем..."></textarea>
+      <button class="pbtn ok" onclick="submitBug()">ОТПРАВИТЬ</button>
+      <button class="pbtn" style="background:#333" onclick="ss('m-bug','display','none')">ОТМЕНА</button>
+    </div>
+  </div>
+
+  <div id="admin-bugs-modal" class="ov" style="z-index:9500">
+    <div class="mbox" style="padding:24px;max-height:85vh;display:flex;flex-direction:column">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+        <h2 style="color:var(--dn);font-family:'Orbitron',sans-serif;">РЕПОРТЫ (АДМИН)</h2>
+        <span onclick="ss('admin-bugs-modal','display','none')" style="font-size:24px;cursor:pointer;color:rgba(255,255,255,.4)">✕</span>
+      </div>
+      <div id="admin-bugs-list" style="overflow-y:auto;flex:1;border:1px solid var(--br);border-radius:12px;padding:10px;background:rgba(0,0,0,0.2)"></div>
+    </div>
+  </div>
+
   <div id="m-nick" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
     <div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--pr);margin-bottom:6px">ВЫБЕРИ НИК</div>
     <input type="text" id="tnick" class="ainput" placeholder="Никнейм" maxlength="16">
     <button class="pbtn" onclick="saveTutNick()">ПОЕХАЛИ ▶</button>
   </div></div></div>
-  <div id="m-reg" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
-    <div style="font-family:'Orbitron',sans-serif;font-size:19px;font-weight:900;color:var(--ac);margin-bottom:8px;text-align:center">СОХРАНИТЬ ПРОГРЕСС?</div>
-    <button class="pbtn ok" onclick="openReg()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
-    <button class="pbtn" style="background:#333" onclick="skipReg()">Позже (Гость)</button>
-  </div></div></div>
-  <div id="m-regemail" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
-    <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px">РЕГИСТРАЦИЯ</div>
-    <input type="email" id="remail" class="ainput" placeholder="Email">
-    <input type="password" id="rpass" class="ainput" placeholder="Пароль (мин. 5)">
-    <button class="pbtn ok" onclick="submitReg()">ДАЛЕЕ</button>
-    <button class="pbtn" style="background:#333" onclick="ss('m-regemail','display','none')">Закрыть</button>
-  </div></div></div>
-  <div id="m-code" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
-    <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:8px">КОД ИЗ ПИСЬМА</div>
-    <input type="text" id="rcode" class="ainput" placeholder="Код">
-    <button class="pbtn ok" onclick="submitCode()">ПОДТВЕРДИТЬ</button>
-  </div></div></div>
-  <div id="m-login" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
-    <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px">ВХОД</div>
-    <input type="email" id="lemail" class="ainput" placeholder="Email">
-    <input type="password" id="lpass" class="ainput" placeholder="Пароль">
-    <button class="pbtn ok" onclick="doLogin()">ВОЙТИ</button>
-    <button class="pbtn" style="background:#333" onclick="ss('m-login','display','none')">Отмена</button>
-  </div></div></div>
-
-  <div class="topbar" id="topbar" style="display:none">
-    <div class="tstat">🏆 <span id="ui-tr">0</span></div>
-    <div class="tstat" style="color:var(--ac)">💰 <span id="ui-go">0</span></div>
-    <div class="tstat" style="color:#7be0a8">💎 <span id="ui-ge">0</span></div>
-  </div>
-
-  <div id="s-shop" class="scr" data-i="0">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 15px 3px">
-      <h2 style="font-family:'Orbitron',sans-serif;font-size:18px;">МАГАЗИН</h2>
-      <button id="admin-btn" class="pbtn" style="width:auto;padding:5px 10px;font-size:10px;margin:0;display:none;background:var(--dn)" onclick="openAdminPanel()">АДМИН</button>
-    </div>
-    <div id="server-gifts-container" style="padding:0 15px;"></div>
-    
-    <div class="sec" style="cursor:pointer; background: linear-gradient(145deg, #1e2030, #2c1a3b); border-color: #9b5de5;" onclick="openRoulette()">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div><div style="font-size:16px;font-weight:800; color:#fff">🎰 Ежедневная рулетка</div><div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px" id="roulette-status">Загрузка...</div></div>
-        <div style="font-size:36px; filter: drop-shadow(0 0 10px rgba(155,93,229,0.8))">🎁</div>
-      </div>
-    </div>
-    <div class="sec"><div class="stit">Смайлики (100 💎)</div><div class="grid" id="emote-grid"></div></div>
-    <div class="sec"><div class="stit">Ежедневный подарок</div>
-      <div style="text-align:center;padding:12px">
-        <div style="font-size:52px;margin-bottom:8px">🎁</div>
-        <div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px" id="gift-timer"></div>
-        <button class="pbtn" onclick="dailyGift()" style="max-width:210px;margin:auto">ЗАБРАТЬ</button>
-      </div>
-    </div>
-    <div class="sec"><div class="stit">Магазин Ящиков</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:4px">
-        <div style="background:var(--p2);padding:15px;border-radius:13px;border:1px solid rgba(245,197,24,.22);text-align:center"><div style="font-size:42px;margin-bottom:8px">📦</div><div style="font-size:13px;color:var(--ac);margin-bottom:10px;font-weight:700">Золотой</div><button class="pbtn" onclick="buyChest('g')" style="background:linear-gradient(135deg,#c4920e,#a07008)">1000 💰</button></div>
-        <div style="background:var(--p2);padding:15px;border-radius:13px;border:1px solid rgba(155,93,229,.3);text-align:center"><div style="font-size:42px;margin-bottom:8px">✨</div><div style="font-size:13px;color:var(--pu);margin-bottom:10px;font-weight:700">Магический</div><button class="pbtn" onclick="buyChest('m')" style="background:linear-gradient(135deg,#6b20d8,#a845e8)">100 💎</button></div>
-      </div>
-    </div>
-    <div class="sec"><div class="stit">Очки силы (ежедневно)</div><div class="grid" id="pow-grid"></div></div>
-    <div class="sec"><div class="stit">Активация промокода</div>
-      <div style="display:flex;gap:8px;padding:4px">
-        <input type="text" id="promo-inp" class="finput" style="margin:0" placeholder="Введи код..." maxlength="12">
-        <button class="pbtn ok" style="margin:0;width:auto;padding:0 20px" onclick="applyPromo()">OK</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="s-deck" class="scr" data-i="1">
-    <div class="dtabs">
-      <div id="dt0" class="dtab active" onclick="switchDeck(0)">Колода</div>
-      <div id="dt1" class="dtab" onclick="switchDeck(1)">Башня</div>
-      <div id="dt2" class="dtab" onclick="switchDeck(2)">Закл.</div>
-    </div>
-    <div style="width:100%;overflow-x:hidden">
-      <div id="dslider" style="display:flex;width:300%;transition:transform .3s ease">
-        <div style="width:33.33%;flex-shrink:0">
-          <div class="sec"><div class="stit">Боевая колода</div><div class="grid" id="ui-deck"></div></div>
-          <div class="sec"><div class="stit">Коллекция</div><div class="grid" id="ui-coll"></div></div>
-          <div class="sec"><div class="stit">Заблокировано</div><div class="grid" id="ui-lock"></div></div>
-        </div>
-        <div style="width:33.33%;flex-shrink:0"><div style="padding:12px" id="ui-tower"></div></div>
-        <div style="width:33.33%;flex-shrink:0"><div class="sec"><div class="stit">Заклинания</div><div class="grid" id="ui-spells"></div></div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="s-main" class="scr active" data-i="2">
-    <div id="arenabox" onclick="nav('s-world',7)"><div class="arenaoverlay"></div><div class="arenacont"><h1 class="arenatit" id="ui-aname">АРЕНА 1</h1><p class="arenadesc" id="ui-adesc">Лужайка</p></div></div>
-    
-    <div class="p-info-card" onclick="openProfile()">
-      <div class="p-info-top">
-        <div class="p-info-name-block">
-          <span id="ui-pname" style="font-size:18px;font-weight:900;">Игрок</span>
-          <span id="ui-title-main" class="p-title">Искатель</span>
-        </div>
-        <div id="ui-streak" style="display:none; font-size:12px; font-weight:800" class="streak-fire">🔥 Серия: <span>0</span></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-top:4px">
-        <span>Ур. <span id="ui-lvl" style="color:var(--ac);font-weight:900">1</span></span>
-        <span id="ui-xp">0/100 XP</span>
-      </div>
-      <div class="xpwrap" style="margin-bottom:0; height:8px;"><div class="xpfill" id="ui-xpb" style="width:0%"></div></div>
-    </div>
-
-    <div style="display:flex;gap:8px;width:92%;max-width:440px">
-      <div class="mfbtn" onclick="openFriends()">👥 Друзья <span id="ndot" style="display:none;background:var(--dn);width:8px;height:8px;border-radius:50%;margin-left:4px"></span></div>
-      <div class="mfbtn" onclick="nav('s-stats',5)">📊 Статы</div>
-      <div class="mfbtn" onclick="nav('s-lb',6)">🏆 Топ</div>
-    </div>
-    <div style="background:var(--panel);border:1px solid var(--br);border-radius:15px;padding:13px 18px;width:92%;max-width:420px;display:flex;justify-content:space-between;align-items:center">
-      <div><h4 style="color:var(--ac);margin-bottom:4px;font-size:14px;font-weight:800">Ящики за победы</h4><p style="font-size:11px;color:rgba(255,255,255,.33)" id="ctimer">Обновится через...</p></div>
-      <div style="display:flex;gap:6px" id="cslots"></div>
-    </div>
-    
-    <div style="display:flex;flex-direction:column;align-items:center;width:100%">
-      <button class="bigbtn" onclick="prepMM(false, false)">⚔️ В БОЙ</button>
-      <button class="bigbtn dr" onclick="prepMM(false, true)">🃏 РЕЖИМ ДРАФТ</button>
-      <button class="bigbtn sd" onclick="prepMM(true, false)">☠️ ВНЕЗАПНАЯ СМЕРТЬ</button>
-    </div>
-  </div>
-
-  <div id="s-pass" class="scr" data-i="3">
-    <div id="pass-controls">
-      <button class="pbtn" style="width:auto;padding:9px 22px;border-radius:20px;margin:0;font-size:13px" onclick="toggleQ()">📋 ЗАДАНИЯ (<span id="qbadge">0/0</span>)</button>
-      <div style="background:rgba(30,32,48,0.85);border:1px solid var(--br);border-radius:11px;padding:7px 11px;font-size:14px;font-weight:800">👑 <span id="ui-cr">0</span></div>
-    </div>
-    
-    <div id="pass-wrap">
-      <div id="pass-map-container" style="position:relative; width:100%; min-height: 4000px; overflow:hidden;">
-        <svg id="pass-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none;"></svg>
-        <div id="pass-layer" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:5; pointer-events:none;"></div>
-        <div id="season-title-block" style="position:absolute; bottom:0; left:0; width:100%; padding:120px 20px 60px; text-align:center; z-index:10; background: linear-gradient(to top, rgba(13,92,46,1), rgba(13,92,46,0)); pointer-events:none;">
-          <h1 style="font-family:'Orbitron',sans-serif; color:#f5c518; text-shadow: 0 4px 10px rgba(0,0,0,0.8); font-size:36px; margin:0;">СЕЗОН 1</h1>
-          <h2 style="color:#fff; font-size:22px; letter-spacing:4px; margin-top:5px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">ДЖУНГЛИ</h2>
-        </div>
-      </div>
-    </div>
-
-    <div id="qpanel">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 18px 9px;border-bottom:1px solid var(--br)">
-        <span style="font-weight:800;font-size:16px">📋 Задания</span>
-        <div style="display:flex;gap:10px;align-items:center">
-          <button id="reroll-btn" class="pbtn small" onclick="rerollQuest()" style="background:#2a2d45;">🔄 Обновить</button>
-          <span onclick="toggleQ()" style="font-size:24px;cursor:pointer;color:rgba(255,255,255,.35)">✕</span>
-        </div>
-      </div>
-      <div id="ui-quests" style="padding:13px; overflow-y:auto; flex:1;"></div>
-      <div style="padding:0 13px 13px;color:rgba(255,255,255,.3);font-size:11px;text-align:center">Побед сегодня: <span id="ui-wins">0</span>/5</div>
-    </div>
-  </div>
-
-  <div id="s-set" class="scr" data-i="4">
-    <h2 style="text-align:center;font-family:'Orbitron',sans-serif;font-size:18px;margin:5px 0 3px">НАСТРОЙКИ</h2>
-    <div style="padding:0 15px 20px">
-      <div class="sec" id="guest-btns" style="display:none">
-        <div class="stit">Аккаунт (Гость)</div>
-        <button class="pbtn ok" onclick="openReg()">Зарегистрироваться</button>
-        <button class="pbtn" style="background:var(--pr)" onclick="ss('m-login','display','flex')">Войти</button>
-      </div>
-      <div class="sec">
-        <div class="stit">Звук</div>
-        <button class="pbtn" id="sfx-btn" onclick="toggleSfx()" style="background:var(--pr)">🔊 Озвучка: ВКЛ</button>
-      </div>
-      <div class="sec">
-        <div class="stit">Слоты Медалей</div>
-        <div style="display:flex;justify-content:center;gap:20px;margin-bottom:15px">
-          <div id="msl0" class="mslot" onclick="unequipMedal(0)"></div>
-          <div id="msl1" class="mslot" onclick="unequipMedal(1)"></div>
-        </div>
-        <div class="stit">Медали</div>
-        <div id="ui-medals" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
-      </div>
-      <div class="sec">
-        <div class="stit">Слоты Смайликов</div>
-        <div style="display:flex;justify-content:center;gap:11px;margin-bottom:15px">
-          <div id="esl0" class="eslot" onclick="unequipEmote(0)"></div>
-          <div id="esl1" class="eslot" onclick="unequipEmote(1)"></div>
-          <div id="esl2" class="eslot" onclick="unequipEmote(2)"></div>
-        </div>
-        <div class="stit">Смайлики</div>
-        <div id="ui-emotes" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
-      </div>
-      <div class="sec">
-        <div class="stit">Флаг</div>
-        <div id="banner-prev" style="width:100%;height:50px;border-radius:11px;margin-bottom:11px;border:1px solid rgba(255,255,255,.1);transition:.3s"></div>
-        <div class="grid" id="ui-banners" style="padding:4px;grid-template-columns:repeat(auto-fit,minmax(80px,1fr))"></div>
-      </div>
-      <div class="sec">
-        <div class="stit">Сменить никнейм (5000 💰)</div>
-        <input type="text" id="newnick" class="ainput" placeholder="Новый никнейм" maxlength="16">
-        <button class="pbtn" onclick="changeNick()">Сменить</button>
-      </div>
-      <p style="color:rgba(255,255,255,.2);font-size:11px;text-align:center;margin-top:11px" id="ui-uid"></p>
-      <button class="pbtn dn" style="margin-top:11px" onclick="logout()">ВЫЙТИ</button>
-    </div>
-  </div>
-
-  <div id="s-stats" class="scr" data-i="5">
-    <div style="padding:15px">
-      <h2 style="font-family:'Orbitron',sans-serif;font-size:18px;text-align:center;margin-bottom:15px">МОЯ СТАТИСТИКА</h2>
-      <div class="scard" id="ui-stats"></div>
-      <div class="sec" style="margin:11px 0 0"><div class="stit">Все медали</div><div id="ui-allmedals" style="display:flex;flex-wrap:wrap;gap:11px;padding:4px;justify-content:center"></div></div>
-    </div>
-  </div>
-
-  <div id="s-lb" class="scr" data-i="6">
-    <div style="padding:15px">
-      <div style="background:var(--p2); border:1px solid rgba(245,197,24,.4); border-radius:15px; padding:15px; margin-bottom:20px; text-align:center; box-shadow:0 4px 15px rgba(245,197,24,.15);">
-        <h3 style="color:var(--ac); margin-bottom:5px; font-family:'Orbitron',sans-serif;">🔴 ТУРНИР (СТАВКИ)</h3>
-        <p style="font-size:12px; color:rgba(255,255,255,.5); margin-bottom:12px;">Смотри бои топ-игроков и угадывай победителя!</p>
-        <button class="pbtn ok" style="width:auto; padding:10px 25px" onclick="openBettingMenu()">СТАВКА (100 💰)</button>
-      </div>
-      <h2 style="font-family:'Orbitron',sans-serif;font-size:18px;text-align:center;margin-bottom:9px;color:var(--ac)">ТОП ИГРОКОВ</h2>
-      <div id="ui-lb" style="margin-top:11px"></div>
-    </div>
-  </div>
-
-  <div id="s-world" class="scr" data-i="7">
-    <div id="world-container">
-      <svg id="world-svg" viewBox="0 0 360 700" preserveAspectRatio="xMidYMid meet"></svg>
-      <div id="world-tooltip">
-        <h3 id="wt-name" style="font-family:'Orbitron',sans-serif; color:var(--pr); margin-bottom:8px;">Арена</h3>
-        <p id="wt-desc" style="font-size:13px; color:rgba(255,255,255,0.8); margin-bottom:15px;">Информация</p>
-        <button class="pbtn ok" style="padding:10px; margin:0;" onclick="document.getElementById('world-tooltip').classList.remove('active')">ПОНЯТНО</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="friends-ov" class="ov" style="z-index:5000">
-    <div class="fbox">
-      <div style="padding:16px 18px 0;border-bottom:1px solid var(--br)">
-        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:var(--pr);margin-bottom:12px">👥 ДРУЗЬЯ</div>
-        <div style="display:flex;gap:0">
-          <div class="ftab active" id="ft-list" onclick="fTab('list')">Друзья</div>
-          <div class="ftab" id="ft-req" onclick="fTab('req')">Запросы <span id="req-count" style="display:none;background:var(--dn);color:#fff;border-radius:8px;padding:1px 6px;font-size:10px;margin-left:4px">0</span></div>
-          <div class="ftab" id="ft-add" onclick="fTab('add')">Добавить</div>
-        </div>
-      </div>
-      <div style="padding:15px;overflow-y:auto;flex:1">
-        <div id="fc-list"></div>
-        <div id="fc-req" style="display:none"></div>
-        <div id="fc-add" style="display:none">
-          <div style="background:rgba(61,155,233,.08);border:1px solid rgba(61,155,233,.2);border-radius:12px;padding:12px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,.5);text-align:center">
-            Твой ID: <span id="my-id-show" style="font-weight:800;color:var(--pr);font-family:'Orbitron',sans-serif;font-size:13px"></span>
-          </div>
-          <input type="text" id="fid-inp" class="finput" placeholder="Введи ID друга" maxlength="9" style="text-transform:uppercase">
-          <button class="fbtn" onclick="searchFriend()">🔍 НАЙТИ ИГРОКА</button>
-          <div id="fres" style="margin-top:9px"></div>
-        </div>
-      </div>
-      <button class="fbtn" style="border-radius:0;margin:0" onclick="ss('friends-ov','display','none')">ЗАКРЫТЬ</button>
-    </div>
-  </div>
-
-  <div id="chest-ov" class="ov" style="z-index:7000; background:rgba(0,0,0,0.95)">
-    <div id="chest-box" class="chestbox" onclick="chestTap()" style="filter: drop-shadow(0 0 30px rgba(245,197,24,0.4))">📦</div>
-    <div class="chestrev" id="chest-rev" onclick="nextChestItem()">
-      <div id="ci-icon" class="gacha-item" style="font-size:120px; filter:drop-shadow(0 0 20px rgba(245,197,24,0.5))"></div>
-      <div id="ci-text" class="gacha-item" style="color:var(--ac);font-size:22px;font-weight:900;margin-top:15px;text-align:center;font-family:'Orbitron',sans-serif;text-shadow:0 2px 5px rgba(0,0,0,0.8)"></div>
-      <div id="ci-cnt" class="gacha-item" style="font-size:32px;font-weight:900;color:#fff;margin-top:5px;font-family:'Orbitron',sans-serif;text-shadow:0 2px 5px rgba(0,0,0,0.8)"></div>
-    </div>
-    <div style="color:rgba(255,255,255,.6);font-size:14px;margin-top:25px;font-weight:bold" id="chest-tip">Нажмите чтобы открыть</div>
-  </div>
-
-  <div id="arena-unlock" class="ov" style="z-index:6000">
-    <div class="mbox"><div style="padding:22px;text-align:center">
-      <div style="font-size:52px;margin-bottom:8px">🏆</div>
-      <h1 style="font-family:'Orbitron',sans-serif;color:var(--pr);font-size:20px">НОВАЯ АРЕНА!</h1>
-      <h2 id="unlock-name" style="color:#fff;margin:11px 0;font-size:18px"></h2>
-      <div class="grid" id="unlock-cards" style="padding:0"></div>
-      <button class="bigbtn" style="width:100%;height:52px;font-size:16px;margin-top:15px" onclick="ss('arena-unlock','display','none')">ОК!</button>
-    </div></div>
-  </div>
-
-  <div id="mmov" class="ov">
-    <div class="mbox" style="padding:30px;align-items:center;text-align:center">
-      <div style="font-size:60px;margin-bottom:15px;animation:mmPulse 1s infinite alternate" id="mm-ic">⚔️</div>
-      <h2 style="font-family:'Orbitron',sans-serif;color:var(--pr);margin-bottom:8px" id="mm-tit">ПОИСК</h2>
-      <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:18px" id="mm-sub">Ищем соперника...</p>
-      <div class="mmdot"><span></span><span></span><span></span></div>
-      <button class="pbtn dn" style="max-width:190px;margin:18px auto 0" onclick="cancelMM()">Отмена</button>
-    </div>
-  </div>
-
-  <div id="bscr">
-    <div id="sd-aura"></div>
-    <div id="weather-layer" style="position:absolute;inset:0;pointer-events:none;z-index:4;"></div>
-    <div id="dmg-container" style="position:absolute;inset:0;pointer-events:none;z-index:25;"></div>
-    
-    <div class="bban bban-e" id="bban-e">
-      <div style="display:flex;flex-direction:column;align-items:flex-end">
-        <span id="bban-e-name" style="font-size:13px">ВРАГ</span>
-        <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
-          <span id="bban-e-fav" style="font-size:16px"></span>
-          <span id="bban-e-tr" style="font-size:11px;color:var(--ac);text-shadow:0 1px 3px rgba(0,0,0,1)">🏆 0</span>
-        </div>
-      </div>
-    </div>
-    <div class="bban bban-p" id="bban-p">
-      <div style="display:flex;flex-direction:column;align-items:flex-start">
-        <span id="bban-p-name" style="display:flex;align-items:center;gap:4px;font-size:13px">ИГРОК</span>
-        <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
-          <span id="bban-p-fav" style="font-size:16px"></span>
-          <span id="bban-p-tr" style="font-size:11px;color:var(--ac);text-shadow:0 1px 3px rgba(0,0,0,1)">🏆 0</span>
-        </div>
-      </div>
-    </div>
-    
-    <div id="btimer">3:00</div>
-    <div id="bscore"><span id="sc-e" style="color:var(--dn)">0</span> - <span id="sc-p" style="color:var(--pr)">0</span></div>
-    
-    <div id="emote-btn" onclick="toggleEmote()">💬</div>
-    <div id="emote-panel"></div>
-    <div class="ebubble" id="pe" style="bottom:175px;left:56px"></div>
-    <div class="ebubble" id="ee" style="top:160px;right:18px"></div>
-    
-    <div id="cvs-c"><canvas id="gc"></canvas></div>
-    
-    <div class="bui" id="bui-c">
-      <div class="elwrap" id="bui-elwrap"><div class="elsegs" id="elsegs"></div><div class="elcnt" id="elcnt">5</div></div>
-      <div class="hand" id="hand"></div>
-      <div id="spec-info" style="display:none; font-family:'Orbitron',sans-serif; color:var(--ac); font-size:18px; text-align:center;">Режим Трансляции</div>
-    </div>
-    
-    <div id="bend">
-      <h1 style="font-family:'Orbitron',sans-serif;color:#fff;font-size:32px;margin-bottom:6px" id="bend-title">КОНЕЦ БОЯ</h1>
-      <div style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:15px" id="bend-sub">+0 XP</div>
-      <div class="ebanner"><div class="ebc" id="en-color"></div><div class="ebi"><span id="en-name-end">Враг</span><span class="etro lose" id="en-tro">-20 🏆</span></div></div>
-      <div class="ebanner"><div class="ebc" id="ep-color"></div><div class="ebi"><span id="ep-name-end">Игрок</span><span class="etro win" id="ep-tro">+30 🏆</span></div></div>
-      <button class="bigbtn" onclick="exitBattle()" style="margin-top:18px">ВЫЙТИ</button>
-    </div>
-  </div>
-
-  <nav id="mainnav" style="display:none">
-    <div class="nb" onclick="nav('s-shop',0)"><span class="ni">🏪</span>Магазин</div>
-    <div class="nb" onclick="nav('s-deck',1)"><span class="ni">🃏</span>Колода</div>
-    <div class="nb active" onclick="nav('s-main',2)"><span class="ni">⚔️</span>Бой</div>
-    <div class="nb" onclick="nav('s-pass',3)"><span class="ni">👑</span>Пропуск</div>
-    <div class="nb" onclick="nav('s-set',4)"><span class="ni">⚙️</span>Настройки</div>
-  </nav>
-
-</div> </body>
+  <div id="m-reg" class="ov"><div class="mbox"><div style
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 <script>
 'use strict';
 const ss=(id,p,v)=>{const e=document.getElementById(id);if(e)e.style[p]=v;};
@@ -777,7 +517,7 @@ const ls=k=>{try{return localStorage.getItem(k);}catch(e){return _mst[k]||null;}
 const lw=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){_mst[k]=v;}};
 const ld=k=>{try{localStorage.removeItem(k);}catch(e){delete _mst[k];}};
 
-// Защита от спама (кулдаун 24 часа на устройство)
+// Защита от спама аккаунтов (лимит 24 часа)
 function canRegister() {
   const lastReg = ls('last_reg_time');
   if(!lastReg) return true;
@@ -785,7 +525,7 @@ function canRegister() {
   return true;
 }
 
-// Проверка PWA (Отображаем блокировщик если игра запущена в обычном браузере мобилки)
+// PWA Блокировщик для мобильных браузеров
 const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 if(!isPWA && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
    document.addEventListener('DOMContentLoaded', () => {
@@ -797,25 +537,51 @@ if(!isPWA && !window.location.hostname.includes('localhost') && !window.location
        pwaBlock.style.display = 'flex';
        setTimeout(() => { pwaWrap.style.display = 'block'; pwaTxt.style.display = 'block'; }, 1000);
        let p = 0;
-       let int = setInterval(()=>{
-         p += Math.random() * 5;
-         if(p > 95) p = 95;
-         pwaFill.style.width = p + '%';
-       }, 500);
+       let int = setInterval(()=>{ p += Math.random() * 5; if(p > 95) p = 95; pwaFill.style.width = p + '%'; }, 500);
      }
    });
 }
 
+// Экран релиза 30 апреля 2026
 function checkAprilWelcome() {
   const today = new Date();
   if(today.getFullYear() === 2026 && today.getMonth() === 3 && today.getDate() === 30) {
     if(!ls('seen_welcome_s1')) {
       const w = document.getElementById('welcome-s1');
-      if(w) w.style.display = 'flex';
+      if(w) {
+         w.style.display = 'flex';
+         w.innerHTML = `
+           <div class="welc-box">
+             <div class="welc-t1">СЕЗОН 1</div>
+             <div class="welc-t2" style="font-style:italic;">ДЖУНГЛИ</div>
+             <div class="welc-sub">нажмите чтобы продолжить</div>
+           </div>
+         `;
+      }
       lw('seen_welcome_s1', 'true');
     }
   }
 }
+
+// PWA Push Уведомления (Локальные)
+function requestNotifPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'hidden') {
+    if('Notification' in window && Notification.permission === 'granted') {
+       setTimeout(() => {
+          new Notification('Clash Arena', { 
+            body: 'Король ждёт твоих распоряжений на арене!👑⚔️', 
+            icon: 'img/icon.png' 
+          });
+       }, 3 * 3600 * 1000); // 3 часа (10800000 мс)
+    }
+  }
+});
 
 function notify(msg,tp='err'){
   const c=document.getElementById('toast-c');if(!c)return;
@@ -825,6 +591,7 @@ function notify(msg,tp='err'){
   setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},2600);
 }
 
+// ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ БОЯ И ДАННЫХ
 let elixir=5,bHand=[],towers=[],ents=[],projs=[],parts=[];
 let cw=0,ch=0,bEndTime=0,isOvertime=false,isTieBreaker=false;
 let bLoopId=null,bState='stopped',lastTime=0;
@@ -849,12 +616,12 @@ let winChestPending=false,appStarted=false,loading=false;
 let navIdx=2,deckTab=0,mmTimer=null;
 let botTrophies=0,botFavCard=null,botBanner=null,rlSpinning=false;
 
-// ВОТ ЗДЕСЬ ИСПРАВЛЕНА ОШИБКА БЕСКОНЕЧНОГО ПОИСКА! МАССИВ ВЕРНУЛСЯ.
 const BOT_NAMES = ['Destroyer99', 'pro_gamer', 'DarkKnight', 'ShadowNinja', 'Alex2010', 'KingOfArena', 'GigaChad', 'PekkaLover', 'Toxic_Boy', 'NoobMaster', 'John_Doe', 'ClashGod', 'CyberDemon', 'GhostRider'];
 const ADMIN_EMAIL = 'danildovz@gmail.com';
 let adminTarget = null;
 let allUsersData = null;
 
+// ТАЙМЕРЫ И СБРОСЫ
 function dailyKey(){
 const n=new Date();
 if(n.getHours()<10){const y=new Date(n);y.setDate(y.getDate()-1);return`${y.getFullYear()}-${y.getMonth()}-${y.getDate()}`;}
@@ -881,22 +648,19 @@ const rb=document.getElementById('rl-btn');if(rb)rb.disabled=!can;
 const ct=document.getElementById('ctimer');if(ct)ct.textContent=`Обновится через ${cd}`;
 },1000);
 
+// МУЗЫКА И ЗВУКИ
 let audioCtx = null;
 let sfxOn = true;
-const bgMusic = new Audio('song/cmenumelody.mp3');
-bgMusic.loop = true; 
-bgMusic.volume = 0.4; 
 let isMusicAllowed = false;
+const bgMusic = new Audio('song/cmenumelody.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.4;
 
 function checkMusic() {
-  if (!isMusicAllowed || !bgMusic) return;
-  
+  if (!isMusicAllowed) return;
   const inBattle = (bState !== 'stopped'); 
-  if (sfxOn && !inBattle) {
-    bgMusic.play().catch(()=>{});
-  } else {
-    bgMusic.pause();
-  }
+  if (sfxOn && !inBattle) bgMusic.play().catch(()=>{});
+  else bgMusic.pause();
 }
 
 function initAudio() {
@@ -905,7 +669,8 @@ function initAudio() {
     if(audioCtx.state === 'suspended') audioCtx.resume();
   } catch(e) {}
   isMusicAllowed = true;
-  checkMusic(); 
+  checkMusic();
+  requestNotifPermission(); // Запрос пушей при первом тапе
 }
 
 function toggleSfx(){
@@ -913,9 +678,8 @@ function toggleSfx(){
   const btn=document.getElementById('sfx-btn');
   if(btn)btn.textContent=`🔊 Озвучка: ${sfxOn?'ВКЛ':'ВЫКЛ'}`;
   if(sfxOn) initAudio();
-  checkMusic(); 
+  checkMusic();
 }
-
 document.addEventListener('click', initAudio, {once:true});
 document.addEventListener('touchstart', initAudio, {once:true});
 
@@ -951,142 +715,11 @@ const getTitle = (tr) => {
   if(tr<4700) return 'Мастер'; if(tr<6800) return 'Чемпион'; return 'Легенда';
 };
 
-const PROMOS = {};
-"GEM-X9A1,GEM-B2C3,GEM-K8L9".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
-"COIN-Q1W2,COIN-E3R4".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
-
-const ARENAS=[
-{n:'Лужайка',     th:0,    bg:"url('img/arena_0.JPG'), radial-gradient(circle at top, #1e3c1a, #12131a)",col:'#2ebd6b',em:'🌿'},
-{n:'Пустыня',     th:600,  bg:"url('img/arena_1.JPG'), radial-gradient(circle at top, #4a2e00, #12131a)",col:'#e67e22',em:'🏜️'},
-{n:'Саванна',     th:1000, bg:"url('img/arena_2.JPG'), radial-gradient(circle at top, #4a3f00, #12131a)",col:'#f5c518',em:'🦁'},
-{n:'Дремучий лес',th:1500, bg:"url('img/arena_3.JPG'), radial-gradient(circle at top, #0d2b18, #12131a)",col:'#27ae60',em:'🌲'},
-{n:'Ледниковый',  th:1900, bg:"url('img/arena_4.JPG'), radial-gradient(circle at top, #1a3c4f, #12131a)",col:'#a0e8ff',em:'❄️'},
-{n:'Джунгли',     th:2400, bg:"url('img/arena_5.JPG'), radial-gradient(circle at top, #0a332a, #12131a)",col:'#1abc9c',em:'🌴'},
-{n:'Замок',       th:2800, bg:"url('img/arena_6.JPG'), radial-gradient(circle at top, #2b1845, #12131a)",col:'#9b5de5',em:'🏰'},
-{n:'Бамбук',      th:3300, bg:"url('img/arena_7.JPG'), radial-gradient(circle at top, #103319, #12131a)",col:'#2ebd6b',em:'🎋'},
-{n:'Глинозём',    th:3900, bg:"url('img/arena_8.JPG'), radial-gradient(circle at top, #3d1c04, #12131a)",col:'#c87d4a',em:'🪨'},
-{n:'Гора',        th:4700, bg:"url('img/arena_9.JPG'), radial-gradient(circle at top, #2c3e50, #12131a)",col:'#e8eaf0',em:'⛰️'},
-{n:'Подземелье',  th:5600, bg:"url('img/arena_10.JPG'), radial-gradient(circle at top, #1a0b2e, #12131a)",col:'#5e35b1',em:'🦇'},
-{n:'Арена боёв',  th:6800, bg:"url('img/arena_11.JPG'), radial-gradient(circle at top, #3a0a0f, #12131a)",col:'#e63946',em:'⚔️'},
-{n:'Крист. Пещера',th:7600, bg:"url('img/arena_12.JPG'), radial-gradient(circle at top, #2e0a4f, #12131a)",col:'#8e24aa',em:'🔮'},
-{n:'Небесный храм',th:8400, bg:"url('img/arena_13.JPG'), radial-gradient(circle at top, #3d7e9a, #12131a)",col:'#4fc3f7',em:'☁️'},
-{n:'Вулкан. Пекло',th:9200, bg:"url('img/arena_14.JPG'), radial-gradient(circle at top, #5a1000, #12131a)",col:'#ff5722',em:'🌋'},
-{n:'Колизей Легенд',th:9800,bg:"url('img/arena_15.JPG'), radial-gradient(circle at top, #4a3a10, #12131a)",col:'#ffd54f',em:'🏟️'}
-];
-
-const CARDS=[
-{id:'spear_g',a:0,n:'Копейщики',  c:2,hp:110, d:25, sp:0.70,r:120,t:'ground',tg:'all',    ic:'👺',pr:'🏹',rr:'c'},
-{id:'fire_s', a:0,n:'Огн.Духи',   c:2,hp:90,  d:80, sp:0.90,r:40, t:'ground',tg:'all',    ic:'🔥',pr:null,rr:'c'},
-{id:'giant',  a:0,n:'Гигант',     c:5,hp:2000,d:50, sp:0.30,r:40, t:'ground',tg:'building',ic:'👹',pr:null,rr:'r'},
-{id:'arrows', a:0,n:'Стрелы',     c:3,hp:0,   d:75, sp:0,   r:150,t:'spell', tg:'all',    ic:'🏹',pr:'🏹',rr:'c'},
-{id:'archer', a:0,n:'Лучница',    c:3,hp:250, d:30, sp:0.60,r:140,t:'ground',tg:'all',    ic:'👱‍♀️',pr:'🏹',rr:'c'},
-{id:'minion', a:0,n:'Миньон',     c:3,hp:200, d:20, sp:0.75,r:40, t:'air',   tg:'all',    ic:'🦇',pr:'🟣',rr:'c'},
-{id:'knight', a:0,n:'Рыцарь',     c:3,hp:800, d:35, sp:0.50,r:40, t:'ground',tg:'all',    ic:'🤺',pr:null,rr:'c'},
-{id:'goblin', a:0,n:'Гоблин',     c:2,hp:150, d:20, sp:0.90,r:40, t:'ground',tg:'all',    ic:'😈',pr:null,rr:'c'},
-{id:'bomber', a:0,n:'Подрывник',  c:3,hp:300, d:75, sp:0.55,r:100,t:'ground',tg:'ground', ic:'💣',pr:'💣',rr:'c'},
-{id:'skel',   a:0,n:'Скелеты',    c:1,hp:50,  d:10, sp:0.75,r:40, t:'ground',tg:'all',    ic:'💀',pr:null,rr:'c'},
-{id:'wolf',   a:0,n:'Волк',       c:4,hp:700, d:45, sp:0.80,r:45, t:'ground',tg:'all',    ic:'🐺',pr:null,rr:'c'},
-{id:'brawler',a:0,n:'Боец',       c:3,hp:500, d:40, sp:0.65,r:40, t:'ground',tg:'all',    ic:'🥊',pr:null,rr:'c'},
-{id:'mushr',  a:0,n:'Гриб',       c:2,hp:80,  d:50, sp:0,   r:80, t:'spell', tg:'ground', ic:'🍄',pr:'💥',rr:'c'},
-{id:'healer', a:0,n:'Целитель',   c:3,hp:280, d:0,  sp:0.40,r:90, t:'ground',tg:'all',    ic:'💚',pr:null,rr:'r',heal:20},
-{id:'gremlin',a:0,n:'Гремлин',    c:2,hp:100, d:15, sp:1.00,r:40, t:'ground',tg:'all',    ic:'👾',pr:null,rr:'c',multi:4},
-{id:'valk',   a:1,n:'Валькирия',  c:4,hp:1100,d:60, sp:0.50,r:50, t:'ground',tg:'all',    ic:'🧝‍♀️',pr:null,rr:'r'},
-{id:'musk',   a:1,n:'Мушкетер',   c:4,hp:400, d:55, sp:0.50,r:150,t:'ground',tg:'all',    ic:'🎯',pr:'⚫',rr:'r'},
-{id:'cannon', a:1,n:'Пушка',      c:4,hp:600, d:100,sp:0.20,r:170,t:'ground',tg:'all',    ic:'💥',pr:'💣',rr:'r'},
-{id:'drag',   a:2,n:'Дракончик',  c:4,hp:800, d:40, sp:0.60,r:90, t:'air',   tg:'all',    ic:'🐉',pr:'🔥',rr:'e'},
-{id:'mpekka', a:2,n:'МиниПЕККА',  c:4,hp:700, d:100,sp:0.70,r:40, t:'ground',tg:'all',    ic:'🤖',pr:null,rr:'r'},
-{id:'vampire',a:2,n:'Вампир',     c:4,hp:600, d:47, sp:0.70,r:45, t:'ground',tg:'all',    ic:'🧛',pr:null,rr:'e',lifeSteal:true},
-{id:'witch',  a:3,n:'Ведьма',     c:5,hp:500, d:30, sp:0.50,r:120,t:'ground',tg:'all',    ic:'🧙‍♀️',pr:'🟣',rr:'e'},
-{id:'prince', a:3,n:'Принц',      c:5,hp:1200,d:100,sp:0.80,r:50, t:'ground',tg:'all',    ic:'🤴',pr:null,rr:'e'},
-{id:'berserker',a:3,n:'Берсерк',  c:4,hp:700, d:50, sp:0.60,r:45, t:'ground',tg:'all',    ic:'😤',pr:null,rr:'e',rageBelow:0.4},
-{id:'wizard', a:4,n:'Колдун',     c:5,hp:450, d:65, sp:0.50,r:130,t:'ground',tg:'all',    ic:'🧙‍♂️',pr:'🔥',rr:'r'},
-{id:'ball',   a:4,n:'Шар',        c:5,hp:1050,d:140,sp:0.40,r:40, t:'air',   tg:'building',ic:'🎈',pr:'💣',rr:'e'},
-{id:'phoenix',a:4,n:'Феникс',     c:4,hp:600, d:60, sp:0.65,r:80, t:'air',   tg:'all',    ic:'🦅',pr:'🔥',rr:'e'},
-{id:'trident',a:4,n:'Тритон',     c:5,hp:900, d:80, sp:0.55,r:130,t:'ground',tg:'all',    ic:'🔱',pr:'🌊',rr:'r'},
-{id:'troll',  a:4,n:'Тролль',     c:5,hp:1800,d:55, sp:0.30,r:45, t:'ground',tg:'all',    ic:'👹',pr:null,rr:'r',regen:true},
-{id:'hog',    a:5,n:'Всадник',    c:4,hp:1000,d:80, sp:0.85,r:40, t:'ground',tg:'building',ic:'🐗',pr:null,rr:'r'},
-{id:'freeze', a:5,n:'Заморозка',  c:4,hp:0,   d:0,  sp:0,   r:100,t:'spell', tg:'all',    ic:'❄️',pr:'❄️',rr:'e'},
-{id:'sniper', a:5,n:'Снайпер',    c:4,hp:180, d:110,sp:0.35,r:160,t:'ground',tg:'all',    ic:'🎯',pr:'⚫',rr:'e'},
-{id:'zap',    a:6,n:'Разряд',     c:2,hp:0,   d:40, sp:0,   r:100,t:'spell', tg:'all',    ic:'⚡',pr:'⚡',rr:'c'},
-{id:'fball',  a:6,n:'Огн.Шар',    c:4,hp:0,   d:125,sp:0,   r:80, t:'spell', tg:'all',    ic:'💥',pr:'💥',rr:'r'},
-{id:'lightning',a:6,n:'Молния',   c:3,hp:0,   d:180,sp:0,   r:60, t:'spell', tg:'all',    ic:'⚡',pr:'⚡',rr:'e'},
-{id:'pekka',  a:7,n:'ПЕККА',      c:7,hp:2500,d:180,sp:0.35,r:50, t:'ground',tg:'all',    ic:'🦾',pr:null,rr:'e'},
-{id:'golem',  a:7,n:'Голем',      c:8,hp:3000,d:75, sp:0.25,r:40, t:'ground',tg:'building',ic:'🗿',pr:null,rr:'e'},
-{id:'icedrag',a:7,n:'Лёд.Дракон', c:5,hp:900, d:45, sp:0.55,r:100,t:'air',   tg:'all',    ic:'🐲',pr:'❄️',rr:'e',freeze:true},
-{id:'exec',   a:7,n:'Палач',      c:5,hp:1000,d:30, sp:0.40,r:110,t:'ground',tg:'all',    ic:'🪓',pr:'🪓',rr:'e'},
-{id:'bats',   a:7,n:'Мыши',       c:2,hp:100, d:15, sp:0.80,r:40, t:'air',   tg:'all',    ic:'🦇',pr:null,rr:'c',multi:4},
-{id:'ewiz',   a:8,n:'Громовержец',c:4,hp:600, d:40, sp:0.50,r:100,t:'ground',tg:'all',    ic:'🌩️',pr:'⚡',rr:'l',freezeOnHit:true},
-{id:'poison', a:8,n:'Яд',         c:4,hp:0,   d:100,sp:0,   r:120,t:'spell', tg:'all',    ic:'🧪',pr:'🧪',rr:'e'},
-{id:'sparky', a:8,n:'Спарки',     c:6,hp:1000,d:260,sp:0.30,r:100,t:'ground',tg:'ground', ic:'🔋',pr:'⚡',rr:'l'},
-{id:'miner',  a:8,n:'Шахтер',     c:3,hp:800, d:50, sp:0.75,r:40, t:'ground',tg:'all',    ic:'⛏️',pr:null,rr:'l'},
-{id:'dart_g', a:9,n:'Гоблин-дрот',c:3,hp:200, d:30, sp:0.70,r:160,t:'ground',tg:'all',    ic:'👺',pr:'🏹',rr:'r'},
-{id:'prin2',  a:9,n:'Принцесса',  c:3,hp:150, d:45, sp:0.50,r:200,t:'ground',tg:'all',    ic:'👸',pr:'🔥',rr:'l'},
-{id:'bandit', a:9,n:'Бандитка',   c:3,hp:750, d:80, sp:0.80,r:40, t:'ground',tg:'ground', ic:'🥷',pr:null,rr:'l'},
-{id:'lumber', a:9,n:'Дровосек',   c:4,hp:990, d:100,sp:0.85,r:40, t:'ground',tg:'ground', ic:'🪓',pr:null,rr:'l'},
-{id:'mknight',a:11,n:'Мегарыцарь',c:7,hp:3300,d:120,sp:0.40,r:50, t:'ground',tg:'ground', ic:'🦹‍♂️',pr:null,rr:'l'},
-{id:'equake', a:11,n:'Землетряс.',c:3,hp:0,   d:85, sp:0,   r:150,t:'spell', tg:'ground', ic:'🫨',pr:'🪨',rr:'r'},
-{id:'bhealer',a:11,n:'Боев. Целит',c:4,hp:1200,d:40, sp:0.50,r:40, t:'ground',tg:'ground', ic:'🧚‍♀️',pr:null,rr:'r',heal:20,lifeSteal:true},
-{id:'marcher',a:12,n:'Маг. Лучник',c:4,hp:450, d:50, sp:0.60,r:180,t:'ground',tg:'all',    ic:'🧝‍♂️',pr:'✨',rr:'l'},
-{id:'rghost', a:12,n:'Кор. Призрак',c:3,hp:1000,d:70,sp:0.60,r:40,t:'ground',tg:'ground', ic:'👻',pr:null,rr:'l'},
-{id:'c_golem',a:12,n:'Крист. Голем',c:6,hp:2200,d:80, sp:0.35,r:45, t:'ground',tg:'building',ic:'🔮',pr:null,rr:'e'},
-{id:'laser',  a:12,n:'Лазер',     c:4,hp:0,   d:160,sp:0,   r:70, t:'spell', tg:'all',    ic:'🔥',pr:'⚡',rr:'e'},
-{id:'c_mage', a:12,n:'Крист. Маг',c:4,hp:500, d:70, sp:0.50,r:150,t:'ground',tg:'all',    ic:'🧙',pr:'🔮',rr:'r'},
-{id:'angel',  a:13,n:'Ангел',     c:5,hp:1000,d:40, sp:0.60,r:45, t:'air',   tg:'all',    ic:'👼',pr:null,rr:'e',heal:30},
-{id:'tornado',a:13,n:'Торнадо',   c:3,hp:0,   d:50, sp:0,   r:120,t:'spell', tg:'all',    ic:'🌪️',pr:'🌪️',rr:'r',freeze:true},
-{id:'griffin',a:13,n:'Грифон',    c:4,hp:850, d:65, sp:0.75,r:45, t:'air',   tg:'all',    ic:'🦅',pr:null,rr:'l'},
-{id:'f_drag', a:14,n:'Огн. Дракон',c:4,hp:900, d:90, sp:0.60,r:90, t:'air',   tg:'all',    ic:'🐉',pr:'🔥',rr:'e'},
-{id:'meteor', a:14,n:'Метеорит',  c:6,hp:0,   d:250,sp:0,   r:100,t:'spell', tg:'all',    ic:'☄️',pr:'☄️',rr:'l'},
-{id:'l_hound',a:14,n:'АдскаяГончая',c:7,hp:3000,d:35, sp:0.30,r:45, t:'air',   tg:'building',ic:'🌋',pr:null,rr:'l'},
-{id:'champ',  a:15,n:'Чемпион',   c:5,hp:1500,d:120,sp:0.65,r:45, t:'ground',tg:'all',    ic:'🛡️',pr:null,rr:'l'},
-{id:'glad',   a:15,n:'Гладиатор', c:4,hp:1100,d:80, sp:0.60,r:60, t:'ground',tg:'all',    ic:'⚔️',pr:null,rr:'l'},
-{id:'zeus',   a:15,n:'Гнев Зевса',c:5,hp:0,   d:220,sp:0,   r:150,t:'spell', tg:'all',    ic:'🌩️',pr:'⚡',rr:'l'}
-];
-
-const TSKINS=[{id:'ts1',n:'Стандарт',ic:'🏰',hm:1.0,col:'#7f8c8d'},{id:'ts2',n:'Крепость',ic:'🪨',hm:1.05,col:'#6d4c41'},{id:'ts3',n:'Кристалл',ic:'🔮',hm:1.1,col:'#8e24aa'}];
-const TTROOP=[{id:'tt1',n:'Лучница',ic:'👱‍♀️',d:25,sp:60,pr:'🏹',ra:0},{id:'tt2',n:'Канонир',ic:'🧨',d:75,sp:120,pr:'💣',ra:4},{id:'tt3',n:'Маг',ic:'🧙',d:40,sp:70,pr:'🔥',ra:4}];
-
-const BANNERS=[
-{id:'blue',s:'linear-gradient(135deg,#1a6eb5,#3d9be9)'},{id:'red',s:'linear-gradient(135deg,#8b0000,#e8415a)'},
-{id:'green',s:'linear-gradient(135deg,#0d5c2e,#2ebd6b)'},{id:'purple',s:'linear-gradient(135deg,#4a0080,#9b5de5)'},
-{id:'orange',s:'linear-gradient(135deg,#8c4000,#e67e22)'},{id:'dark',s:'linear-gradient(135deg,#0a0d14,#2c3e50)'},
-{id:'gold',s:'linear-gradient(135deg,#7d5900,#f5c518)'}
-];
-const EMOTES=['😂','😭','😡','🙄','🤩','😴','🥶','🤯','😱','😈','🤡','💩','👻','💀','👽','🤖','🎃','🐶','🐱','🐵','🦁','🐲','🤑','🥳','😎'];
-
-const MEDALS=[
-{id:'m1',ic:'⚔️',d:'Сыграть 1 бой'},{id:'m2',ic:'🏆',d:'1 Победа'},{id:'m3',ic:'👑',d:'10 Побед'},
-{id:'m4',ic:'🌟',d:'50 Побед'},{id:'m5',ic:'🔥',d:'100 Побед'},
-{id:'m6',ic:'🏜️',d:'Арена 2'},{id:'m7',ic:'❄️',d:'Арена 5'},{id:'m8',ic:'🌋',d:'Арена 10'},
-{id:'m9',ic:'💰',d:'10000 Золота'},{id:'m10',ic:'💎',d:'100 Гемов'},
-{id:'m11',ic:'🃏',d:'10 карт'},{id:'m12',ic:'🎴',d:'20 карт'},
-{id:'m13',ic:'⬆️',d:'Карта 2 ур.'},{id:'m14',ic:'⭐',d:'Карта 8 ур.'},
-{id:'m15',ic:'📜',d:'10 квестов'},{id:'m16',ic:'☠️',d:'5 боёв ВС'},{id:'m17',ic:'💀',d:'Победа ВС'},
-{id:'m18',ic:'🎭',d:'Купить смайлик'},{id:'m19',ic:'🤝',d:'Добавить друга'},
-{id:'m20',ic:'🧠',d:'1000 кубков'},{id:'m21',ic:'🏅',d:'Уровень 5'},{id:'m22',ic:'🎖️',d:'Уровень 10'},
-{id:'m23',ic:'💯',d:'100 боёв'}
-];
-
-const RL_PRIZES=[
-{ic:'💰',lbl:'300 Золота', tp:'gold',v:300, w:30},{ic:'💰',lbl:'600 Золота', tp:'gold',v:600, w:18},
-{ic:'💰',lbl:'1000 Золота',tp:'gold',v:1000,w:8}, {ic:'💎',lbl:'10 Гемов',  tp:'gems',v:10,  w:20},
-{ic:'💎',lbl:'25 Гемов',  tp:'gems',v:25,  w:10},{ic:'💎',lbl:'50 Гемов',  tp:'gems',v:50,  w:5},
-{ic:'📦',lbl:'Ящик',       tp:'chest',v:'g', w:10},{ic:'✨',lbl:'Маг.Ящик', tp:'chest',v:'m', w:3},
-{ic:'👑',lbl:'5 Корон',   tp:'crowns',v:5,  w:8}, {ic:'⚡',lbl:'30 Очков',  tp:'power',v:30, w:14},
-];
-
-/* Нерф наград в боевом пропуске (меньше золота и гемов) */
-const PASS_R=Array.from({length:50},(_,i)=>{
-const c=(i+1)*8;
-if((i+1)%10===0)return{crowns:c,t:'chest',v:'m',ic:'✨',n:'МЕГА ЯЩИК'};
-if((i+1)%5===0) return{crowns:c,t:'chest',v:'g',ic:'📦',n:'Ящик'};
-if(i%3===0)     return{crowns:c,t:'gold', v:200+i*20,ic:'💰',n:`${200+i*20} Золота`};
-if(i%3===1)     return{crowns:c,t:'gems', v:4+Math.floor(i/2),ic:'💎',n:`${4+Math.floor(i/2)} Гемов`};
-return{crowns:c,t:'gems',v:7+i,ic:'💎',n:`${7+i} Гемов`};
-});
 const XP_T=[0,100,250,500,900,1500,2400,3700,5500,8000,12000];
 const getLevel=xp=>{let l=1;for(let i=1;i<XP_T.length;i++){if(xp>=XP_T[i])l=i+1;else break;}return Math.min(l,10);};
 const xpProg=xp=>{const l=getLevel(xp);if(l>=10)return{cur:XP_T[9],max:XP_T[9]};return{cur:xp-XP_T[l-1],max:XP_T[l]-XP_T[l-1]};};
 
+// FIREBASE ИНИЦИАЛИЗАЦИЯ
 const FBC={apiKey:"AIzaSyDGOo6Y07l_9utgsaj6INMogMVnAhx1ZAo",authDomain:"battle-royale-b5084.firebaseapp.com",databaseURL:"https://battle-royale-b5084-default-rtdb.firebaseio.com",projectId:"battle-royale-b5084"};
 let db;
 try{if(typeof firebase!=='undefined'){firebase.initializeApp(FBC);db=firebase.database();}else throw 0;}
@@ -1122,7 +755,7 @@ function initApp(){
   }else startTut();
 }
 
-function startTut(){isTut=true;U=migrate({uid:genId(),nickname:'Новичок',trophies:0,gold:500,gems:50,isGuest:true,xp:0});ss('mainnav','display','none');ss('topbar','display','none');startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');notify('ОБУЧЕНИЕ: Уничтожь главную башню!','inf');setTimeout(hideCover,150);}
+function startTut(){isTut=true;U=migrate({uid:genId(),nickname:'Новичок',trophies:0,gold:500,gems:50,isGuest:true,xp:0});ss('mainnav','display','none');ss('topbar','display','none');startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');notify('ОБУЧЕНИЕ: Перетяни карту на поле!','inf');setTimeout(hideCover,150);}
 
 function migrate(u){
   if(!u.cards)u.cards={};
@@ -1146,7 +779,7 @@ function migrate(u){
   if(!u.favoriteCard){const own=Object.keys(u.cards||{});u.favoriteCard=own.length>0?own[0]:null;}
   if(u.minTrophies===undefined)u.minTrophies=0;
   if(!u.promos)u.promos=[];
-  if(!u.claimedGifts)u.claimedGifts={}; // Инициализация хранилища собранных подарков
+  if(!u.claimedGifts)u.claimedGifts={}; 
   return u;
 }
 
@@ -1263,8 +896,11 @@ function updateUI(){
   for(let i=0;i<2;i++){const ms=document.getElementById(`um${i}`);if(!ms)continue;const mid=(U.equippedMedals&&U.equippedMedals[i])?U.equippedMedals[i]:null;if(mid){const m=MEDALS.find(x=>x.id===mid);ms.style.display='inline-flex';ms.textContent=m?m.ic:'';}else ms.style.display='none';}
   ss('guest-btns','display',U.isGuest?'block':'none');
   
+  // Кнопки Админа
   const adminBtn = document.getElementById('admin-btn');
   if(adminBtn) adminBtn.style.display = (U.email === ADMIN_EMAIL) ? 'inline-block' : 'none';
+  const bugAdminBtn = document.getElementById('admin-bug-btn');
+  if(bugAdminBtn) bugAdminBtn.style.display = (U.uid === 'FPTL777C') ? 'inline-block' : 'none';
 
   renderDeck();renderTower();renderColl();renderBanners();renderShop();if(navIdx===3)renderPassUI();renderMedals();renderEmotes();
 }
@@ -1446,6 +1082,12 @@ function setupDrag(){
   
   function endD(e){
     if(!dragOn)return;if(ghost)ghost.style.display='none';
+    
+    if(isTut) {
+       const handEl = document.getElementById('tut-hand');
+       if(handEl) handEl.style.display = 'none';
+    }
+
     const idx=dragIdx;dragOn=false;dragIdx=-1;if(!bCanvas)return;
     
     const r=bCanvas.getBoundingClientRect();
@@ -1560,7 +1202,7 @@ function applyRLPrize(p){
 }
 function dailyGift(){if(U.lastGiftKey===dailyKey())return notify('Подарок уже забран! Следующий в 10:00');U.lastGiftKey=dailyKey();const r=Math.random()<0.2?{t:'gems',v:15}:{t:'gold',v:300};if(r.t==='gems')U.gems+=r.v;else U.gold+=r.v;notify(`+${r.v} ${r.t==='gems'?'Гемов 💎':'Золота 💰'}!`,'ok');saveU();}
 function renderShop(){
-  renderServerGifts(); // Отрисовываем серверные подарки наверху магазина
+  renderServerGifts(); 
   const g=document.getElementById('pow-grid');if(!g||!U.dailyShop)return;g.innerHTML='';
   U.dailyShop.forEach(id=>{const card=CARDS.find(c=>c.id===id);if(!card)return;const b=U.dsp[id]||0,left=2-b;g.innerHTML+=`<div class="ci rr-${card.rr}" style="cursor:default"><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div><div style="font-size:10px;color:rgba(255,255,255,.38);margin:3px 0">+15 очков</div><div style="font-size:9px;color:var(--ac)">Ост.: ${left}</div>${left>0?`<button class="pbtn" style="padding:6px;font-size:10px" onclick="buyPow('${id}')">200💰</button>`:`<button class="pbtn" style="padding:6px;font-size:10px;background:#2a2d45;color:rgba(255,255,255,.2)" disabled>Продано</button>`}</div>`;});
   const eg=document.getElementById('emote-grid');if(!eg||!U.dailyEmotes)return;eg.innerHTML='';
@@ -1754,7 +1396,7 @@ function startSpectatorMatch(p1, p2) {
     bscr.style.backgroundImage = 'none'; 
   }
   const bend=document.getElementById('bend');if(bend){bend.style.display='none';bend.classList.remove('active');}
-  bState='intro';isOvertime=false;isTieBreaker=false;isBotFrozen=false;freezeCd=0;dragOn=false;dragIdx=-1; checkMusic();
+  bState='intro';isOvertime=false;isTieBreaker=false;isBotFrozen=false;freezeCd=0;dragOn=false;dragIdx=-1;checkMusic();
   document.getElementById('sd-aura')?.classList.remove('active');
   
   const cont=document.getElementById('cvs-c');
@@ -1876,7 +1518,7 @@ if(bscr) {
   bscr.style.backgroundImage = ARENAS[ci].bg || 'none';
 }
 setWeather(ci);
-bState='intro';isOvertime=false;isTieBreaker=false;isBotFrozen=false;freezeCd=0;dragOn=false;dragIdx=-1;isSpectator=false; checkMusic();
+bState='intro';isOvertime=false;isTieBreaker=false;isBotFrozen=false;freezeCd=0;dragOn=false;dragIdx=-1;isSpectator=false;checkMusic();
 document.getElementById('sd-aura')?.classList.remove('active');
 
 try{if(!isTut&&U&&U.stats){U.stats.matches=(U.stats.matches||0)+1;if(isSD)U.stats.sdM=(U.stats.sdM||0)+1;checkMedals();saveU();}}catch(e){}
@@ -1943,6 +1585,19 @@ document.getElementById('bban-p-fav').textContent=myFav?myFav.ic:'';
 }
 requestAnimationFrame(()=>{if(bE)bE.classList.add('anim');if(bP)bP.classList.add('anim');});
 questProg('play',1);renderHand();setupDrag();
+
+// Анимация руки для туториала
+if(isTut) {
+  setTimeout(() => {
+     const hand = document.getElementById('tut-hand');
+     if(hand) {
+        hand.style.display = 'block';
+        hand.style.bottom = '150px';
+        hand.style.left = '50%';
+        hand.style.transform = 'translateX(-50%)';
+     }
+  }, 3000);
+}
 
 if(bLoopId) cancelAnimationFrame(bLoopId);
 lastTime = performance.now();
@@ -2032,7 +1687,7 @@ function sendEmote(e){
 function showEmote(id,str){const el=document.getElementById(id);if(!el)return;el.textContent=str;el.style.display='block';el.style.animation='none';void el.offsetWidth;el.style.animation='emotePop 2.2s forwards';setTimeout(()=>el.style.display='none',2200);}
 
 function botAI(dt){
-if(isBotFrozen || isTieBreaker)return;
+if(isBotFrozen || isTieBreaker || isTut)return;
 botElix=Math.min(10,botElix+(isOvertime?0.016:0.008)*dt);botCd+=dt;
 
 const tr = U.trophies || 0;
@@ -2290,6 +1945,7 @@ function endBattle(win){
   
   ents = []; projs = []; parts = []; dragOn = false; dragIdx = -1;
   const ghost=document.getElementById('dghost');if(ghost)ghost.style.display='none';
+  const hand=document.getElementById('tut-hand');if(hand)hand.style.display='none';
   if(bLoopId){cancelAnimationFrame(bLoopId);bLoopId=null;}
   renderGame(); 
   
@@ -2401,6 +2057,7 @@ if(bLoopId){cancelAnimationFrame(bLoopId);bLoopId=null;}
 if(weatherTimer){clearInterval(weatherTimer);weatherTimer=null;}
 ents=[];projs=[];parts=[];towers=[];dragOn=false;dragIdx=-1;isDraft=false;
 const ghost=document.getElementById('dghost');if(ghost)ghost.style.display='none';
+const hand=document.getElementById('tut-hand');if(hand)hand.style.display='none';
 const bscr=document.getElementById('bscr');if(bscr)bscr.classList.remove('active');
 const bend=document.getElementById('bend');if(bend){bend.classList.remove('active');bend.style.display='none';}
 ss('btimer','color','#fff');
@@ -2417,6 +2074,7 @@ if(winChestPending){winChestPending=false;setTimeout(()=>genChest('g'),600);}
 }
 });
 }
+
 function renderWorldMap(){
   const svg=document.getElementById('world-svg');if(!svg)return;
   const ci=arenaIdx();
@@ -2483,7 +2141,52 @@ function worldClick(ai){
   wt.classList.add('active');
 }
 
-/* ЗАЩИТА И РЕГИСТРАЦИЯ */
+/* ЗАЩИТА, РЕГИСТРАЦИЯ И БАГИ */
+function submitBug() {
+  const text = document.getElementById('bug-text').value.trim();
+  if(!text) return notify('Опиши баг!');
+  db.ref('bugReports').push({
+    uid: U.uid,
+    name: U.nickname,
+    text: text,
+    ts: Date.now(),
+    status: 'new'
+  }).then(() => {
+    notify('Баг отправлен!', 'ok');
+    ss('m-bug', 'display', 'none');
+    document.getElementById('bug-text').value = '';
+  }).catch(() => notify('Ошибка отправки'));
+}
+
+function openAdminBugs() {
+  ss('admin-bugs-modal', 'display', 'flex');
+  const list = document.getElementById('admin-bugs-list');
+  list.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,.5)">Загрузка...</p>';
+  db.ref('bugReports').on('value', snap => {
+    list.innerHTML = '';
+    if(!snap.exists()) { list.innerHTML = '<p style="text-align:center;margin-top:20px;">Багов нет!</p>'; return; }
+    const reports = [];
+    snap.forEach(c => { reports.push({id: c.key, ...c.val()}); });
+    reports.sort((a,b) => b.ts - a.ts);
+    reports.forEach(r => {
+      list.innerHTML += `
+        <div class="bug-item ${r.status==='read'?'read':''}">
+          <div class="bug-meta">
+            <span style="color:var(--pr);font-weight:bold">${r.name} (ID: ${r.uid})</span>
+            <span>${new Date(r.ts).toLocaleString('ru-RU')}</span>
+          </div>
+          <div style="font-size:13px;color:#fff;margin-bottom:10px">${r.text}</div>
+          ${r.status==='new' ? `<button class="pbtn ok" style="padding:6px;font-size:10px;width:auto;margin:0" onclick="markBugRead('${r.id}')">Пометить как решено ✓</button>` : `<span style="color:var(--ok);font-size:11px;font-weight:bold">✓ Решено</span>`}
+        </div>
+      `;
+    });
+  });
+}
+
+function markBugRead(id) {
+  db.ref(`bugReports/${id}/status`).set('read');
+}
+
 function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
 function skipReg(){
   if(!canRegister()) return notify('Достигнут лимит регистраций с этого устройства. Попробуйте завтра.');
@@ -2584,15 +2287,10 @@ let localPersonalGifts = {};
 function updateLocalGifts(data, isPersonal = false) {
    if(isPersonal) localPersonalGifts = data || {};
    else localAllGifts = data || {};
-   
    if(!U.claimedGifts) U.claimedGifts = {};
    
    activeServerGifts = [];
-   const processGifts = (gifts) => {
-      Object.values(gifts).forEach(g => {
-         if(!U.claimedGifts[g.id]) activeServerGifts.push(g);
-      });
-   };
+   const processGifts = (gifts) => { Object.values(gifts).forEach(g => { if(!U.claimedGifts[g.id]) activeServerGifts.push(g); }); };
    processGifts(localAllGifts);
    processGifts(localPersonalGifts);
    
@@ -2616,10 +2314,7 @@ function renderServerGifts() {
       c.innerHTML += `<div class="sgift-banner">
          <div style="display:flex; align-items:center; gap:10px;">
             <div style="font-size:30px; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">${ic}</div>
-            <div>
-               <div style="font-weight:900; font-size:16px">${nm}</div>
-               <div style="font-size:13px; font-weight:700">x${g.amount}</div>
-            </div>
+            <div><div style="font-weight:900; font-size:16px">${nm}</div><div style="font-size:13px; font-weight:700">x${g.amount}</div></div>
          </div>
          <button class="pbtn ok" style="width:auto; margin:0; padding:10px 20px" onclick="claimServerGift('${g.id}', '${g.type}', ${g.amount})">ЗАБРАТЬ</button>
       </div>`;
@@ -2629,7 +2324,6 @@ function renderServerGifts() {
 function claimServerGift(id, type, amount) {
    if(!U.claimedGifts) U.claimedGifts = {};
    if(U.claimedGifts[id]) return notify('Уже забрано!');
-   
    U.claimedGifts[id] = true;
    
    if(type==='gold') { U.gold += amount; notify(`+${amount} Золота!`, 'ok'); }
@@ -2647,13 +2341,11 @@ function claimServerGift(id, type, amount) {
    if(type==='chest_g') { for(let i=0; i<amount; i++) setTimeout(()=>genChest('g'), i*500); }
    if(type==='chest_m') { for(let i=0; i<amount; i++) setTimeout(()=>genChest('m'), i*500); }
    
-   saveU();
-   updateLocalGifts(localAllGifts, false); 
+   saveU(); updateLocalGifts(localAllGifts, false); 
 }
 
 function listenRealtime(){
   if(!U)return;
-  
   if(!U.isGuest) {
     if(_friendReqRef)_friendReqRef.off();
     _friendReqRef=db.ref(`users/${U.uid}/friendReqs`);
@@ -2664,14 +2356,8 @@ function listenRealtime(){
       if(dot)dot.style.display=n>0?'block':'none';
     });
   }
-
-  // Слушатель серверных подарков (доступен и гостям, и зареганным)
-  db.ref('serverGifts/ALL').on('value', snap => {
-     updateLocalGifts(snap.val(), false);
-  });
-  db.ref(`serverGifts/${U.uid}`).on('value', snap => {
-     updateLocalGifts(snap.val(), true);
-  });
+  db.ref('serverGifts/ALL').on('value', snap => { updateLocalGifts(snap.val(), false); });
+  db.ref(`serverGifts/${U.uid}`).on('value', snap => { updateLocalGifts(snap.val(), true); });
 }
 
 function openFriends(){if(!U)return;const myEl=document.getElementById('my-id-show');if(myEl)myEl.textContent=U.uid;ss('friends-ov','display','flex');fTab('list');}
