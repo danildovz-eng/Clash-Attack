@@ -9,6 +9,9 @@ const urlsToCache = [
   './icon-512.PNG'
 ];
 
+// Переменная для таймера уведомлений
+let notifTimeout;
+
 // Установка: кэшируем основные файлы
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -22,7 +25,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Активация: удаляем старые версии кэша, если мы обновили игру (поменяли CACHE_NAME)
+// Активация: удаляем старые версии кэша, если мы обновили игру
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -44,12 +47,55 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // Если файл найден в кэше — отдаем его моментально
         if (response) {
           return response;
         }
-        // Иначе скачиваем из сети
         return fetch(event.request);
       })
+  );
+});
+
+
+// === НОВАЯ ЛОГИКА ДЛЯ PUSH-УВЕДОМЛЕНИЙ ===
+
+// Слушаем сообщения из нашей игры (когда игрок сворачивает или открывает игру)
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'HIDDEN') {
+    // Игрок свернул игру. Запускаем таймер на 3 часа (3 * 60 * 60 * 1000 = 10 800 000 мс)
+    notifTimeout = setTimeout(() => {
+      self.registration.showNotification('Clash Arena', {
+        body: 'Король ждёт твоих распоряжений на арене! 👑⚔️',
+        icon: './icon-192.PNG', // Используем вашу локальную иконку!
+        badge: './icon-192.PNG',
+        vibrate: [200, 100, 200, 100, 200],
+        requireInteraction: true
+      });
+    }, 3 * 60 * 60 * 1000); 
+  } 
+  else if (event.data && event.data.type === 'VISIBLE') {
+    // Игрок вернулся в игру до истечения 3 часов — отменяем пуш
+    if (notifTimeout) {
+      clearTimeout(notifTimeout);
+    }
+  }
+});
+
+// Обработка клика по уведомлению
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window' }).then(windowClients => {
+      // Пытаемся развернуть уже открытую вкладку с игрой
+      for (let i = 0; i < windowClients.length; i++) {
+        let client = windowClients[i];
+        if (client.url.includes('/') && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // Если вкладка закрыта - открываем новую
+      if (clients.openWindow) {
+        return clients.openWindow('/');
+      }
+    })
   );
 });
