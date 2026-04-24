@@ -1214,8 +1214,20 @@ const getLevel=xp=>{let l=1;for(let i=1;i<XP_T.length;i++){if(xp>=XP_T[i])l=i+1;
 const xpProg=xp=>{const l=getLevel(xp);if(l>=10)return{cur:XP_T[9],max:XP_T[9]};return{cur:xp-XP_T[l-1],max:XP_T[l]-XP_T[l-1]};};
 
 let db;
-try{if(typeof firebase!=='undefined'){firebase.initializeApp(FBC);db=firebase.database();}else throw 0;}
-catch(e){db={ref:()=>({once:()=>Promise.reject('offline'),set:()=>Promise.resolve(),update:()=>Promise.resolve(),on:()=>{},off:()=>{},push:()=>Promise.resolve({key:'mock'}),remove:()=>Promise.resolve(),orderByChild(){return this;},equalTo(){return this;}})}}
+try {
+  if (typeof firebase !== 'undefined') {
+    firebase.initializeApp(FBC);
+    db = firebase.database();
+  } else {
+    alert("ОШИБКА: Браузер заблокировал загрузку Firebase!");
+    throw 0;
+  }
+} catch(e) {
+  // ЭТОТ ALERT ПОКАЖЕТ ТОЧНУЮ ОШИБКУ ПРЯМО НА ЭКРАНЕ
+  alert("ОШИБКА ЗАПУСКА БАЗЫ ДАННЫХ: " + (e.message || "Проверьте ключи FBC!"));
+  
+  db={ref:()=>({once:()=>Promise.reject('offline'),set:()=>Promise.resolve(),update:()=>Promise.resolve(),on:()=>{},off:()=>{},push:()=>Promise.resolve({key:'mock'}),remove:()=>Promise.resolve(),orderByChild(){return this;},equalTo(){return this;}})}
+}
 
 function hideCover(){const c=document.getElementById('app-cover');if(c){c.style.opacity='0';setTimeout(()=>c.style.display='none',400);}}
 
