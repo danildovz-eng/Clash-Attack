@@ -1213,7 +1213,6 @@ const XP_T=[0,100,250,500,900,1500,2400,3700,5500,8000,12000];
 const getLevel=xp=>{let l=1;for(let i=1;i<XP_T.length;i++){if(xp>=XP_T[i])l=i+1;else break;}return Math.min(l,10);};
 const xpProg=xp=>{const l=getLevel(xp);if(l>=10)return{cur:XP_T[9],max:XP_T[9]};return{cur:xp-XP_T[l-1],max:XP_T[l]-XP_T[l-1]};};
 
-const FBC={apiKey:"AIzaSyDGOo6Y07l_9utgsaj6INMogMVnAhx1ZAo",authDomain:"battle-royale-b5084.firebaseapp.com",databaseURL:"https://battle-royale-b5084-default-rtdb.firebaseio.com",projectId:"battle-royale-b5084"};
 let db;
 try{if(typeof firebase!=='undefined'){firebase.initializeApp(FBC);db=firebase.database();}else throw 0;}
 catch(e){db={ref:()=>({once:()=>Promise.reject('offline'),set:()=>Promise.resolve(),update:()=>Promise.resolve(),on:()=>{},off:()=>{},push:()=>Promise.resolve({key:'mock'}),remove:()=>Promise.resolve(),orderByChild(){return this;},equalTo(){return this;}})}}
