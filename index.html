@@ -1271,47 +1271,6 @@ function doLoad(txt,cb){
   setTimeout(()=>{if(prog)prog.style.width='100%';if(ltxt)ltxt.textContent='Готово!';setTimeout(()=>{try{if(cb)cb();}catch(e){console.error(e);startTut();}if(loader){loader.style.opacity='0';setTimeout(()=>{loader.style.display='none';loading=false;},300);}},200);},700);
 }
 
-function initApp(){
-  const sid=ls('clash_uid');
-  if(sid){
-    let done=false;
-    const t=setTimeout(()=>{if(done)return;done=true;ld('clash_uid');startTut();},3500);
-    
-    db.ref('users/'+sid).once('value').then(snap=>{
-      if(done)return;done=true;clearTimeout(t);
-      if(snap.exists()){
-        let cloudData = snap.val();
-        
-        // Восстанавливаем из страховки, если облако не успело обновиться
-        let localBackup = ls('local_u_backup');
-        if (localBackup) {
-           try {
-             let localData = JSON.parse(localBackup);
-             // Если локальное сохранение новее облачного - берем его!
-             if (localData && localData.lastSaveTs > (cloudData.lastSaveTs || 0)) {
-                 cloudData = localData; 
-             }
-           } catch(e) { console.error("Ошибка чтения бекапа"); }
-        }
-        
-        U=migrate(cloudData);
-        startUI();
-        listenRealtime();
-      } else {
-        ld('clash_uid');
-        startTut();
-      }
-    }).catch(()=>{
-      if(done)return;done=true;clearTimeout(t);
-      ld('clash_uid');
-      startTut();
-    });
-  } else {
-    startTut();
-  }
-}
-
-
 // ==== УЛУЧШЕННЫЙ ТУТОРИАЛ ====
 let tutStep = 0;
 const tutData = [
@@ -1876,45 +1835,6 @@ function genChest(tp){
   const box=document.getElementById('chest-box'),rev=document.getElementById('chest-rev');if(box)box.style.display='flex';if(rev)rev.style.display='none';st('chest-tip','Нажмите чтобы открыть');ss('chest-ov','display','flex');
 }
 function chestTap(){const b=document.getElementById('chest-box');if(b&&b.style.display!=='none'){b.style.display='none';nextChestItem();}}
-
-function saveU(){
-  if(!U)return;
-  if(U.stats){['matches','wins','sdM','sdW','towers','quests','winStreak'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
-  ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
-  
-  // ЖЕСТКОЕ ЛОКАЛЬНОЕ СОХРАНЕНИЕ: Страховка на случай, если Firebase не успеет отправить данные
-  U.lastSaveTs = Date.now();
-  lw('local_u_backup', JSON.stringify(U));
-  
-  if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
-  updateUI();
-}
-
-function nextChestItem(){
-  const rev=document.getElementById('chest-rev');
-  if(!cQ.length){ss('chest-ov','display','none');checkMedals();saveU();return;}
-  const item=cQ.shift();
-  st('ci-icon',item.ic);st('ci-text',item.tx);st('ci-cnt','+'+item.v);
-  if(rev){
-    rev.style.display='flex';
-    document.querySelectorAll('.gacha-item').forEach(el => {
-      el.style.animation = 'none'; void el.offsetWidth; el.style.animation = 'gachaReveal 0.4s ease-out forwards';
-    });
-  }
-  st('chest-tip',cQ.length?'Нажмите далее…':'Нажмите чтобы закрыть');
-  
-  // НАЧИСЛЯЕМ ЛУТ
-  if(item.t==='gold')U.gold+=item.v;
-  else if(item.t==='gems')U.gems+=item.v;
-  else if(item.t==='power'){if(!U.cards[item.cid])U.cards[item.cid]={level:1,power:0,played:0};U.cards[item.cid].power+=item.v;}
-  else if(item.t==='newcard')U.cards[item.cid]={level:1,power:0,played:0};
-  else if(item.t==='banner'){if(!U.banners)U.banners=[];U.banners.push(item.bid);}
-  else if(item.t==='tskin'){if(!U.towerSkins)U.towerSkins=[];U.towerSkins.push(item.id);}
-  else if(item.t==='ttroop'){if(!U.towerTroops)U.towerTroops=[];U.towerTroops.push(item.id);}
-  
-  // МГНОВЕННОЕ СОХРАНЕНИЕ ПОСЛЕ КАЖДОЙ ВЕЩИ ИЗ ЯЩИКА!
-  saveU(); 
-}
 
 function upCost(l){return l*800;}function upReq(l){return l*50;}
 function renderDeck(){const c=document.getElementById('ui-deck');if(!c)return;c.innerHTML='';(U.deck||[]).forEach(id=>{const card=CARDS.find(x=>x.id===id);if(!card)return;const data=U.cards[id]||{level:1,power:0},sel=swapMode&&swapId===id,isFoil=data.level>=8,isFav=U.favoriteCard===id;c.innerHTML+=`<div class="ci rr-${card.rr} ${sel?'sel':''} ${isFoil?'foil':''}" onclick="deckClick('${id}')">${isFoil?'<div class="foil-fx"></div>':''}${isFav?'<div class="fav-badge">💖</div>':''}<div class="clvl">Лвл ${data.level}</div><div class="cicon">${card.ic}</div><div class="cname" style="margin-top:6px">${card.n}</div><div style="font-size:10px;color:var(--pu);margin-top:4px">${card.c}💜</div></div>`;});}
@@ -2880,6 +2800,66 @@ function updateLocalGifts(data, isPersonal = false) {
    
    activeServerGifts.sort((a,b) => b.ts - a.ts);
    renderServerGifts();
+}
+
+function initApp(){
+  const sid=ls('clash_uid');
+  if(sid){
+    let done=false;const t=setTimeout(()=>{if(done)return;done=true;ld('clash_uid');startTut();},3500);
+    db.ref('users/'+sid).once('value').then(snap=>{
+      if(done)return;done=true;clearTimeout(t);
+      if(snap.exists()){
+        let cloudData = snap.val();
+        let localBackup = ls('local_u_backup');
+        if (localBackup) {
+           try {
+             let localData = JSON.parse(localBackup);
+             if (localData && localData.lastSaveTs > (cloudData.lastSaveTs || 0)) {
+                 cloudData = localData; 
+             }
+           } catch(e) {}
+        }
+        U=migrate(cloudData);
+        startUI();listenRealtime();
+      }else{ld('clash_uid');startTut();}
+    }).catch(()=>{if(done)return;done=true;clearTimeout(t);ld('clash_uid');startTut();});
+  }else startTut();
+}
+
+function saveU(){
+  if(!U)return;
+  if(U.stats){['matches','wins','sdM','sdW','towers','quests','winStreak'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
+  ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
+  
+  U.lastSaveTs = Date.now();
+  lw('local_u_backup', JSON.stringify(U));
+  
+  if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
+  updateUI();
+}
+
+function nextChestItem(){
+  const rev=document.getElementById('chest-rev');
+  if(!cQ.length){ss('chest-ov','display','none');checkMedals();saveU();return;}
+  const item=cQ.shift();
+  st('ci-icon',item.ic);st('ci-text',item.tx);st('ci-cnt','+'+item.v);
+  if(rev){
+    rev.style.display='flex';
+    document.querySelectorAll('.gacha-item').forEach(el => {
+      el.style.animation = 'none'; void el.offsetWidth; el.style.animation = 'gachaReveal 0.4s ease-out forwards';
+    });
+  }
+  st('chest-tip',cQ.length?'Нажмите далее…':'Нажмите чтобы закрыть');
+  
+  if(item.t==='gold')U.gold+=item.v;
+  else if(item.t==='gems')U.gems+=item.v;
+  else if(item.t==='power'){if(!U.cards[item.cid])U.cards[item.cid]={level:1,power:0,played:0};U.cards[item.cid].power+=item.v;}
+  else if(item.t==='newcard')U.cards[item.cid]={level:1,power:0,played:0};
+  else if(item.t==='banner'){if(!U.banners)U.banners=[];U.banners.push(item.bid);}
+  else if(item.t==='tskin'){if(!U.towerSkins)U.towerSkins=[];U.towerSkins.push(item.id);}
+  else if(item.t==='ttroop'){if(!U.towerTroops)U.towerTroops=[];U.towerTroops.push(item.id);}
+  
+  saveU(); 
 }
 
 function renderServerGifts() {
