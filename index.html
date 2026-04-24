@@ -1450,14 +1450,6 @@ function openFavPicker(){
 }
 function setFavCard(id){U.favoriteCard=id;saveU();notify('Любимая карта выбрана!','ok');ss('m-favpick','display','none');openProfile();}
 
-function saveU(){
-  if(!U)return;
-  if(U.stats){['matches','wins','sdM','sdW','towers','quests','winStreak'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
-  ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
-  if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
-  updateUI();
-}
-
 function updateUI(){
   if(!U)return;
   st('ui-tr',U.trophies);st('ui-go',U.gold);st('ui-ge',U.gems);
@@ -1830,6 +1822,20 @@ function genChest(tp){
   const box=document.getElementById('chest-box'),rev=document.getElementById('chest-rev');if(box)box.style.display='flex';if(rev)rev.style.display='none';st('chest-tip','Нажмите чтобы открыть');ss('chest-ov','display','flex');
 }
 function chestTap(){const b=document.getElementById('chest-box');if(b&&b.style.display!=='none'){b.style.display='none';nextChestItem();}}
+
+function saveU(){
+  if(!U)return;
+  if(U.stats){['matches','wins','sdM','sdW','towers','quests','winStreak'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
+  ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
+  
+  // ЖЕСТКОЕ ЛОКАЛЬНОЕ СОХРАНЕНИЕ: Страховка на случай, если Firebase не успеет отправить данные
+  U.lastSaveTs = Date.now();
+  lw('local_u_backup', JSON.stringify(U));
+  
+  if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
+  updateUI();
+}
+
 function nextChestItem(){
   const rev=document.getElementById('chest-rev');
   if(!cQ.length){ss('chest-ov','display','none');checkMedals();saveU();return;}
@@ -1838,12 +1844,12 @@ function nextChestItem(){
   if(rev){
     rev.style.display='flex';
     document.querySelectorAll('.gacha-item').forEach(el => {
-      el.style.animation = 'none';
-      void el.offsetWidth; 
-      el.style.animation = 'gachaReveal 0.4s ease-out forwards';
+      el.style.animation = 'none'; void el.offsetWidth; el.style.animation = 'gachaReveal 0.4s ease-out forwards';
     });
   }
   st('chest-tip',cQ.length?'Нажмите далее…':'Нажмите чтобы закрыть');
+  
+  // НАЧИСЛЯЕМ ЛУТ
   if(item.t==='gold')U.gold+=item.v;
   else if(item.t==='gems')U.gems+=item.v;
   else if(item.t==='power'){if(!U.cards[item.cid])U.cards[item.cid]={level:1,power:0,played:0};U.cards[item.cid].power+=item.v;}
@@ -1851,6 +1857,9 @@ function nextChestItem(){
   else if(item.t==='banner'){if(!U.banners)U.banners=[];U.banners.push(item.bid);}
   else if(item.t==='tskin'){if(!U.towerSkins)U.towerSkins=[];U.towerSkins.push(item.id);}
   else if(item.t==='ttroop'){if(!U.towerTroops)U.towerTroops=[];U.towerTroops.push(item.id);}
+  
+  // МГНОВЕННОЕ СОХРАНЕНИЕ ПОСЛЕ КАЖДОЙ ВЕЩИ ИЗ ЯЩИКА!
+  saveU(); 
 }
 
 function upCost(l){return l*800;}function upReq(l){return l*50;}
@@ -2832,15 +2841,13 @@ function renderServerGifts() {
       if(g.type==='chest_g'){ ic='📦'; nm='Мал. Ящик'; }
       if(g.type==='chest_m'){ ic='✨'; nm='Бол. Ящик'; }
       
-      c.innerHTML += `<div class="sgift-banner">
-         <div style="display:flex; align-items:center; gap:10px;">
-            <div style="font-size:30px; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">${ic}</div>
-            <div>
-               <div style="font-weight:900; font-size:16px">${nm}</div>
-               <div style="font-size:13px; font-weight:700">x${g.amount}</div>
-            </div>
+      c.innerHTML += `<div style="background: linear-gradient(135deg, #d4af37, #f5c518); color: #1a1000; border-radius: 20px; padding: 25px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 30px rgba(245,197,24,0.6); border: 3px solid #fff; text-align: center; animation: popIn 0.5s ease-out;">
+         <div style="font-size:65px; filter:drop-shadow(0 5px 10px rgba(0,0,0,0.5)); animation: pulse 2s infinite; margin-bottom: 10px;">${ic}</div>
+         <div style="margin-bottom: 15px;">
+            <div style="font-weight:900; font-size:26px; font-family:'Orbitron',sans-serif; text-transform:uppercase;">${nm}</div>
+            <div style="font-size:16px; font-weight:800; opacity:0.8; margin-top:4px;">Вам отправлено: x${g.amount}</div>
          </div>
-         <button class="pbtn ok" style="width:auto; margin:0; padding:10px 20px" onclick="claimServerGift('${g.id}', '${g.type}', ${g.amount})">ЗАБРАТЬ</button>
+         <button class="bigbtn" style="width:100%; max-width:100%; height:55px; font-size:16px; background:linear-gradient(145deg,#ffffff,#e0e0e0); color:#000; box-shadow:0 6px 0 #999;" onclick="claimServerGift('${g.id}', '${g.type}', ${g.amount})">ЗАБРАТЬ ПОДАРОК</button>
       </div>`;
    });
 }
