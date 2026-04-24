@@ -913,13 +913,34 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// Экстренное сохранение при закрытии/сворачивании игры
+window.addEventListener('pagehide', () => { if(typeof U !== 'undefined' && U) saveU(); });
+window.addEventListener('beforeunload', () => { if(typeof U !== 'undefined' && U) saveU(); });
 
-// Музыка и пауза игры в фоне (фикс бага со сворачиванием)
+// Музыка, пауза и сохранение при сворачивании
 document.addEventListener('visibilitychange', () => {
+  if (document.hidden && typeof U !== 'undefined' && U) {
+    saveU(); // Принудительное сохранение при сворачивании!
+  }
+  
   if(navigator.serviceWorker.controller) {
     if (document.hidden) navigator.serviceWorker.controller.postMessage({type: 'HIDDEN'});
     else navigator.serviceWorker.controller.postMessage({type: 'VISIBLE'});
   }
+  if (document.hidden) {
+    if (typeof bgMusic !== 'undefined' && bgMusic) bgMusic.pause();
+    if (typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'running') audioCtx.suspend();
+    if (typeof bState !== 'undefined' && bState === 'playing') bState = 'paused_bg';
+  } else {
+    if (typeof sfxOn !== 'undefined' && sfxOn && typeof bState !== 'undefined' && bState !== 'playing' && bState !== 'paused_bg' && typeof bgMusic !== 'undefined') bgMusic.play().catch(()=>{});
+    if (typeof sfxOn !== 'undefined' && sfxOn && typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    if (typeof bState !== 'undefined' && bState === 'paused_bg') {
+      bState = 'playing';
+      if (typeof lastTime !== 'undefined') lastTime = performance.now();
+    }
+  }
+});
+
   if (document.hidden) {
     if (bgMusic) bgMusic.pause();
     if (audioCtx && audioCtx.state === 'running') audioCtx.suspend();
@@ -1253,10 +1274,43 @@ function doLoad(txt,cb){
 function initApp(){
   const sid=ls('clash_uid');
   if(sid){
-    let done=false;const t=setTimeout(()=>{if(done)return;done=true;ld('clash_uid');startTut();},3500);
-    db.ref('users/'+sid).once('value').then(snap=>{if(done)return;done=true;clearTimeout(t);if(snap.exists()){U=migrate(snap.val());startUI();listenRealtime();}else{ld('clash_uid');startTut();}}).catch(()=>{if(done)return;done=true;clearTimeout(t);ld('clash_uid');startTut();});
-  }else startTut();
+    let done=false;
+    const t=setTimeout(()=>{if(done)return;done=true;ld('clash_uid');startTut();},3500);
+    
+    db.ref('users/'+sid).once('value').then(snap=>{
+      if(done)return;done=true;clearTimeout(t);
+      if(snap.exists()){
+        let cloudData = snap.val();
+        
+        // Восстанавливаем из страховки, если облако не успело обновиться
+        let localBackup = ls('local_u_backup');
+        if (localBackup) {
+           try {
+             let localData = JSON.parse(localBackup);
+             // Если локальное сохранение новее облачного - берем его!
+             if (localData && localData.lastSaveTs > (cloudData.lastSaveTs || 0)) {
+                 cloudData = localData; 
+             }
+           } catch(e) { console.error("Ошибка чтения бекапа"); }
+        }
+        
+        U=migrate(cloudData);
+        startUI();
+        listenRealtime();
+      } else {
+        ld('clash_uid');
+        startTut();
+      }
+    }).catch(()=>{
+      if(done)return;done=true;clearTimeout(t);
+      ld('clash_uid');
+      startTut();
+    });
+  } else {
+    startTut();
+  }
 }
+
 
 // ==== УЛУЧШЕННЫЙ ТУТОРИАЛ ====
 let tutStep = 0;
