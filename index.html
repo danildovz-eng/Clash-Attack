@@ -2580,13 +2580,14 @@ function worldClick(ai){
   wt.classList.add('active');
 }
 
-/* ЗАЩИТА И РЕГИСТРАЦИЯ */
 function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
 function skipReg(){
-  if(!canRegister()) return notify('Достигнут лимит регистраций с этого устройства. Попробуйте завтра.');
-  lw('last_reg_time', Date.now());
-  ss('m-reg','display','none');U.isGuest=true;lw('clash_uid',U.uid);startUI();
+  ss('m-reg','display','none');
+  U.isGuest=true;
+  lw('clash_uid',U.uid);
+  startUI();
 }
+
 function openReg(){
   if(!canRegister()) return notify('Достигнут лимит регистраций с этого устройства. Попробуйте завтра.');
   ss('m-reg','display','none');ss('m-regemail','display','flex');
