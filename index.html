@@ -2668,12 +2668,7 @@ function openReg(){
   if(!canRegister()) return notify('Достигнут лимит регистраций с этого устройства. Попробуйте завтра.');
   ss('m-reg','display','none');ss('m-regemail','display','flex');
 }
-function submitReg(){
-  if(!canRegister()) return notify('Достигнут лимит регистраций!');
-  const email=document.getElementById('remail').value.trim(),pass=document.getElementById('rpass').value;
-  if(!email||pass.length<5)return notify('Введите почту и пароль (мин. 5 симв.)');
-  db.ref('users').orderByChild('email').equalTo(email).once('value').then(s=>{if(s.exists())return notify('Почта занята!');U.email=email;U.password=pass;ss('m-regemail','display','none');ss('m-code','display','flex');notify('Код отправлен!','ok');}).catch(()=>notify('Ошибка связи'));
-}
+
 function submitCode(){
   if(document.getElementById('rcode').value.length<4)return notify('Мин. 4 символа');
   U.isGuest=false;ss('m-code','display','none');lw('clash_uid',U.uid);
@@ -2690,8 +2685,26 @@ function doLogin(){
       U=migrate(fu);lw('clash_uid',fk);notify('Добро пожаловать!','ok');ss('m-login','display','none');
       doLoad('Загрузка профиля…',()=>{startUI();listenRealtime();});
     }else notify('Неверный пароль или аккаунт не найден');
-  }).catch(()=>notify('БД недоступна'));
+  }).catch((err)=>{
+    console.error(err);
+    notify('Ошибка БД: ' + (err.message || err)); // ТЕПЕРЬ МЫ УВИДИМ ТОЧНУЮ ОШИБКУ
+  });
 }
+
+function submitReg(){
+  if(!canRegister()) return notify('Достигнут лимит регистраций!');
+  const email=document.getElementById('remail').value.trim(),pass=document.getElementById('rpass').value;
+  if(!email||pass.length<5)return notify('Введите почту и пароль (мин. 5 симв.)');
+  db.ref('users').orderByChild('email').equalTo(email).once('value').then(s=>{
+    if(s.exists())return notify('Почта занята!');
+    U.email=email;U.password=pass;ss('m-regemail','display','none');ss('m-code','display','flex');notify('Код отправлен!','ok');
+  }).catch((err)=>{
+    console.error(err);
+    notify('Ошибка связи: ' + (err.message || err)); // ТЕПЕРЬ МЫ УВИДИМ ТОЧНУЮ ОШИБКУ
+  });
+}
+
+
 function logout(){ld('clash_uid');location.reload();}
 
 /* АДМИН ПАНЕЛЬ И СЕРВЕРНЫЕ ПОДАРКИ */
