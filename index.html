@@ -27,7 +27,7 @@
 input, textarea, select { user-select:text; -webkit-user-select:text; }
 
 html, body {
-  position: fixed; /* Жестко фиксируем фон от скролла на iOS */
+  position: fixed; 
   top: 0; left: 0; right: 0; bottom: 0;
   width: 100%; height: 100%;
   margin: 0; padding: 0;
@@ -38,19 +38,13 @@ html, body {
   overscroll-behavior: none;
 }
 
-/* Блокируем передачу скролла от окон к фону */
-.scr, #pass-wrap, #world-container, #fav-pick-grid, #admin-player-list {
-  overscroll-behavior-y: contain;
-}
+.scr, #pass-wrap, #world-container, #fav-pick-grid, #admin-player-list { overscroll-behavior-y: contain; }
 
 #app-container {
-  width: 100%; height: 100%;
-  max-width: 480px; 
-  position: relative;
-  background-color: var(--bg);
+  width: 100%; height: 100%; max-width: 480px; 
+  position: relative; background-color: var(--bg);
   background-size: cover; background-position: center;
-  overflow: hidden;
-  box-shadow: 0 0 40px rgba(0,0,0,0.9);
+  overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.9);
   transition: background 0.8s ease, background-color 0.8s ease;
 }
 
@@ -65,9 +59,46 @@ html, body {
 @keyframes mmPulse{from{transform:scale(0.9);opacity:0.8;}to{transform:scale(1.1);opacity:1;}}
 @keyframes sdPulse { from { box-shadow: inset 0 0 30px rgba(232,65,90,0.2); } to { box-shadow: inset 0 0 80px rgba(232,65,90,0.7); } }
 
-/* Анимации для экрана 30 апреля */
-@keyframes slideInLeftSkew { from { transform: translateX(-100%) skewX(-15deg); opacity: 0; } to { transform: translateX(0) skewX(-15deg); opacity: 1; } }
-@keyframes slideInRightSkew { from { transform: translateX(100%) skewX(-15deg); opacity: 0; } to { transform: translateX(0) skewX(-15deg); opacity: 1; } }
+/* Обновленный экран 30 апреля 2026 */
+#welcome-s1 { 
+  position: fixed; inset: 0; 
+  background: radial-gradient(circle at center, #051a0b 0%, #000000 80%); 
+  z-index: 80000; display: none; flex-direction: column; 
+  justify-content: center; align-items: center; 
+  overflow: hidden; cursor: pointer; 
+}
+.welc-t1 { 
+  font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900; 
+  color: #00ff00; text-shadow: 0 0 25px rgba(0, 255, 0, 0.8); 
+  text-transform: uppercase; text-align: center; line-height: 1.1; 
+  opacity: 0; transform: skewX(-10deg);
+  animation: fadeGlowIn 1s ease-out forwards 0.3s; 
+}
+.welc-t2 { 
+  font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900; 
+  color: #00ff00; text-shadow: 0 0 25px rgba(0, 255, 0, 0.8); 
+  text-transform: uppercase; margin-top: -5px; transform: skewX(-10deg);
+  opacity: 0; animation: fadeGlowIn 1s ease-out forwards 1.2s; 
+}
+.welc-blink {
+  position: absolute; bottom: 50px; font-size: 14px; 
+  color: rgba(255, 255, 255, 0.6); letter-spacing: 1px;
+  opacity: 0; animation: blinkFade 1.5s infinite 2.5s;
+}
+@keyframes fadeGlowIn { from { opacity: 0; transform: translateY(15px) skewX(-10deg); } to { opacity: 1; transform: translateY(0) skewX(-10deg); } }
+@keyframes blinkFade { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.9; } }
+
+/* UI для улучшенного туториала */
+#tut-overlay { position: absolute; inset: 0; z-index: 15000; pointer-events: none; display: none; flex-direction: column; align-items: center; }
+.tut-box { background: rgba(18, 19, 26, 0.95); border: 2px solid var(--pr); border-radius: 18px; padding: 18px; text-align: center; box-shadow: 0 0 30px rgba(61, 155, 233, 0.6); color: #fff; width: 85%; max-width: 320px; pointer-events: auto; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; transition: margin-top 0.3s ease; }
+.tut-title { font-family: 'Orbitron', sans-serif; color: var(--ac); margin-bottom: 8px; font-size: 18px; font-weight: 900; }
+.tut-text { font-size: 13px; color: rgba(255,255,255,0.9); margin-bottom: 15px; line-height: 1.4; }
+.tut-hl { border: 3px solid var(--ac) !important; box-shadow: 0 0 20px var(--ac) !important; z-index: 14000 !important; position: relative; background: var(--panel) !important; }
+
+/* Стили для баг-репорта */
+.bug-item { background: rgba(0,0,0,0.3); border: 1px solid var(--br); border-radius: 8px; padding: 10px; margin-bottom: 10px; text-align: left; }
+.bug-item-title { color: var(--dn); font-weight: bold; font-size: 14px; margin-bottom: 4px; }
+.bug-item-desc { font-size: 12px; color: rgba(255,255,255,0.7); }
 
 .dmg-txt { position: absolute; color: #ff4757; font-weight: 900; font-size: 18px; text-shadow: 0 2px 5px #000; pointer-events: none; z-index: 25; font-family: 'Orbitron', sans-serif; transition: transform 0.8s ease-out, opacity 0.8s ease-out; }
 .streak-fire { text-shadow: 0 0 10px #ff9800, 0 0 20px #ff5722 !important; color: #ffeb3b !important; }
@@ -279,10 +310,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .pwa-prog-wrap { width: 80%; height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 20px 0; display: none; }
 .pwa-prog-fill { height: 100%; background: var(--pr); width: 0%; transition: width 0.1s linear; }
 
-/* Стили экрана Добро Пожаловать */
-#welcome-s1 { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 80000; display: none; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; cursor: pointer; }
-.welc-t1 { font-family: 'Orbitron', sans-serif; font-size: 38px; font-weight: 900; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,0.8); margin-bottom: 10px; text-transform: uppercase; text-align: center; line-height: 1.1; animation: slideInLeftSkew 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; }
-.welc-t2 { font-family: 'Orbitron', sans-serif; font-size: 52px; font-weight: 900; color: var(--ac); text-shadow: 0 5px 20px rgba(245,197,24,0.6); text-transform: uppercase; animation: slideInRightSkew 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards; opacity: 0; }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -299,14 +326,24 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <p id="pwa-txt" style="color:var(--ac);font-size:12px;margin-top:10px;font-weight:bold;display:none">Ожидание установки...</p>
 </div>
 
-<div id="welcome-s1" onclick="this.style.display='none'">
-  <div class="welc-t1">Добро пожаловать!</div>
-  <div class="welc-t2">СЕЗОН 1</div>
+<div id="welcome-s1" onclick="dismissAprilWelcome()">
+  <div class="welc-t1">СЕЗОН 1</div>
+  <div class="welc-t2">ДЖУНГЛИ</div>
+  <div class="welc-blink">нажмите чтобы продолжить</div>
 </div>
 
 <div id="app-container">
   <div id="app-cover"></div>
   <div id="toast-c"></div>
+  
+  <div id="tut-overlay">
+    <div class="tut-box" id="tut-box" style="margin-top: 40vh;">
+      <div class="tut-title" id="tut-title">Обучение</div>
+      <div class="tut-text" id="tut-text">Текст обучения</div>
+      <button class="pbtn ok" id="tut-btn" style="margin: 0;" onclick="nextTutStep()">ПОНЯТНО</button>
+    </div>
+  </div>
+
   <div id="dghost"><div id="dg-icon" style="font-size:36px"></div><div id="dg-name" style="font-size:10px;font-weight:bold;margin-top:4px"></div></div>
   <div id="intro"><h1>TERROV<br>STUDIO</h1><p>Game Development</p></div>
   <div id="loading"><h1>CLASH<br><span>ARENA</span></h1><div class="lbar"><div id="lprog"></div></div><div id="ltxt">ИНИЦИАЛИЗАЦИЯ...</div></div>
@@ -420,16 +457,39 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     </div>
   </div>
 
+  <div id="m-bug-report" class="ov" style="z-index:9500">
+    <div class="mbox" style="padding:24px">
+      <div style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:var(--dn);margin-bottom:15px">СООБЩИТЬ О БАГЕ</div>
+      <p style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:10px">Опишите, как вызвать ошибку, и мы её исправим!</p>
+      <textarea id="bug-desc" class="ainput" style="height:100px; resize:none;" placeholder="Я зашел в бой и..."></textarea>
+      <button class="pbtn ok" onclick="submitBugReport()">ОТПРАВИТЬ</button>
+      <button class="pbtn dn" onclick="ss('m-bug-report','display','none')">ОТМЕНА</button>
+    </div>
+  </div>
+
+  <div id="m-bug-admin" class="ov" style="z-index:9600">
+    <div class="mbox" style="padding:24px; max-height:80vh; display:flex; flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+        <div style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:var(--dn)">БАГ-РЕПОРТЫ</div>
+        <span onclick="ss('m-bug-admin','display','none')" style="font-size:24px;cursor:pointer;color:rgba(255,255,255,.4)">✕</span>
+      </div>
+      <div id="bug-admin-list" style="overflow-y:auto;flex:1;border:1px solid var(--br);border-radius:12px;padding:10px;background:rgba(0,0,0,0.2)">
+        </div>
+    </div>
+  </div>
+
   <div id="m-nick" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
     <div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--pr);margin-bottom:6px">ВЫБЕРИ НИК</div>
     <input type="text" id="tnick" class="ainput" placeholder="Никнейм" maxlength="16">
     <button class="pbtn" onclick="saveTutNick()">ПОЕХАЛИ ▶</button>
   </div></div></div>
+  
   <div id="m-reg" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
     <div style="font-family:'Orbitron',sans-serif;font-size:19px;font-weight:900;color:var(--ac);margin-bottom:8px;text-align:center">СОХРАНИТЬ ПРОГРЕСС?</div>
     <button class="pbtn ok" onclick="openReg()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
     <button class="pbtn" style="background:#333" onclick="skipReg()">Позже (Гость)</button>
   </div></div></div>
+  
   <div id="m-regemail" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
     <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px">РЕГИСТРАЦИЯ</div>
     <input type="email" id="remail" class="ainput" placeholder="Email">
@@ -437,11 +497,13 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <button class="pbtn ok" onclick="submitReg()">ДАЛЕЕ</button>
     <button class="pbtn" style="background:#333" onclick="ss('m-regemail','display','none')">Закрыть</button>
   </div></div></div>
+  
   <div id="m-code" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
     <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:8px">КОД ИЗ ПИСЬМА</div>
     <input type="text" id="rcode" class="ainput" placeholder="Код">
     <button class="pbtn ok" onclick="submitCode()">ПОДТВЕРДИТЬ</button>
   </div></div></div>
+  
   <div id="m-login" class="ov"><div class="mbox"><div style="padding:22px;display:flex;flex-direction:column;align-items:center">
     <div style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--pr);margin-bottom:14px">ВХОД</div>
     <input type="email" id="lemail" class="ainput" placeholder="Email">
@@ -617,6 +679,22 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
         <input type="text" id="newnick" class="ainput" placeholder="Новый никнейм" maxlength="16">
         <button class="pbtn" onclick="changeNick()">Сменить</button>
       </div>
+
+      <div class="sec">
+        <div class="stit">Наше комьюнити</div>
+        <button class="pbtn" style="background:#2AABEE; margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="window.open('https://t.me/TerrovStudio', '_blank')">
+          <span style="font-size:18px">✈️</span> Telegram
+        </button>
+        <button class="pbtn" style="background:#010101; border:1px solid #333; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="window.open('https://www.tiktok.com/@onlyfate_1', '_blank')">
+          <span style="font-size:18px">🎵</span> TikTok
+        </button>
+      </div>
+
+      <div class="sec">
+        <div class="stit">Поддержка</div>
+        <button class="pbtn" style="background:var(--dn)" onclick="openBugReport()">🐛 Сообщить о баге</button>
+        <button class="pbtn" id="bug-admin-btn" style="background:var(--pr); display:none; margin-top:8px;" onclick="openBugAdmin()">🛠 Панель багов (Admin)</button>
+      </div>
       <p style="color:rgba(255,255,255,.2);font-size:11px;text-align:center;margin-top:11px" id="ui-uid"></p>
       <button class="pbtn dn" style="margin-top:11px" onclick="logout()">ВЫЙТИ</button>
     </div>
@@ -785,7 +863,7 @@ function canRegister() {
   return true;
 }
 
-// Проверка PWA (Отображаем блокировщик если игра запущена в обычном браузере мобилки)
+// Проверка PWA
 const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 if(!isPWA && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
    document.addEventListener('DOMContentLoaded', () => {
@@ -797,24 +875,41 @@ if(!isPWA && !window.location.hostname.includes('localhost') && !window.location
        pwaBlock.style.display = 'flex';
        setTimeout(() => { pwaWrap.style.display = 'block'; pwaTxt.style.display = 'block'; }, 1000);
        let p = 0;
-       let int = setInterval(()=>{
-         p += Math.random() * 5;
-         if(p > 95) p = 95;
-         pwaFill.style.width = p + '%';
-       }, 500);
+       let int = setInterval(()=>{ p += Math.random() * 5; if(p > 95) p = 95; pwaFill.style.width = p + '%'; }, 500);
      }
    });
 }
 
+// PWA: Регистрация Service Worker для Push-уведомлений
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+        Notification.requestPermission();
+      }
+    }).catch(err => console.log('SW Reg Error:', err));
+  });
+}
+document.addEventListener('visibilitychange', () => {
+  if(navigator.serviceWorker.controller) {
+    if (document.visibilityState === 'hidden') navigator.serviceWorker.controller.postMessage({type: 'HIDDEN'});
+    else navigator.serviceWorker.controller.postMessage({type: 'VISIBLE'});
+  }
+});
+
+// Экран 30 апреля 2026
 function checkAprilWelcome() {
   const today = new Date();
   if(today.getFullYear() === 2026 && today.getMonth() === 3 && today.getDate() === 30) {
     if(!ls('seen_welcome_s1')) {
       const w = document.getElementById('welcome-s1');
       if(w) w.style.display = 'flex';
-      lw('seen_welcome_s1', 'true');
     }
   }
+}
+function dismissAprilWelcome() {
+  document.getElementById('welcome-s1').style.display = 'none';
+  lw('seen_welcome_s1', 'true');
 }
 
 function notify(msg,tp='err'){
@@ -849,7 +944,6 @@ let winChestPending=false,appStarted=false,loading=false;
 let navIdx=2,deckTab=0,mmTimer=null;
 let botTrophies=0,botFavCard=null,botBanner=null,rlSpinning=false;
 
-// ВОТ ЗДЕСЬ ИСПРАВЛЕНА ОШИБКА БЕСКОНЕЧНОГО ПОИСКА! МАССИВ ВЕРНУЛСЯ.
 const BOT_NAMES = ['Destroyer99', 'pro_gamer', 'DarkKnight', 'ShadowNinja', 'Alex2010', 'KingOfArena', 'GigaChad', 'PekkaLover', 'Toxic_Boy', 'NoobMaster', 'John_Doe', 'ClashGod', 'CyberDemon', 'GhostRider'];
 const ADMIN_EMAIL = 'danildovz@gmail.com';
 let adminTarget = null;
@@ -884,64 +978,34 @@ const ct=document.getElementById('ctimer');if(ct)ct.textContent=`Обновит�
 let audioCtx = null;
 let sfxOn = true;
 const bgMusic = new Audio('song/cmenumelody.mp3');
-bgMusic.loop = true; 
-bgMusic.volume = 0.4; 
+bgMusic.loop = true; bgMusic.volume = 0.4; 
 let isMusicAllowed = false;
 
 function checkMusic() {
   if (!isMusicAllowed || !bgMusic) return;
-  
   const inBattle = (bState !== 'stopped'); 
-  if (sfxOn && !inBattle) {
-    bgMusic.play().catch(()=>{});
-  } else {
-    bgMusic.pause();
-  }
+  if (sfxOn && !inBattle) bgMusic.play().catch(()=>{}); else bgMusic.pause();
 }
 
 function initAudio() {
-  try {
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if(audioCtx.state === 'suspended') audioCtx.resume();
-  } catch(e) {}
-  isMusicAllowed = true;
-  checkMusic(); 
+  try { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if(audioCtx.state === 'suspended') audioCtx.resume(); } catch(e) {}
+  isMusicAllowed = true; checkMusic(); 
 }
-
 function toggleSfx(){
-  sfxOn=!sfxOn;
-  const btn=document.getElementById('sfx-btn');
-  if(btn)btn.textContent=`🔊 Озвучка: ${sfxOn?'ВКЛ':'ВЫКЛ'}`;
-  if(sfxOn) initAudio();
-  checkMusic(); 
+  sfxOn=!sfxOn; const btn=document.getElementById('sfx-btn'); if(btn)btn.textContent=`🔊 Озвучка: ${sfxOn?'ВКЛ':'ВЫКЛ'}`;
+  if(sfxOn) initAudio(); checkMusic(); 
 }
-
 document.addEventListener('click', initAudio, {once:true});
 document.addEventListener('touchstart', initAudio, {once:true});
 
 function playSfx(type){
   if(!sfxOn || !audioCtx || audioCtx.state==='suspended') return;
   try {
-    const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
-    osc.connect(gain);gain.connect(audioCtx.destination);
-    const now=audioCtx.currentTime;
-    if(type==='spawn'){
-      osc.type='sine';osc.frequency.setValueAtTime(400,now);osc.frequency.exponentialRampToValueAtTime(800,now+0.1);
-      gain.gain.setValueAtTime(0.1,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.1);
-      osc.start(now);osc.stop(now+0.1);
-    }else if(type==='hit'){
-      osc.type='square';osc.frequency.setValueAtTime(100,now);osc.frequency.exponentialRampToValueAtTime(50,now+0.1);
-      gain.gain.setValueAtTime(0.1,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.1);
-      osc.start(now);osc.stop(now+0.1);
-    }else if(type==='win'){
-      osc.type='triangle';osc.frequency.setValueAtTime(440,now);osc.frequency.setValueAtTime(554,now+0.1);osc.frequency.setValueAtTime(659,now+0.2);
-      gain.gain.setValueAtTime(0.1,now);gain.gain.linearRampToValueAtTime(0,now+0.4);
-      osc.start(now);osc.stop(now+0.4);
-    }else if(type==='lose'){
-      osc.type='sawtooth';osc.frequency.setValueAtTime(300,now);osc.frequency.exponentialRampToValueAtTime(100,now+0.5);
-      gain.gain.setValueAtTime(0.1,now);gain.gain.linearRampToValueAtTime(0,now+0.5);
-      osc.start(now);osc.stop(now+0.5);
-    }
+    const osc=audioCtx.createOscillator(),gain=audioCtx.createGain(); osc.connect(gain);gain.connect(audioCtx.destination); const now=audioCtx.currentTime;
+    if(type==='spawn'){osc.type='sine';osc.frequency.setValueAtTime(400,now);osc.frequency.exponentialRampToValueAtTime(800,now+0.1);gain.gain.setValueAtTime(0.1,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.1);osc.start(now);osc.stop(now+0.1);}
+    else if(type==='hit'){osc.type='square';osc.frequency.setValueAtTime(100,now);osc.frequency.exponentialRampToValueAtTime(50,now+0.1);gain.gain.setValueAtTime(0.1,now);gain.gain.exponentialRampToValueAtTime(0.01,now+0.1);osc.start(now);osc.stop(now+0.1);}
+    else if(type==='win'){osc.type='triangle';osc.frequency.setValueAtTime(440,now);osc.frequency.setValueAtTime(554,now+0.1);osc.frequency.setValueAtTime(659,now+0.2);gain.gain.setValueAtTime(0.1,now);gain.gain.linearRampToValueAtTime(0,now+0.4);osc.start(now);osc.stop(now+0.4);}
+    else if(type==='lose'){osc.type='sawtooth';osc.frequency.setValueAtTime(300,now);osc.frequency.exponentialRampToValueAtTime(100,now+0.5);gain.gain.setValueAtTime(0.1,now);gain.gain.linearRampToValueAtTime(0,now+0.5);osc.start(now);osc.stop(now+0.5);}
   } catch(e) {}
 }
 
@@ -955,6 +1019,7 @@ const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
 
+// ПОЛНЫЕ МАССИВЫ БЕЗ СОКРАЩЕНИЙ
 const ARENAS=[
 {n:'Лужайка',     th:0,    bg:"url('img/arena_0.JPG'), radial-gradient(circle at top, #1e3c1a, #12131a)",col:'#2ebd6b',em:'🌿'},
 {n:'Пустыня',     th:600,  bg:"url('img/arena_1.JPG'), radial-gradient(circle at top, #4a2e00, #12131a)",col:'#e67e22',em:'🏜️'},
@@ -1074,7 +1139,6 @@ const RL_PRIZES=[
 {ic:'👑',lbl:'5 Корон',   tp:'crowns',v:5,  w:8}, {ic:'⚡',lbl:'30 Очков',  tp:'power',v:30, w:14},
 ];
 
-/* Нерф наград в боевом пропуске (меньше золота и гемов) */
 const PASS_R=Array.from({length:50},(_,i)=>{
 const c=(i+1)*8;
 if((i+1)%10===0)return{crowns:c,t:'chest',v:'m',ic:'✨',n:'МЕГА ЯЩИК'};
@@ -1122,7 +1186,81 @@ function initApp(){
   }else startTut();
 }
 
-function startTut(){isTut=true;U=migrate({uid:genId(),nickname:'Новичок',trophies:0,gold:500,gems:50,isGuest:true,xp:0});ss('mainnav','display','none');ss('topbar','display','none');startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');notify('ОБУЧЕНИЕ: Уничтожь главную башню!','inf');setTimeout(hideCover,150);}
+// ==== УЛУЧШЕННЫЙ ТУТОРИАЛ ====
+let tutStep = 0;
+const tutData = [
+  { t: "Добро пожаловать!", d: "Это поле боя. Твоя цель -- уничтожить главную башню врага. Давай посмотрим, как это сделать.", hl: null },
+  { t: "Эликсир", d: "Каждую секунду ты накапливаешь эликсир. Без него не получится отправить войска в бой!", hl: "bui-elwrap" },
+  { t: "Твои Карты", d: "Здесь находятся твои карты. Выбирай с умом -- каждая карта стоит разное количество эликсира.", hl: "hand" },
+  { t: "В БОЙ!", d: "Хватай карту и перетаскивай её на свою половину поля, чтобы начать атаку. Удачи, командир!", hl: null }
+];
+
+function startTut(){
+  isTut=true;
+  U=migrate({uid:genId(),nickname:'Новичок',trophies:0,gold:500,gems:50,isGuest:true,xp:0});
+  ss('mainnav','display','none');ss('topbar','display','none');
+  startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');
+  
+  // Пауза перед обучением
+  setTimeout(() => {
+    bState = 'paused'; // Приостанавливаем логику ИИ и спавн
+    tutStep = 0;
+    ss('tut-overlay', 'display', 'flex');
+    updateTutUI();
+  }, 1000);
+  
+  setTimeout(hideCover,150);
+}
+
+function updateTutUI() {
+  const d = tutData[tutStep];
+  st('tut-title', d.t);
+  st('tut-text', d.d);
+  document.querySelectorAll('.tut-hl').forEach(el => el.classList.remove('tut-hl'));
+  if(d.hl) {
+    const hlEl = document.getElementById(d.hl);
+    if(hlEl) hlEl.classList.add('tut-hl');
+  }
+}
+
+function nextTutStep() {
+  playSfx('hit');
+  tutStep++;
+  if(tutStep >= tutData.length) {
+    // Конец обучения
+    document.querySelectorAll('.tut-hl').forEach(el => el.classList.remove('tut-hl'));
+    ss('tut-overlay', 'display', 'none');
+    bState = 'playing'; // Возобновляем бой
+  } else {
+    updateTutUI();
+  }
+}
+
+// ==== СИСТЕМА БАГ-РЕПОРТОВ ====
+function openBugReport() { ss('m-bug-report', 'display', 'flex'); }
+function submitBugReport() {
+  const txt = document.getElementById('bug-desc').value.trim();
+  if(!txt) return notify('Опишите проблему!', 'err');
+  db.ref('bugs').push({ uid: U?.uid || 'guest', name: U?.nickname || 'Guest', text: txt, ts: Date.now() });
+  document.getElementById('bug-desc').value = '';
+  notify('Баг-репорт отправлен. Спасибо!', 'ok');
+  ss('m-bug-report', 'display', 'none');
+}
+
+function openBugAdmin() {
+  ss('m-bug-admin', 'display', 'flex');
+  const list = document.getElementById('bug-admin-list');
+  list.innerHTML = '<p style="text-align:center;color:#fff;">Загрузка...</p>';
+  db.ref('bugs').limitToLast(50).once('value').then(snap => {
+    list.innerHTML = '';
+    const bugs = [];
+    snap.forEach(c => { bugs.push(c.val()); });
+    bugs.reverse().forEach(b => {
+      list.innerHTML += `<div class="bug-item"><div class="bug-item-title">${b.name} (${b.uid})</div><div class="bug-item-desc">${b.text}</div></div>`;
+    });
+    if(bugs.length === 0) list.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,.5);">Багов нет!</p>';
+  });
+}
 
 function migrate(u){
   if(!u.cards)u.cards={};
@@ -1146,7 +1284,7 @@ function migrate(u){
   if(!u.favoriteCard){const own=Object.keys(u.cards||{});u.favoriteCard=own.length>0?own[0]:null;}
   if(u.minTrophies===undefined)u.minTrophies=0;
   if(!u.promos)u.promos=[];
-  if(!u.claimedGifts)u.claimedGifts={}; // Инициализация хранилища собранных подарков
+  if(!u.claimedGifts)u.claimedGifts={}; 
   return u;
 }
 
@@ -1263,8 +1401,10 @@ function updateUI(){
   for(let i=0;i<2;i++){const ms=document.getElementById(`um${i}`);if(!ms)continue;const mid=(U.equippedMedals&&U.equippedMedals[i])?U.equippedMedals[i]:null;if(mid){const m=MEDALS.find(x=>x.id===mid);ms.style.display='inline-flex';ms.textContent=m?m.ic:'';}else ms.style.display='none';}
   ss('guest-btns','display',U.isGuest?'block':'none');
   
-  const adminBtn = document.getElementById('admin-btn');
+  const adminBtn = document.getElementById('bug-admin-btn');
+  const mainAdminBtn = document.getElementById('admin-btn');
   if(adminBtn) adminBtn.style.display = (U.email === ADMIN_EMAIL) ? 'inline-block' : 'none';
+  if(mainAdminBtn) mainAdminBtn.style.display = (U.email === ADMIN_EMAIL) ? 'inline-block' : 'none';
 
   renderDeck();renderTower();renderColl();renderBanners();renderShop();if(navIdx===3)renderPassUI();renderMedals();renderEmotes();
 }
@@ -1560,7 +1700,7 @@ function applyRLPrize(p){
 }
 function dailyGift(){if(U.lastGiftKey===dailyKey())return notify('Подарок уже забран! Следующий в 10:00');U.lastGiftKey=dailyKey();const r=Math.random()<0.2?{t:'gems',v:15}:{t:'gold',v:300};if(r.t==='gems')U.gems+=r.v;else U.gold+=r.v;notify(`+${r.v} ${r.t==='gems'?'Гемов 💎':'Золота 💰'}!`,'ok');saveU();}
 function renderShop(){
-  renderServerGifts(); // Отрисовываем серверные подарки наверху магазина
+  renderServerGifts(); 
   const g=document.getElementById('pow-grid');if(!g||!U.dailyShop)return;g.innerHTML='';
   U.dailyShop.forEach(id=>{const card=CARDS.find(c=>c.id===id);if(!card)return;const b=U.dsp[id]||0,left=2-b;g.innerHTML+=`<div class="ci rr-${card.rr}" style="cursor:default"><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div><div style="font-size:10px;color:rgba(255,255,255,.38);margin:3px 0">+15 очков</div><div style="font-size:9px;color:var(--ac)">Ост.: ${left}</div>${left>0?`<button class="pbtn" style="padding:6px;font-size:10px" onclick="buyPow('${id}')">200💰</button>`:`<button class="pbtn" style="padding:6px;font-size:10px;background:#2a2d45;color:rgba(255,255,255,.2)" disabled>Продано</button>`}</div>`;});
   const eg=document.getElementById('emote-grid');if(!eg||!U.dailyEmotes)return;eg.innerHTML='';
@@ -1630,7 +1770,6 @@ function renderEmotes(){for(let i=0;i<3;i++){const slot=document.getElementById(
 function eqEmote(e){if(!U.equippedEmotes)U.equippedEmotes=[null,null,null];const i=U.equippedEmotes.indexOf(e);if(i!==-1)U.equippedEmotes[i]=null;else{const s=U.equippedEmotes.indexOf(null);if(s!==-1)U.equippedEmotes[s]=e;else{U.equippedEmotes.shift();U.equippedEmotes.push(e);}}saveU();}
 function unequipEmote(i){if(U.equippedEmotes)U.equippedEmotes[i]=null;saveU();}
 function renderStats(){const c=document.getElementById('ui-stats');if(!c||!U)return;const s=U.stats||{},xp=U.xp||0,lvl=getLevel(xp);const rows=[['👤 Никнейм',U.nickname],['🏆 Кубки',U.trophies],['⭐ Уровень',lvl],['⚔️ Всего боёв',s.matches||0],['🏅 Побед',s.wins||0],['💀 Поражений',(s.matches||0)-(s.wins||0)],['🔥 Вин Стрик',s.winStreak||0],['☠️ Боёв ВС',s.sdM||0],['💀 Побед ВС',s.sdW||0],['🏰 Башен',s.towers||0],['📜 Квестов',s.quests||0],['🃏 Карт',Object.keys(U.cards||{}).length]];c.innerHTML=rows.map(([l,v])=>`<div class="srow"><span class="slbl">${l}</span><span class="sval">${v}</span></div>`).join('');renderMedals();}
-
 function loadLB(){
   const lb=document.getElementById('ui-lb');if(!lb)return;
   lb.innerHTML='<p style="text-align:center;color:rgba(255,255,255,.4);padding:20px">Загрузка…</p>';
@@ -1649,66 +1788,24 @@ function loadLB(){
     });
   }).catch(()=>{lb.innerHTML='<p style="text-align:center;color:var(--dn)">Ошибка загрузки</p>';});
 }
-
 function openBettingMenu() {
   if(!globalLbPlayers || globalLbPlayers.length < 2) return notify('Турнир пока недоступен');
   if(U.gold < 100) return notify('Нужно минимум 100 💰 для ставки!');
-  
   const pCount = globalLbPlayers.length;
-  let i1 = Math.floor(Math.random() * Math.min(20, pCount));
-  let i2 = Math.floor(Math.random() * Math.min(20, pCount));
+  let i1 = Math.floor(Math.random() * Math.min(20, pCount)), i2 = Math.floor(Math.random() * Math.min(20, pCount));
   while(i1 === i2) i2 = Math.floor(Math.random() * Math.min(20, pCount));
-  
-  const p1 = globalLbPlayers[i1];
-  const p2 = globalLbPlayers[i2];
-  
+  const p1 = globalLbPlayers[i1], p2 = globalLbPlayers[i2];
   const cont = document.getElementById('bet-players');
-  cont.innerHTML = `
-    <div style="background:var(--panel); border:1px solid var(--br); border-radius:12px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
-      <div style="text-align:left;">
-        <div style="font-weight:bold; font-size:14px">${p1.nickname}</div>
-        <div style="color:var(--ac); font-size:11px">🏆 ${p1.trophies}</div>
-      </div>
-      <button class="pbtn" style="width:auto; margin:0; padding:8px 15px; background:#e8415a" onclick="placeBet(${i1}, ${i2}, 0)">НА КРАСНОГО</button>
-    </div>
-    <div style="font-weight:900; color:rgba(255,255,255,.3); margin: 5px 0;">VS</div>
-    <div style="background:var(--panel); border:1px solid var(--br); border-radius:12px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
-      <div style="text-align:left;">
-        <div style="font-weight:bold; font-size:14px">${p2.nickname}</div>
-        <div style="color:var(--ac); font-size:11px">🏆 ${p2.trophies}</div>
-      </div>
-      <button class="pbtn" style="width:auto; margin:0; padding:8px 15px; background:#3d9be9" onclick="placeBet(${i1}, ${i2}, 1)">НА СИНЕГО</button>
-    </div>
-  `;
+  cont.innerHTML = `<div style="background:var(--panel); border:1px solid var(--br); border-radius:12px; padding:12px; display:flex; justify-content:space-between; align-items:center;"><div style="text-align:left;"><div style="font-weight:bold; font-size:14px">${p1.nickname}</div><div style="color:var(--ac); font-size:11px">🏆 ${p1.trophies}</div></div><button class="pbtn" style="width:auto; margin:0; padding:8px 15px; background:#e8415a" onclick="placeBet(${i1}, ${i2}, 0)">НА КРАСНОГО</button></div><div style="font-weight:900; color:rgba(255,255,255,.3); margin: 5px 0;">VS</div><div style="background:var(--panel); border:1px solid var(--br); border-radius:12px; padding:12px; display:flex; justify-content:space-between; align-items:center;"><div style="text-align:left;"><div style="font-weight:bold; font-size:14px">${p2.nickname}</div><div style="color:var(--ac); font-size:11px">🏆 ${p2.trophies}</div></div><button class="pbtn" style="width:auto; margin:0; padding:8px 15px; background:#3d9be9" onclick="placeBet(${i1}, ${i2}, 1)">НА СИНЕГО</button></div>`;
   ss('m-bet', 'display', 'flex');
 }
-
 function placeBet(i1, i2, betIndex) {
-  if(U.gold < 100) return notify('Мало золота!');
-  U.gold -= 100;
-  saveU();
-  ss('m-bet', 'display', 'none');
-  notify('Ставка принята! Загрузка матча...', 'ok');
-  
-  const p1 = globalLbPlayers[i1];
-  const p2 = globalLbPlayers[i2];
-  
-  isSpectator = true;
-  specBetOn = betIndex;
-  
-  specBot0.deck = (p2.deck || []).slice(0,8);
-  if(specBot0.deck.length < 8) specBot0.deck = ['giant','arrows','archer','minion','knight','goblin','bomber','skel'];
-  specBot0.name = p2.nickname;
-  specBot0.elix = 5; specBot0.cd = 0;
-  
-  specBot1.deck = (p1.deck || []).slice(0,8);
-  if(specBot1.deck.length < 8) specBot1.deck = ['giant','arrows','archer','minion','knight','goblin','bomber','skel'];
-  specBot1.name = p1.nickname;
-  specBot1.elix = 5; specBot1.cd = 0;
-  
+  if(U.gold < 100) return notify('Мало золота!'); U.gold -= 100; saveU(); ss('m-bet', 'display', 'none'); notify('Ставка принята! Загрузка матча...', 'ok');
+  const p1 = globalLbPlayers[i1], p2 = globalLbPlayers[i2]; isSpectator = true; specBetOn = betIndex;
+  specBot0.deck = (p2.deck || []).slice(0,8); if(specBot0.deck.length < 8) specBot0.deck = ['giant','arrows','archer','minion','knight','goblin','bomber','skel']; specBot0.name = p2.nickname; specBot0.elix = 5; specBot0.cd = 0;
+  specBot1.deck = (p1.deck || []).slice(0,8); if(specBot1.deck.length < 8) specBot1.deck = ['giant','arrows','archer','minion','knight','goblin','bomber','skel']; specBot1.name = p1.nickname; specBot1.elix = 5; specBot1.cd = 0;
   setTimeout(() => startSpectatorMatch(p1, p2), 1000);
 }
-
 function setWeather(ai) {
   const wl = document.getElementById('weather-layer');
   if(!wl) return; wl.innerHTML='';
@@ -1947,7 +2044,7 @@ questProg('play',1);renderHand();setupDrag();
 if(bLoopId) cancelAnimationFrame(bLoopId);
 lastTime = performance.now();
 bLoopId = requestAnimationFrame(bLoop);
-setTimeout(()=>{bState='playing';bEndTime=Date.now()+(isTut?9999999:180000);},2500);
+setTimeout(()=>{if(bState!=='paused')bState='playing';bEndTime=Date.now()+(isTut?9999999:180000);},2500);
 }catch(e){console.error(e);notify('Сбой арены');exitBattle();}
 },150);
 }catch(e){console.error(e);notify('Ошибка старта!');exitBattle();}
@@ -2665,7 +2762,6 @@ function listenRealtime(){
     });
   }
 
-  // Слушатель серверных подарков (доступен и гостям, и зареганным)
   db.ref('serverGifts/ALL').on('value', snap => {
      updateLocalGifts(snap.val(), false);
   });
