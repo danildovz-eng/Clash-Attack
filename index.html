@@ -2581,6 +2581,7 @@ function worldClick(ai){
 }
 
 function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
+
 function skipReg(){
   ss('m-reg','display','none');
   U.isGuest=true;
