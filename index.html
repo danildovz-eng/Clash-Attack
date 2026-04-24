@@ -884,16 +884,29 @@ if(!isPWA && !window.location.hostname.includes('localhost') && !window.location
    });
 }
 
-// PWA: Регистрация Service Worker для Push-уведомлений
+// PWA: Регистрация Service Worker с АВТООБНОВЛЕНИЕМ
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').then(reg => {
+      // Права на пуши
       if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
         Notification.requestPermission();
       }
+      
+      // Слушаем скачивание новых обновлений
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'activated') {
+            // Как только новая версия игры скачана — обновляем страницу для игрока!
+            window.location.reload();
+          }
+        });
+      });
     }).catch(err => console.log('SW Reg Error:', err));
   });
 }
+
 
 // Музыка и пауза игры в фоне (фикс бага со сворачиванием)
 document.addEventListener('visibilitychange', () => {
