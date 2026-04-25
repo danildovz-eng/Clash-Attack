@@ -1454,7 +1454,10 @@ function saveU(){
   if(!U)return;
   if(U.stats){['matches','wins','sdM','sdW','towers','quests','winStreak'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
   ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
-  if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
+  
+  const cleanU = JSON.parse(JSON.stringify(U));
+
+  if(!U.isGuest||ls('clash_uid')) db.ref('users/'+U.uid).set(cleanU).catch(e => console.error("Firebase save error:", e));
   updateUI();
 }
 
@@ -2848,26 +2851,27 @@ function renderServerGifts() {
 function claimServerGift(id, type, amount) {
    if(!U.claimedGifts) U.claimedGifts = {};
    if(U.claimedGifts[id]) return notify('Уже забрано!');
-   
+
    U.claimedGifts[id] = true;
-   
-   if(type==='gold') { U.gold += amount; notify(`+${amount} Золота!`, 'ok'); }
-   if(type==='gems') { U.gems += amount; notify(`+${amount} Гемов!`, 'ok'); }
-   if(type==='crowns') { U.crowns += amount; notify(`+${amount} Корон!`, 'ok'); renderPassUI(); }
-   if(type==='power') { 
+
+   if(type==='gold') { U.gold = (U.gold || 0) + amount; notify(`+${amount} Золота!`, 'ok'); }
+   else if(type==='gems') { U.gems = (U.gems || 0) + amount; notify(`+${amount} Гемов!`, 'ok'); }
+   else if(type==='crowns') { U.crowns = (U.crowns || 0) + amount; notify(`+${amount} Корон!`, 'ok'); renderPassUI(); }
+   else if(type==='power') { 
       const d=U.deck||[];
       if(d.length>0){
          const cid=d[Math.floor(Math.random()*d.length)];
          if(!U.cards[cid])U.cards[cid]={level:1,power:0,played:0};
-         U.cards[cid].power+=amount;
+         U.cards[cid].power += amount;
          notify(`+${amount} очков силы!`, 'ok');
       } else notify('+ Очки силы!', 'ok');
    }
-   if(type==='chest_g') { for(let i=0; i<amount; i++) setTimeout(()=>genChest('g'), i*500); }
-   if(type==='chest_m') { for(let i=0; i<amount; i++) setTimeout(()=>genChest('m'), i*500); }
-   
+   else if(type==='chest_g') { for(let i=0; i<amount; i++) setTimeout(()=>genChest('g'), i*500); }
+   else if(type==='chest_m') { for(let i=0; i<amount; i++) setTimeout(()=>genChest('m'), i*500); }
+
    saveU();
-   updateLocalGifts(localAllGifts, false); 
+   updateLocalGifts(localAllGifts, false);
+   renderServerGifts();
 }
 
 function listenRealtime(){
