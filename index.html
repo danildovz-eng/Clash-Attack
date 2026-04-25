@@ -59,6 +59,7 @@ html, body {
 @keyframes mmPulse{from{transform:scale(0.9);opacity:0.8;}to{transform:scale(1.1);opacity:1;}}
 @keyframes sdPulse { from { box-shadow: inset 0 0 30px rgba(232,65,90,0.2); } to { box-shadow: inset 0 0 80px rgba(232,65,90,0.7); } }
 
+/* Обновленный экран 30 апреля 2026 */
 #welcome-s1 { 
   position: fixed; inset: 0; 
   background: radial-gradient(circle at center, #051a0b 0%, #000000 80%); 
@@ -87,12 +88,14 @@ html, body {
 @keyframes fadeGlowIn { from { opacity: 0; transform: translateY(15px) skewX(-10deg); } to { opacity: 1; transform: translateY(0) skewX(-10deg); } }
 @keyframes blinkFade { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.9; } }
 
+/* UI для улучшенного туториала */
 #tut-overlay { position: absolute; inset: 0; z-index: 15000; pointer-events: none; display: none; flex-direction: column; align-items: center; }
 .tut-box { background: rgba(18, 19, 26, 0.95); border: 2px solid var(--pr); border-radius: 18px; padding: 18px; text-align: center; box-shadow: 0 0 30px rgba(61, 155, 233, 0.6); color: #fff; width: 85%; max-width: 320px; pointer-events: auto; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; transition: margin-top 0.3s ease; }
 .tut-title { font-family: 'Orbitron', sans-serif; color: var(--ac); margin-bottom: 8px; font-size: 18px; font-weight: 900; }
 .tut-text { font-size: 13px; color: rgba(255,255,255,0.9); margin-bottom: 15px; line-height: 1.4; }
 .tut-hl { border: 3px solid var(--ac) !important; box-shadow: 0 0 20px var(--ac) !important; z-index: 14000 !important; position: relative; background: var(--panel) !important; }
 
+/* Стили для баг-репорта */
 .bug-item { background: rgba(0,0,0,0.3); border: 1px solid var(--br); border-radius: 8px; padding: 10px; margin-bottom: 10px; text-align: left; }
 .bug-item-title { color: var(--dn); font-weight: bold; font-size: 14px; margin-bottom: 4px; }
 .bug-item-desc { font-size: 12px; color: rgba(255,255,255,0.7); }
@@ -297,13 +300,20 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #world-tooltip { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); opacity: 0; pointer-events: none; background: var(--bg); border: 2px solid var(--pr); border-radius: 20px; padding: 20px; z-index: 9999; box-shadow: 0 10px 40px rgba(0,0,0,0.8); text-align: center; transition: 0.3s; width: 85%; max-width: 320px; }
 #world-tooltip.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
 
+/* Стили админ-панели и серверных подарков */
+.sgift-banner { background: linear-gradient(135deg, #d4af37, #f5c518); color: #000; border-radius: 15px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(245,197,24,0.4); border: 2px solid #fff; }
+.admin-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 8px; cursor:pointer; }
+.admin-row:hover { background: rgba(255,255,255,0.1); }
+
 /* Стили блока PWA */
 #pwa-block { position: fixed; inset: 0; background: var(--bg); z-index: 999999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
 .pwa-prog-wrap { width: 80%; height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 20px 0; display: none; }
 .pwa-prog-fill { height: 100%; background: var(--pr); width: 0%; transition: width 0.1s linear; }
-</style>
-</head>
 
+</style>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+</head>
 <body>
 
 <div id="pwa-block">
@@ -464,7 +474,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
         <span onclick="ss('m-bug-admin','display','none')" style="font-size:24px;cursor:pointer;color:rgba(255,255,255,.4)">✕</span>
       </div>
       <div id="bug-admin-list" style="overflow-y:auto;flex:1;border:1px solid var(--br);border-radius:12px;padding:10px;background:rgba(0,0,0,0.2)">
-      </div>
+        </div>
     </div>
   </div>
 
@@ -522,14 +532,13 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       </div>
     </div>
     <div class="sec"><div class="stit">Смайлики (100 💎)</div><div class="grid" id="emote-grid"></div></div>
-    
-    <div class="sec" style="background: linear-gradient(135deg, #2a2d45 0%, #1e2030 100%); border: 2px solid var(--pr); box-shadow: 0 0 25px rgba(61,155,233,0.3); padding: 25px 15px; border-radius: 18px;">
-      <div style="font-family:'Orbitron',sans-serif; color:var(--pr); font-size:20px; font-weight:900; text-align:center; margin-bottom:15px; letter-spacing:1px;">🎁 ЕЖЕДНЕВНЫЙ ПОДАРОК</div>
-      <div style="text-align:center; font-size:75px; filter:drop-shadow(0 5px 15px rgba(0,0,0,0.6)); margin-bottom:10px; animation: pulse 2s infinite;">📦</div>
-      <div style="font-size:13px; color:rgba(255,255,255,.6); margin-bottom:18px; text-align:center; font-weight:bold;" id="gift-timer">Обновится через...</div>
-      <button class="bigbtn" onclick="dailyGift()" style="width:100%; max-width:100%; height:60px; font-size:18px;">ЗАБРАТЬ БЕСПЛАТНО</button>
+    <div class="sec"><div class="stit">Ежедневный подарок</div>
+      <div style="text-align:center;padding:12px">
+        <div style="font-size:52px;margin-bottom:8px">🎁</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px" id="gift-timer"></div>
+        <button class="pbtn" onclick="dailyGift()" style="max-width:210px;margin:auto">ЗАБРАТЬ</button>
+      </div>
     </div>
-
     <div class="sec"><div class="stit">Магазин Ящиков</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:4px">
         <div style="background:var(--p2);padding:15px;border-radius:13px;border:1px solid rgba(245,197,24,.22);text-align:center"><div style="font-size:42px;margin-bottom:8px">📦</div><div style="font-size:13px;color:var(--ac);margin-bottom:10px;font-weight:700">Золотой</div><button class="pbtn" onclick="buyChest('g')" style="background:linear-gradient(135deg,#c4920e,#a07008)">1000 💰</button></div>
@@ -686,7 +695,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
         <button class="pbtn" style="background:var(--dn)" onclick="openBugReport()">🐛 Сообщить о баге</button>
         <button class="pbtn" id="bug-admin-btn" style="background:var(--pr); display:none; margin-top:8px;" onclick="openBugAdmin()">🛠 Панель багов (Admin)</button>
       </div>
-
       <p style="color:rgba(255,255,255,.2);font-size:11px;text-align:center;margin-top:11px" id="ui-uid"></p>
       <button class="pbtn dn" style="margin-top:11px" onclick="logout()">ВЫЙТИ</button>
     </div>
@@ -847,7 +855,7 @@ const ls=k=>{try{return localStorage.getItem(k);}catch(e){return _mst[k]||null;}
 const lw=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){_mst[k]=v;}};
 const ld=k=>{try{localStorage.removeItem(k);}catch(e){delete _mst[k];}};
 
-// Защита от спама (макс. 3 аккаунта за 24 часа). Гостей больше не блокирует!
+// Новая защита от спама (макс. 3 аккаунта за 24 часа)
 function canRegister() {
   let history = JSON.parse(ls('reg_history') || '[]');
   const now = Date.now();
@@ -858,27 +866,12 @@ function canRegister() {
   return true;
 }
 
-// ==== ВАШИ НАСТОЯЩИЕ КЛЮЧИ FIREBASE ====
-// ВНИМАНИЕ: Обязательно замените эти данные на свои из консоли Firebase!
-// Ключ apiKey должен быть длинный и без многоточий на конце!
-const FBC = {
-  apiKey: "ВСТАВЬТЕ_СЮДА_ВАШ_ПОЛНЫЙ_КЛЮЧ_БЕЗ_ТОЧЕК", 
-  authDomain: "battle-royale-b5084.firebaseapp.com",
-  databaseURL: "https://battle-royale-b5084-default-rtdb.firebaseio.com",
+const FBC={
+  apiKey: "AIzaSyDGOo6Y07l_9utgsaj6INMogMVnAhx1ZAo", 
+  authDomain: "battle-royale-b5084.firebaseapp.com", 
+  databaseURL: "https://battle-royale-b5084-default-rtdb.firebaseio.com", 
   projectId: "battle-royale-b5084"
 };
-
-let db;
-try {
-  if (typeof firebase !== 'undefined') {
-    firebase.initializeApp(FBC);
-    db = firebase.database();
-  } else {
-    throw new Error("Браузер заблокировал загрузку Firebase! Проверьте скрипты в <head>");
-  }
-} catch(e) {
-  db={ref:()=>({once:()=>Promise.reject('offline'),set:()=>Promise.resolve(),update:()=>Promise.resolve(),on:()=>{},off:()=>{},push:()=>Promise.resolve({key:'mock'}),remove:()=>Promise.resolve(),orderByChild(){return this;},equalTo(){return this;}})}
-}
 
 // Проверка PWA
 const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
@@ -901,35 +894,42 @@ if(!isPWA && !window.location.hostname.includes('localhost') && !window.location
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').then(reg => {
+      // Права на пуши
       if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
         Notification.requestPermission();
       }
+      
+      // Слушаем скачивание новых обновлений
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
         newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'activated') { window.location.reload(); }
+          if (newWorker.state === 'activated') {
+            // Как только новая версия игры скачана — обновляем страницу для игрока!
+            window.location.reload();
+          }
         });
       });
     }).catch(err => console.log('SW Reg Error:', err));
   });
 }
 
-// Музыка и пауза игры в фоне
+
+// Музыка и пауза игры в фоне (фикс бага со сворачиванием)
 document.addEventListener('visibilitychange', () => {
   if(navigator.serviceWorker.controller) {
     if (document.hidden) navigator.serviceWorker.controller.postMessage({type: 'HIDDEN'});
     else navigator.serviceWorker.controller.postMessage({type: 'VISIBLE'});
   }
   if (document.hidden) {
-    if (typeof bgMusic !== 'undefined' && bgMusic) bgMusic.pause();
-    if (typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'running') audioCtx.suspend();
-    if (typeof bState !== 'undefined' && bState === 'playing') bState = 'paused_bg';
+    if (bgMusic) bgMusic.pause();
+    if (audioCtx && audioCtx.state === 'running') audioCtx.suspend();
+    if (bState === 'playing') bState = 'paused_bg';
   } else {
-    if (typeof sfxOn !== 'undefined' && sfxOn && typeof bState !== 'undefined' && bState !== 'playing' && bState !== 'paused_bg' && typeof bgMusic !== 'undefined') bgMusic.play().catch(()=>{});
-    if (typeof sfxOn !== 'undefined' && sfxOn && typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    if (typeof bState !== 'undefined' && bState === 'paused_bg') {
+    if (sfxOn && bState !== 'playing' && bState !== 'paused_bg') bgMusic.play().catch(()=>{});
+    if (sfxOn && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    if (bState === 'paused_bg') {
       bState = 'playing';
-      if (typeof lastTime !== 'undefined') lastTime = performance.now();
+      lastTime = performance.now();
     }
   }
 });
@@ -997,7 +997,6 @@ const d=Math.max(0,Math.floor((nextReset()-new Date())/1000));
 const h=Math.floor(d/3600),m=Math.floor((d%3600)/60),s=d%60;
 return`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
-
 setInterval(()=>{
 const cd=fmtCountdown();
 const gt=document.getElementById('gift-timer');
@@ -1057,7 +1056,7 @@ const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
 
-// ПОЛНЫЕ МАССИВЫ АРЕН И КАРТ
+// ПОЛНЫЕ МАССИВЫ АРЕН И КАРТ (С РЕБАЛАНСОМ ХП И УРОНА)
 const ARENAS=[
 {n:'Лужайка',     th:0,    bg:"url('img/arena_0.JPG'), radial-gradient(circle at top, #1e3c1a, #12131a)",col:'#2ebd6b',em:'🌿'},
 {n:'Пустыня',     th:600,  bg:"url('img/arena_1.JPG'), radial-gradient(circle at top, #4a2e00, #12131a)",col:'#e67e22',em:'🏜️'},
@@ -1213,6 +1212,22 @@ const XP_T=[0,100,250,500,900,1500,2400,3700,5500,8000,12000];
 const getLevel=xp=>{let l=1;for(let i=1;i<XP_T.length;i++){if(xp>=XP_T[i])l=i+1;else break;}return Math.min(l,10);};
 const xpProg=xp=>{const l=getLevel(xp);if(l>=10)return{cur:XP_T[9],max:XP_T[9]};return{cur:xp-XP_T[l-1],max:XP_T[l]-XP_T[l-1]};};
 
+let db;
+try {
+  if (typeof firebase !== 'undefined') {
+    firebase.initializeApp(FBC);
+    db = firebase.database();
+  } else {
+    alert("ОШИБКА: Браузер заблокировал загрузку Firebase!");
+    throw 0;
+  }
+} catch(e) {
+  // ЭТОТ ALERT ПОКАЖЕТ ТОЧНУЮ ОШИБКУ ПРЯМО НА ЭКРАНЕ
+  alert("ОШИБКА ЗАПУСКА БАЗЫ ДАННЫХ: " + (e.message || "Проверьте ключи FBC!"));
+  
+  db={ref:()=>({once:()=>Promise.reject('offline'),set:()=>Promise.resolve(),update:()=>Promise.resolve(),on:()=>{},off:()=>{},push:()=>Promise.resolve({key:'mock'}),remove:()=>Promise.resolve(),orderByChild(){return this;},equalTo(){return this;}})}
+}
+
 function hideCover(){const c=document.getElementById('app-cover');if(c){c.style.opacity='0';setTimeout(()=>c.style.display='none',400);}}
 
 function startApp(){
@@ -1235,28 +1250,11 @@ function doLoad(txt,cb){
   setTimeout(()=>{if(prog)prog.style.width='100%';if(ltxt)ltxt.textContent='Готово!';setTimeout(()=>{try{if(cb)cb();}catch(e){console.error(e);startTut();}if(loader){loader.style.opacity='0';setTimeout(()=>{loader.style.display='none';loading=false;},300);}},200);},700);
 }
 
-// ЗАГРУЗКА С БЕКАПОМ (чтобы лут не пропадал)
 function initApp(){
   const sid=ls('clash_uid');
   if(sid){
     let done=false;const t=setTimeout(()=>{if(done)return;done=true;ld('clash_uid');startTut();},3500);
-    db.ref('users/'+sid).once('value').then(snap=>{
-      if(done)return;done=true;clearTimeout(t);
-      if(snap.exists()){
-        let cloudData = snap.val();
-        let localBackup = ls('local_u_backup');
-        if (localBackup) {
-           try {
-             let localData = JSON.parse(localBackup);
-             if (localData && localData.lastSaveTs > (cloudData.lastSaveTs || 0)) {
-                 cloudData = localData; 
-             }
-           } catch(e) {}
-        }
-        U=migrate(cloudData);
-        startUI();listenRealtime();
-      }else{ld('clash_uid');startTut();}
-    }).catch(()=>{if(done)return;done=true;clearTimeout(t);ld('clash_uid');startTut();});
+    db.ref('users/'+sid).once('value').then(snap=>{if(done)return;done=true;clearTimeout(t);if(snap.exists()){U=migrate(snap.val());startUI();listenRealtime();}else{ld('clash_uid');startTut();}}).catch(()=>{if(done)return;done=true;clearTimeout(t);ld('clash_uid');startTut();});
   }else startTut();
 }
 
@@ -1275,6 +1273,7 @@ function startTut(){
   ss('mainnav','display','none');ss('topbar','display','none');
   startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');
   
+  // Пауза перед обучением
   setTimeout(() => {
     bState = 'paused'; 
     tutStep = 0;
@@ -1451,6 +1450,14 @@ function openFavPicker(){
 }
 function setFavCard(id){U.favoriteCard=id;saveU();notify('Любимая карта выбрана!','ok');ss('m-favpick','display','none');openProfile();}
 
+function saveU(){
+  if(!U)return;
+  if(U.stats){['matches','wins','sdM','sdW','towers','quests','winStreak'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
+  ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
+  if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
+  updateUI();
+}
+
 function updateUI(){
   if(!U)return;
   st('ui-tr',U.trophies);st('ui-go',U.gold);st('ui-ge',U.gems);
@@ -1511,7 +1518,7 @@ function checkMedals(){
   if(s.matches>=1)un.push('m1');if(s.wins>=1)un.push('m2');if(s.wins>=10)un.push('m3');if(s.wins>=50)un.push('m4');if(s.wins>=100)un.push('m5');
   if(U.maxArena>=1)un.push('m6');if(U.maxArena>=4)un.push('m7');if(U.maxArena>=9)un.push('m8');
   if(U.gold>=10000)un.push('m9');if(U.gems>=100)un.push('m10');
-  const ow=Object.keys(U.cards||{});if(ow>=10)un.push('m11');if(ow>=20)un.push('m12');
+  const ow=Object.keys(U.cards||{}).length;if(ow>=10)un.push('m11');if(ow>=20)un.push('m12');
   let ml=1;Object.values(U.cards||{}).forEach(c=>{if(c.level>ml)ml=c.level;});if(ml>=2)un.push('m13');if(ml>=8)un.push('m14');
   if(s.quests>=10)un.push('m15');if(s.sdM>=5)un.push('m16');if(s.sdW>=1)un.push('m17');
   if(U.emotes&&U.emotes.length>3)un.push('m18');if(U.friends&&Object.keys(U.friends).length>=1)un.push('m19');
@@ -1823,8 +1830,6 @@ function genChest(tp){
   const box=document.getElementById('chest-box'),rev=document.getElementById('chest-rev');if(box)box.style.display='flex';if(rev)rev.style.display='none';st('chest-tip','Нажмите чтобы открыть');ss('chest-ov','display','flex');
 }
 function chestTap(){const b=document.getElementById('chest-box');if(b&&b.style.display!=='none'){b.style.display='none';nextChestItem();}}
-
-// СОХРАНЕНИЕ ПОСЛЕ КАЖДОЙ ВЕЩИ ИЗ ЯЩИКА
 function nextChestItem(){
   const rev=document.getElementById('chest-rev');
   if(!cQ.length){ss('chest-ov','display','none');checkMedals();saveU();return;}
@@ -1833,11 +1838,12 @@ function nextChestItem(){
   if(rev){
     rev.style.display='flex';
     document.querySelectorAll('.gacha-item').forEach(el => {
-      el.style.animation = 'none'; void el.offsetWidth; el.style.animation = 'gachaReveal 0.4s ease-out forwards';
+      el.style.animation = 'none';
+      void el.offsetWidth; 
+      el.style.animation = 'gachaReveal 0.4s ease-out forwards';
     });
   }
   st('chest-tip',cQ.length?'Нажмите далее…':'Нажмите чтобы закрыть');
-  
   if(item.t==='gold')U.gold+=item.v;
   else if(item.t==='gems')U.gems+=item.v;
   else if(item.t==='power'){if(!U.cards[item.cid])U.cards[item.cid]={level:1,power:0,played:0};U.cards[item.cid].power+=item.v;}
@@ -1845,8 +1851,6 @@ function nextChestItem(){
   else if(item.t==='banner'){if(!U.banners)U.banners=[];U.banners.push(item.bid);}
   else if(item.t==='tskin'){if(!U.towerSkins)U.towerSkins=[];U.towerSkins.push(item.id);}
   else if(item.t==='ttroop'){if(!U.towerTroops)U.towerTroops=[];U.towerTroops.push(item.id);}
-  
-  saveU(); 
 }
 
 function upCost(l){return l*800;}function upReq(l){return l*50;}
@@ -1907,7 +1911,6 @@ function placeBet(i1, i2, betIndex) {
   specBot1.deck = (p1.deck || []).slice(0,8); if(specBot1.deck.length < 8) specBot1.deck = ['giant','arrows','archer','minion','knight','goblin','bomber','skel']; specBot1.name = p1.nickname; specBot1.elix = 5; specBot1.cd = 0;
   setTimeout(() => startSpectatorMatch(p1, p2), 1000);
 }
-
 function setWeather(ai) {
   const wl = document.getElementById('weather-layer');
   if(!wl) return; wl.innerHTML='';
@@ -2686,19 +2689,19 @@ function worldClick(ai){
 /* ЗАЩИТА И РЕГИСТРАЦИЯ */
 function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
 
+// Обновленная функция: лимиты убраны для гостевого режима
+function skipReg(){
+  ss('m-reg','display','none');
+  U.isGuest=true;
+  lw('clash_uid',U.uid);
+  startUI();
+}
+
 function openReg(){
   if(!canRegister()) return notify('Достигнут лимит регистраций с этого устройства. Попробуйте завтра.');
   ss('m-reg','display','none');ss('m-regemail','display','flex');
 }
-function submitReg(){
-  if(!canRegister()) return notify('Достигнут лимит регистраций!');
-  const email=document.getElementById('remail').value.trim(),pass=document.getElementById('rpass').value;
-  if(!email||pass.length<5)return notify('Введите почту и пароль (мин. 5 симв.)');
-  db.ref('users').orderByChild('email').equalTo(email).once('value').then(s=>{
-    if(s.exists())return notify('Почта занята!');
-    U.email=email;U.password=pass;ss('m-regemail','display','none');ss('m-code','display','flex');notify('Код отправлен!','ok');
-  }).catch((err)=>notify('Ошибка: ' + (err.message||err)));
-}
+
 function submitCode(){
   if(document.getElementById('rcode').value.length<4)return notify('Мин. 4 символа');
   U.isGuest=false;ss('m-code','display','none');lw('clash_uid',U.uid);
@@ -2715,8 +2718,26 @@ function doLogin(){
       U=migrate(fu);lw('clash_uid',fk);notify('Добро пожаловать!','ok');ss('m-login','display','none');
       doLoad('Загрузка профиля…',()=>{startUI();listenRealtime();});
     }else notify('Неверный пароль или аккаунт не найден');
-  }).catch((err)=>notify('Ошибка БД: ' + (err.message||err)));
+  }).catch((err)=>{
+    console.error(err);
+    notify('Ошибка БД: ' + (err.message || err)); // ТЕПЕРЬ МЫ УВИДИМ ТОЧНУЮ ОШИБКУ
+  });
 }
+
+function submitReg(){
+  if(!canRegister()) return notify('Достигнут лимит регистраций!');
+  const email=document.getElementById('remail').value.trim(),pass=document.getElementById('rpass').value;
+  if(!email||pass.length<5)return notify('Введите почту и пароль (мин. 5 симв.)');
+  db.ref('users').orderByChild('email').equalTo(email).once('value').then(s=>{
+    if(s.exists())return notify('Почта занята!');
+    U.email=email;U.password=pass;ss('m-regemail','display','none');ss('m-code','display','flex');notify('Код отправлен!','ok');
+  }).catch((err)=>{
+    console.error(err);
+    notify('Ошибка связи: ' + (err.message || err)); // ТЕПЕРЬ МЫ УВИДИМ ТОЧНУЮ ОШИБКУ
+  });
+}
+
+
 function logout(){ld('clash_uid');location.reload();}
 
 /* АДМИН ПАНЕЛЬ И СЕРВЕРНЫЕ ПОДАРКИ */
@@ -2782,12 +2803,46 @@ let localPersonalGifts = {};
 function updateLocalGifts(data, isPersonal = false) {
    if(isPersonal) localPersonalGifts = data || {};
    else localAllGifts = data || {};
+   
    if(!U.claimedGifts) U.claimedGifts = {};
+   
    activeServerGifts = [];
-   const processGifts = (gifts) => { Object.values(gifts).forEach(g => { if(!U.claimedGifts[g.id]) activeServerGifts.push(g); }); };
-   processGifts(localAllGifts); processGifts(localPersonalGifts);
+   const processGifts = (gifts) => {
+      Object.values(gifts).forEach(g => {
+         if(!U.claimedGifts[g.id]) activeServerGifts.push(g);
+      });
+   };
+   processGifts(localAllGifts);
+   processGifts(localPersonalGifts);
+   
    activeServerGifts.sort((a,b) => b.ts - a.ts);
    renderServerGifts();
+}
+
+function renderServerGifts() {
+   const c = document.getElementById('server-gifts-container');
+   if(!c) return;
+   c.innerHTML = '';
+   activeServerGifts.forEach(g => {
+      let ic = '🎁', nm = 'Подарок';
+      if(g.type==='gold'){ ic='💰'; nm='Монеты'; }
+      if(g.type==='gems'){ ic='💎'; nm='Гемы'; }
+      if(g.type==='crowns'){ ic='👑'; nm='Короны'; }
+      if(g.type==='power'){ ic='⚡'; nm='Очки силы'; }
+      if(g.type==='chest_g'){ ic='📦'; nm='Мал. Ящик'; }
+      if(g.type==='chest_m'){ ic='✨'; nm='Бол. Ящик'; }
+      
+      c.innerHTML += `<div class="sgift-banner">
+         <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-size:30px; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">${ic}</div>
+            <div>
+               <div style="font-weight:900; font-size:16px">${nm}</div>
+               <div style="font-size:13px; font-weight:700">x${g.amount}</div>
+            </div>
+         </div>
+         <button class="pbtn ok" style="width:auto; margin:0; padding:10px 20px" onclick="claimServerGift('${g.id}', '${g.type}', ${g.amount})">ЗАБРАТЬ</button>
+      </div>`;
+   });
 }
 
 function claimServerGift(id, type, amount) {
@@ -2811,44 +2866,30 @@ function claimServerGift(id, type, amount) {
    if(type==='chest_g') { for(let i=0; i<amount; i++) setTimeout(()=>genChest('g'), i*500); }
    if(type==='chest_m') { for(let i=0; i<amount; i++) setTimeout(()=>genChest('m'), i*500); }
    
-   saveU(); updateLocalGifts(localAllGifts, false); 
-}
-
-function saveU(){
-  if(!U)return;
-  if(U.stats){['matches','wins','sdM','sdW','towers','quests','winStreak'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
-  ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
-  
-  U.lastSaveTs = Date.now();
-  lw('local_u_backup', JSON.stringify(U));
-  
-  try {
-    if(!U.isGuest||ls('clash_uid')) db.ref('users/'+U.uid).set(U).catch(()=>{});
-  } catch(e) {
-    console.warn("Работаем в оффлайн-режиме");
-  }
-  
-  updateUI(); 
+   saveU();
+   updateLocalGifts(localAllGifts, false); 
 }
 
 function listenRealtime(){
   if(!U)return;
-  try {
-    if(!U.isGuest) {
-      if(_friendReqRef)_friendReqRef.off();
-      _friendReqRef=db.ref(`users/${U.uid}/friendReqs`);
-      _friendReqRef.on('value',snap=>{
-        const n=snap.exists()?Object.keys(snap.val()||{}).length:0;
-        const badge=document.getElementById('req-count'),dot=document.getElementById('ndot');
-        if(badge){badge.textContent=n;badge.style.display=n>0?'inline':'none';}
-        if(dot)dot.style.display=n>0?'block':'none';
-      });
-    }
-    db.ref('serverGifts/ALL').on('value', snap => { updateLocalGifts(snap.val(), false); });
-    db.ref(`serverGifts/${U.uid}`).on('value', snap => { updateLocalGifts(snap.val(), true); });
-  } catch(e) {
-    console.warn("Онлайн-функции временно отключены");
+  
+  if(!U.isGuest) {
+    if(_friendReqRef)_friendReqRef.off();
+    _friendReqRef=db.ref(`users/${U.uid}/friendReqs`);
+    _friendReqRef.on('value',snap=>{
+      const n=snap.exists()?Object.keys(snap.val()||{}).length:0;
+      const badge=document.getElementById('req-count'),dot=document.getElementById('ndot');
+      if(badge){badge.textContent=n;badge.style.display=n>0?'inline':'none';}
+      if(dot)dot.style.display=n>0?'block':'none';
+    });
   }
+
+  db.ref('serverGifts/ALL').on('value', snap => {
+     updateLocalGifts(snap.val(), false);
+  });
+  db.ref(`serverGifts/${U.uid}`).on('value', snap => {
+     updateLocalGifts(snap.val(), true);
+  });
 }
 
 function openFriends(){if(!U)return;const myEl=document.getElementById('my-id-show');if(myEl)myEl.textContent=U.uid;ss('friends-ov','display','flex');fTab('list');}
@@ -2912,13 +2953,6 @@ function acceptFriendReq(fromUid,fromName){
 
 function declineFriendReq(fromUid){db.ref(`users/${U.uid}/friendReqs/${fromUid}`).remove().then(()=>{notify('Запрос отклонён');renderFriendReqs();});}
 function removeFriend(fuid){if(!U.friends)return;delete U.friends[fuid];Promise.all([db.ref(`users/${U.uid}/friends/${fuid}`).remove(),db.ref(`users/${fuid}/friends/${U.uid}`).remove()]).then(()=>{saveU();renderFriendList();notify('Друг удалён');});}
-
-function skipReg(){
-  ss('m-reg','display','none');
-  U.isGuest=true;
-  lw('clash_uid', U.uid);
-  startUI();
-}
 
 </script>
 </body>
