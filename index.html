@@ -1451,19 +1451,6 @@ function openFavPicker(){
 }
 function setFavCard(id){U.favoriteCard=id;saveU();notify('Любимая карта выбрана!','ok');ss('m-favpick','display','none');openProfile();}
 
-// ЖЕСТКОЕ ЛОКАЛЬНОЕ СОХРАНЕНИЕ
-function saveU(){
-  if(!U)return;
-  if(U.stats){['matches','wins','sdM','sdW','towers','quests','winStreak'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
-  ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
-  
-  U.lastSaveTs = Date.now();
-  lw('local_u_backup', JSON.stringify(U));
-  
-  if(!U.isGuest||ls('clash_uid'))db.ref('users/'+U.uid).set(U).catch(()=>{});
-  updateUI();
-}
-
 function updateUI(){
   if(!U)return;
   st('ui-tr',U.trophies);st('ui-go',U.gold);st('ui-ge',U.gems);
@@ -2827,20 +2814,41 @@ function claimServerGift(id, type, amount) {
    saveU(); updateLocalGifts(localAllGifts, false); 
 }
 
+function saveU(){
+  if(!U)return;
+  if(U.stats){['matches','wins','sdM','sdW','towers','quests','winStreak'].forEach(k=>{if(isNaN(U.stats[k]))U.stats[k]=0;});}
+  ['crownsFromWins','winsToday','trophies','xp','gold'].forEach(k=>{if(isNaN(U[k]))U[k]=0;});
+  
+  U.lastSaveTs = Date.now();
+  lw('local_u_backup', JSON.stringify(U));
+  
+  try {
+    if(!U.isGuest||ls('clash_uid')) db.ref('users/'+U.uid).set(U).catch(()=>{});
+  } catch(e) {
+    console.warn("Работаем в оффлайн-режиме");
+  }
+  
+  updateUI(); 
+}
+
 function listenRealtime(){
   if(!U)return;
-  if(!U.isGuest) {
-    if(_friendReqRef)_friendReqRef.off();
-    _friendReqRef=db.ref(`users/${U.uid}/friendReqs`);
-    _friendReqRef.on('value',snap=>{
-      const n=snap.exists()?Object.keys(snap.val()||{}).length:0;
-      const badge=document.getElementById('req-count'),dot=document.getElementById('ndot');
-      if(badge){badge.textContent=n;badge.style.display=n>0?'inline':'none';}
-      if(dot)dot.style.display=n>0?'block':'none';
-    });
+  try {
+    if(!U.isGuest) {
+      if(_friendReqRef)_friendReqRef.off();
+      _friendReqRef=db.ref(`users/${U.uid}/friendReqs`);
+      _friendReqRef.on('value',snap=>{
+        const n=snap.exists()?Object.keys(snap.val()||{}).length:0;
+        const badge=document.getElementById('req-count'),dot=document.getElementById('ndot');
+        if(badge){badge.textContent=n;badge.style.display=n>0?'inline':'none';}
+        if(dot)dot.style.display=n>0?'block':'none';
+      });
+    }
+    db.ref('serverGifts/ALL').on('value', snap => { updateLocalGifts(snap.val(), false); });
+    db.ref(`serverGifts/${U.uid}`).on('value', snap => { updateLocalGifts(snap.val(), true); });
+  } catch(e) {
+    console.warn("Онлайн-функции временно отключены");
   }
-  db.ref('serverGifts/ALL').on('value', snap => { updateLocalGifts(snap.val(), false); });
-  db.ref(`serverGifts/${U.uid}`).on('value', snap => { updateLocalGifts(snap.val(), true); });
 }
 
 function openFriends(){if(!U)return;const myEl=document.getElementById('my-id-show');if(myEl)myEl.textContent=U.uid;ss('friends-ov','display','flex');fTab('list');}
