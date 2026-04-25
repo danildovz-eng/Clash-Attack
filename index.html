@@ -2677,14 +2677,6 @@ function worldClick(ai){
 /* ЗАЩИТА И РЕГИСТРАЦИЯ */
 function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
 
-// Обновленная функция: лимиты убраны для гостевого режима
-function skipReg(){
-  ss('m-reg','display','none');
-  U.isGuest=true;
-  lw('clash_uid',U.uid);
-  startUI();
-}
-
 function openReg(){
   if(!canRegister()) return notify('Достигнут лимит регистраций с этого устройства. Попробуйте завтра.');
   ss('m-reg','display','none');ss('m-regemail','display','flex');
@@ -2805,6 +2797,13 @@ function updateLocalGifts(data, isPersonal = false) {
    
    activeServerGifts.sort((a,b) => b.ts - a.ts);
    renderServerGifts();
+}
+
+function skipReg(){
+  ss('m-reg','display','none');
+  U.isGuest=true;
+  lw('clash_uid',U.uid);
+  startUI();
 }
 
 function initApp(){
