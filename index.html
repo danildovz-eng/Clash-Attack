@@ -314,6 +314,11 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 </head>
+<script>
+window.onerror = function(message, source, lineno) {
+    alert("ОШИБКА НА СТРОКЕ " + lineno + ":\n" + message);
+};
+</script>
 <body>
 
 <div id="pwa-block">
