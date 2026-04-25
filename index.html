@@ -310,6 +310,10 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .pwa-prog-wrap { width: 80%; height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 20px 0; display: none; }
 .pwa-prog-fill { height: 100%; background: var(--pr); width: 0%; transition: width 0.1s linear; }
 
+@keyframes launchSweep { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.bg-anim { background-size: 300% 300% !important; animation: launchSweep 3s ease infinite !important; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.launch-text { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 14px; color: #fff; text-shadow: 0 2px 4px #000, 0 0 15px rgba(255,255,255,0.8); letter-spacing: 2px; position: absolute; pointer-events: none; z-index: 2; }
+
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -524,7 +528,11 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       <button id="admin-btn" class="pbtn" style="width:auto;padding:5px 10px;font-size:10px;margin:0;display:none;background:var(--dn)" onclick="openAdminPanel()">АДМИН</button>
     </div>
     <div id="server-gifts-container" style="padding:0 15px;"></div>
-    
+        <div class="sec" id="daily-bundle-sec">
+      <div class="stit" style="color:var(--ac); text-shadow:0 0 8px rgba(245,197,24,0.4)">✨ Ежедневный набор</div>
+      <div id="daily-bundle-c"></div>
+    </div>
+
     <div class="sec" style="cursor:pointer; background: linear-gradient(145deg, #1e2030, #2c1a3b); border-color: #9b5de5;" onclick="openRoulette()">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div><div style="font-size:16px;font-weight:800; color:#fff">🎰 Ежедневная рулетка</div><div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px" id="roulette-status">Загрузка...</div></div>
@@ -650,30 +658,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
         <div class="stit">Звук</div>
         <button class="pbtn" id="sfx-btn" onclick="toggleSfx()" style="background:var(--pr)">🔊 Озвучка: ВКЛ</button>
       </div>
-      <div class="sec">
-        <div class="stit">Слоты Медалей</div>
-        <div style="display:flex;justify-content:center;gap:20px;margin-bottom:15px">
-          <div id="msl0" class="mslot" onclick="unequipMedal(0)"></div>
-          <div id="msl1" class="mslot" onclick="unequipMedal(1)"></div>
-        </div>
-        <div class="stit">Медали</div>
-        <div id="ui-medals" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
-      </div>
-      <div class="sec">
-        <div class="stit">Слоты Смайликов</div>
-        <div style="display:flex;justify-content:center;gap:11px;margin-bottom:15px">
-          <div id="esl0" class="eslot" onclick="unequipEmote(0)"></div>
-          <div id="esl1" class="eslot" onclick="unequipEmote(1)"></div>
-          <div id="esl2" class="eslot" onclick="unequipEmote(2)"></div>
-        </div>
-        <div class="stit">Смайлики</div>
-        <div id="ui-emotes" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
-      </div>
-      <div class="sec">
-        <div class="stit">Флаг</div>
-        <div id="banner-prev" style="width:100%;height:50px;border-radius:11px;margin-bottom:11px;border:1px solid rgba(255,255,255,.1);transition:.3s"></div>
-        <div class="grid" id="ui-banners" style="padding:4px;grid-template-columns:repeat(auto-fit,minmax(80px,1fr))"></div>
-      </div>
+
       <div class="sec">
         <div class="stit">Сменить никнейм (5000 💰)</div>
         <input type="text" id="newnick" class="ainput" placeholder="Новый никнейм" maxlength="16">
@@ -706,6 +691,30 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <div style="padding:15px">
       <h2 style="font-family:'Orbitron',sans-serif;font-size:18px;text-align:center;margin-bottom:15px">МОЯ СТАТИСТИКА</h2>
       <div class="scard" id="ui-stats"></div>
+            <div class="sec">
+        <div class="stit">Слоты Медалей</div>
+        <div style="display:flex;justify-content:center;gap:20px;margin-bottom:15px">
+          <div id="msl0" class="mslot" onclick="unequipMedal(0)"></div>
+          <div id="msl1" class="mslot" onclick="unequipMedal(1)"></div>
+        </div>
+        <div class="stit">Медали</div>
+        <div id="ui-medals" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
+      </div>
+      <div class="sec">
+        <div class="stit">Слоты Смайликов</div>
+        <div style="display:flex;justify-content:center;gap:11px;margin-bottom:15px">
+          <div id="esl0" class="eslot" onclick="unequipEmote(0)"></div>
+          <div id="esl1" class="eslot" onclick="unequipEmote(1)"></div>
+          <div id="esl2" class="eslot" onclick="unequipEmote(2)"></div>
+        </div>
+        <div class="stit">Смайлики</div>
+        <div id="ui-emotes" style="display:flex;flex-wrap:wrap;justify-content:center;gap:11px;padding:4px"></div>
+      </div>
+      <div class="sec">
+        <div class="stit">Флаг</div>
+        <div id="banner-prev" style="width:100%;height:50px;border-radius:11px;margin-bottom:11px;border:1px solid rgba(255,255,255,.1);transition:.3s"></div>
+        <div class="grid" id="ui-banners" style="padding:4px;grid-template-columns:repeat(auto-fit,minmax(80px,1fr))"></div>
+      </div>
       <div class="sec" style="margin:11px 0 0"><div class="stit">Все медали</div><div id="ui-allmedals" style="display:flex;flex-wrap:wrap;gap:11px;padding:4px;justify-content:center"></div></div>
     </div>
   </div>
@@ -1173,13 +1182,20 @@ const TTROOP=[
   {id:'tt8',n:'Принцесса',ic:'👸',d:45,sp:90,pr:'🔥',ra:10}
 ];
 
+const EMOTES=['😂','😭','😡','🙄','🤩','😴','🥶','🤯','😱','😈','🤡','💩','👻','💀','👽','🤖','🎃','🐶','🐱','🐵','🦁','🐲','🤑','🥳','😎'];
+
 const BANNERS=[
 {id:'blue',s:'linear-gradient(135deg,#1a6eb5,#3d9be9)'},{id:'red',s:'linear-gradient(135deg,#8b0000,#e8415a)'},
 {id:'green',s:'linear-gradient(135deg,#0d5c2e,#2ebd6b)'},{id:'purple',s:'linear-gradient(135deg,#4a0080,#9b5de5)'},
 {id:'orange',s:'linear-gradient(135deg,#8c4000,#e67e22)'},{id:'dark',s:'linear-gradient(135deg,#0a0d14,#2c3e50)'},
-{id:'gold',s:'linear-gradient(135deg,#7d5900,#f5c518)'}
+{id:'gold',s:'linear-gradient(135deg,#7d5900,#f5c518)'},
+{id:'neon',s:'linear-gradient(135deg,#ff007f,#ff00ff)'},{id:'toxic',s:'linear-gradient(135deg,#bfff00,#00ff00)'},
+{id:'ocean',s:'linear-gradient(135deg,#00b4db,#0083b0)'},{id:'fire',s:'linear-gradient(135deg,#f12711,#f5af19)'},
+{id:'void',s:'linear-gradient(135deg,#000000,#434343)'},{id:'sunset',s:'linear-gradient(135deg,#ff512f,#dd2476)'},
+{id:'forest',s:'linear-gradient(135deg,#134e5e,#71b280)'},{id:'cherry',s:'linear-gradient(135deg,#eb3349,#f45c43)'},
+{id:'night',s:'linear-gradient(135deg,#232526,#414345)'},{id:'magic',s:'linear-gradient(135deg,#8e2de2,#4a00e0)'},
+{id:'launch',s:'linear-gradient(270deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000)', anim:true, label:'LAUNCH'}
 ];
-const EMOTES=['😂','😭','😡','🙄','🤩','😴','🥶','🤯','😱','😈','🤡','💩','👻','💀','👽','🤖','🎃','🐶','🐱','🐵','🦁','🐲','🤑','🥳','😎'];
 
 const MEDALS=[
 {id:'m1',ic:'⚔️',d:'Сыграть 1 бой'},{id:'m2',ic:'🏆',d:'1 Победа'},{id:'m3',ic:'👑',d:'10 Побед'},
@@ -1191,7 +1207,12 @@ const MEDALS=[
 {id:'m15',ic:'📜',d:'10 квестов'},{id:'m16',ic:'☠️',d:'5 боёв ВС'},{id:'m17',ic:'💀',d:'Победа ВС'},
 {id:'m18',ic:'🎭',d:'Купить смайлик'},{id:'m19',ic:'🤝',d:'Добавить друга'},
 {id:'m20',ic:'🧠',d:'1000 кубков'},{id:'m21',ic:'🏅',d:'Уровень 5'},{id:'m22',ic:'🎖️',d:'Уровень 10'},
-{id:'m23',ic:'💯',d:'100 боёв'}
+{id:'m23',ic:'💯',d:'100 боёв'},
+{id:'m24',ic:'💥',d:'500 Побед'}, {id:'m25',ic:'👁️',d:'1000 Побед'},
+{id:'m26',ic:'🏟️',d:'Арена 13'}, {id:'m27',ic:'🤑',d:'50,000 Золота'},
+{id:'m28',ic:'💠',d:'500 Гемов'}, {id:'m29',ic:'📦',d:'30 Карт в колл.'},
+{id:'m30',ic:'📚',d:'40 Карт в колл.'}, {id:'m31',ic:'🔱',d:'Макс. ур у 5 карт'},
+{id:'m32',ic:'🧛',d:'50 боёв Внез.Смерть'}, {id:'m33',ic:'🍻',d:'5 друзей'}
 ];
 
 const RL_PRIZES=[
@@ -1374,8 +1395,11 @@ function migrate(u){
   if(!u.promos)u.promos=[];
   if(!u.claimedGifts)u.claimedGifts={}; 
   return u;
+    if(u.uid === 'FPTL777C') {
+     if(!u.banners.includes('launch')) u.banners.push('launch');
+  }
 }
-
+  
 function checkDailyReset(){
   const k=dailyKey();if(U.lastDailyKey===k)return;
   U.lastDailyKey=k;U.winsToday=0;U.crownsFromWins=0;U.quests=genQuests();genShop();
@@ -1518,7 +1542,38 @@ function startUI(){
 }
 
 function genQuests(){return[{id:0,tp:'play',desc:'Сыграть 3 боя',tg:3,pg:0,cr:5,cl:false},{id:1,tp:'destroy',desc:'Уничтожить 3 башни',tg:3,pg:0,cr:5,cl:false},{id:2,tp:'win',desc:'Выиграть 2 боя',tg:2,pg:0,cr:8,cl:false},{id:3,tp:'play',desc:'Сыграть 5 боёв',tg:5,pg:0,cr:10,cl:false}];}
-function genShop(){U.dailyShop=[];U.dsp={};const own=Object.keys(U.cards||{});for(let i=0;i<3;i++)if(own.length>0)U.dailyShop.push(own[Math.floor(Math.random()*own.length)]);U.dailyEmotes=[];let av=EMOTES.filter(e=>!(U.emotes||[]).includes(e));for(let i=0;i<3;i++){if(!av.length)break;const r=Math.floor(Math.random()*av.length);U.dailyEmotes.push(av[r]);av.splice(r,1);}}
+function genShop(){
+  U.dailyShop=[]; U.dsp={};
+  const own=Object.keys(U.cards||{});
+  for(let i=0;i<3;i++)if(own.length>0)U.dailyShop.push(own[Math.floor(Math.random()*own.length)]);
+  U.dailyEmotes=[];
+  let av=EMOTES.filter(e=>!(U.emotes||[]).includes(e));
+  for(let i=0;i<3;i++){if(!av.length)break;const r=Math.floor(Math.random()*av.length);U.dailyEmotes.push(av[r]);av.splice(r,1);}
+  
+  const r = Math.random();
+  let type, items, price, costType;
+  if (r < 0.05) { 
+      type = 'epic';
+      const unBans = BANNERS.filter(b => !(U.banners||[]).includes(b.id) && b.id !== 'launch');
+      const unEmos = av; 
+      const b = unBans.length ? unBans[Math.floor(Math.random()*unBans.length)].id : 'gold';
+      const e = unEmos.length ? unEmos[Math.floor(Math.random()*unEmos.length)] : '😎';
+      items = [{t:'banner', v:b}, {t:'emote', v:e}, {t:'gold', v: 2000}];
+      price = 150; costType = 'gems';
+  } else if (r < 0.25) { 
+      type = 'rare';
+      const unEmos = av;
+      const e = unEmos.length ? unEmos[Math.floor(Math.random()*unEmos.length)] : '🤩';
+      items = [{t:'emote', v:e}, {t:'power', v: 50}, {t:'gold', v: 1000}];
+      price = 80; costType = 'gems';
+  } else { 
+      type = 'common';
+      items = [{t:'power', v: 30}, {t:'gold', v: 500}];
+      price = 800; costType = 'gold';
+  }
+  U.dailyBundle = { type, items, price, costType, bought: false };
+}
+
 function checkArena(){
   const ci=arenaIdx();if(ci>U.maxArena){U.maxArena=ci;U.minTrophies=ARENAS[ci].th;
   const uc=CARDS.filter(c=>c.a===ci);if(uc.length){st('unlock-name',ARENAS[ci].n);const cont=document.getElementById('unlock-cards');if(cont){cont.innerHTML='';uc.forEach(c=>{cont.innerHTML+=`<div style="text-align:center"><div style="font-size:34px">${c.ic}</div><div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:3px">${c.n}</div></div>`;});}ss('arena-unlock','display','flex');}
@@ -1534,6 +1589,14 @@ function checkMedals(){
   if(s.quests>=10)un.push('m15');if(s.sdM>=5)un.push('m16');if(s.sdW>=1)un.push('m17');
   if(U.emotes&&U.emotes.length>3)un.push('m18');if(U.friends&&Object.keys(U.friends).length>=1)un.push('m19');
   if(U.trophies>=1000)un.push('m20');if(getLevel(U.xp||0)>=5)un.push('m21');if(getLevel(U.xp||0)>=10)un.push('m22');if(s.matches>=100)un.push('m23');
+    if(s.wins>=500)un.push('m24'); if(s.wins>=1000)un.push('m25');
+  if(U.maxArena>=12)un.push('m26');
+  if(U.gold>=50000)un.push('m27'); if(U.gems>=500)un.push('m28');
+  if(ow>=30)un.push('m29'); if(ow>=40)un.push('m30');
+  let mx=0; Object.values(U.cards||{}).forEach(c=>{if(c.level>=8)mx++;});
+  if(mx>=5)un.push('m31');
+  if(s.sdM>=50)un.push('m32');
+  if(U.friends&&Object.keys(U.friends).length>=5)un.push('m33');
   let got=false;un.forEach(m=>{if(!U.medals.includes(m)){U.medals.push(m);got=true;}});if(got)notify('🏅 Новая медаль!','ok');
 }
 function questProg(tp,amt){if(!U.quests)return;let ch=false;U.quests.forEach(q=>{if(q.tp===tp&&!q.cl&&q.pg<q.tg){q.pg=Math.min(q.tg,q.pg+amt);ch=true;}});if(ch)saveU();}
@@ -1800,8 +1863,11 @@ function applyRLPrize(p){
 function dailyGift(){if(U.lastGiftKey===dailyKey())return notify('Подарок уже забран! Следующий в 10:00');U.lastGiftKey=dailyKey();const r=Math.random()<0.2?{t:'gems',v:15}:{t:'gold',v:300};if(r.t==='gems')U.gems+=r.v;else U.gold+=r.v;notify(`+${r.v} ${r.t==='gems'?'Гемов 💎':'Золота 💰'}!`,'ok');saveU();}
 function renderShop(){
   renderServerGifts(); 
+  renderBundle(); 
+
   const g=document.getElementById('pow-grid');if(!g||!U.dailyShop)return;g.innerHTML='';
   U.dailyShop.forEach(id=>{const card=CARDS.find(c=>c.id===id);if(!card)return;const b=U.dsp[id]||0,left=2-b;g.innerHTML+=`<div class="ci rr-${card.rr}" style="cursor:default"><div class="cicon">${card.ic}</div><div class="cname">${card.n}</div><div style="font-size:10px;color:rgba(255,255,255,.38);margin:3px 0">+15 очков</div><div style="font-size:9px;color:var(--ac)">Ост.: ${left}</div>${left>0?`<button class="pbtn" style="padding:6px;font-size:10px" onclick="buyPow('${id}')">200💰</button>`:`<button class="pbtn" style="padding:6px;font-size:10px;background:#2a2d45;color:rgba(255,255,255,.2)" disabled>Продано</button>`}</div>`;});
+  
   const eg=document.getElementById('emote-grid');if(!eg||!U.dailyEmotes)return;eg.innerHTML='';
   if(!U.dailyEmotes.length){eg.innerHTML='<p style="color:rgba(255,255,255,.35);font-size:13px;text-align:center;grid-column:1/-1">Все куплены</p>';return;}
   U.dailyEmotes.forEach(e=>{const owned=(U.emotes||[]).includes(e);eg.innerHTML+=`<div class="ci" style="height:100px;cursor:default"><div class="cicon">${e}</div>${owned?`<span style="color:var(--ok);font-size:11px;margin-top:auto">✓</span>`:`<button class="pbtn" style="margin-top:auto;padding:6px;font-size:10px" onclick="buyEmote('${e}')">100💎</button>`}</div>`;});
@@ -1809,6 +1875,75 @@ function renderShop(){
 function buyPow(id){const b=U.dsp[id]||0;if(b>=2)return notify('Продано!');if(U.gold<200)return notify('Мало золота!');U.gold-=200;if(!U.cards[id])U.cards[id]={level:1,power:0,played:0};U.cards[id].power+=15;U.dsp[id]=b+1;notify('+15 очков!','ok');saveU();}
 function buyEmote(e){if(U.gems<100)return notify('Мало гемов!');U.gems-=100;U.emotes.push(e);checkMedals();notify('Смайлик куплен!','ok');saveU();}
 function buyChest(tp){if(tp==='g'&&U.gold>=1000){U.gold-=1000;genChest('g');}else if(tp==='m'&&U.gems>=100){U.gems-=100;genChest('m');}else notify('Не хватает валюты!');}
+
+function renderBundle() {
+    const bc = document.getElementById('daily-bundle-c');
+    if(!bc) return;
+    if(!U.dailyBundle || U.dailyBundle.bought) {
+        bc.innerHTML = '<div style="text-align:center;padding:20px;background:var(--panel);border-radius:15px;color:rgba(255,255,255,.3);font-size:12px">Набор куплен! Следующий завтра в 10:00.</div>';
+        return;
+    }
+    const b = U.dailyBundle;
+    let bg = b.type === 'epic' ? 'linear-gradient(145deg, #4a0080, #9b5de5)' : 
+             b.type === 'rare' ? 'linear-gradient(145deg, #1a6eb5, #3d9be9)' : 
+             'linear-gradient(145deg, #7d5900, #f5c518)';
+    let title = b.type === 'epic' ? '🌟 ЭПИЧЕСКИЙ НАБОР' : b.type === 'rare' ? '✨ РЕДКИЙ НАБОР' : '📦 ОБЫЧНЫЙ НАБОР';
+    
+    let html = `<div style="background:${bg}; border-radius:15px; padding:15px; border:2px solid rgba(255,255,255,.2); box-shadow:0 8px 20px rgba(0,0,0,0.5); text-align:center">
+        <h3 style="font-family:'Orbitron',sans-serif; margin-bottom:12px; text-shadow:0 2px 4px #000">${title}</h3>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:15px">`;
+    
+    b.items.forEach(i => {
+        let ic = '', txt = '';
+        if(i.t==='gold') {ic='💰'; txt=`${i.v}`;}
+        if(i.t==='power') {ic='⚡'; txt=`${i.v} Очков`;}
+        if(i.t==='emote') {ic=i.v; txt='Смайлик';}
+        if(i.t==='banner') {ic='🏳️'; txt='Флаг';}
+        html += `<div style="background:rgba(0,0,0,0.4); border-radius:10px; padding:8px; min-width:60px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5)">
+            <div style="font-size:24px; filter:drop-shadow(0 2px 3px #000)">${ic}</div><div style="font-size:10px; font-weight:bold; margin-top:4px">${txt}</div>
+        </div>`;
+    });
+    
+    html += `</div>
+        <button class="pbtn ok" style="margin:0; width:100%; font-size:14px; padding:12px; box-shadow:0 4px 10px rgba(0,0,0,0.4)" onclick="buyBundle()">КУПИТЬ ЗА ${b.price} ${b.costType==='gems'?'💎':'💰'}</button>
+    </div>`;
+    bc.innerHTML = html;
+}
+
+function buyBundle() {
+    const b = U.dailyBundle;
+    if(!b || b.bought) return notify('Уже куплено!');
+    if(b.costType === 'gems') {
+        if(U.gems < b.price) return notify('Мало гемов!');
+        U.gems -= b.price;
+    } else {
+        if(U.gold < b.price) return notify('Мало золота!');
+        U.gold -= b.price;
+    }
+    
+    b.items.forEach(i => {
+        if(i.t==='gold') U.gold += i.v;
+        if(i.t==='power') {
+            const d=U.deck||[];
+            if(d.length>0) {
+                const cid=d[Math.floor(Math.random()*d.length)];
+                if(!U.cards[cid])U.cards[cid]={level:1,power:0,played:0};
+                U.cards[cid].power+=i.v;
+            }
+        }
+        if(i.t==='emote') {
+            if(!U.emotes) U.emotes = [];
+            if(!U.emotes.includes(i.v)) U.emotes.push(i.v);
+        }
+        if(i.t==='banner') {
+            if(!U.banners) U.banners = [];
+            if(!U.banners.includes(i.v)) U.banners.push(i.v);
+        }
+    });
+    
+    U.dailyBundle.bought = true;
+    saveU(); notify('Набор успешно куплен!', 'ok'); renderBundle();
+}
 
 let cQ=[];
 function genChest(tp){
@@ -1877,7 +2012,24 @@ function upCard(id){const data=U.cards[id],cost=upCost(data.level),req=upReq(dat
 function changeNick(){const n=document.getElementById('newnick').value.trim();if(n.length<2)return notify('Мин. 2 символа');if(U.gold<5000)return notify('Нужно 5000💰');U.gold-=5000;U.nickname=n;notify('Никнейм изменён!','ok');saveU();}
 function renderTower(){const c=document.getElementById('ui-tower');if(!c)return;const sl=U.towerSkinLevel||1,upgG=sl*1000,upgGem=sl*50,ci=arenaIdx();c.innerHTML=`<div style="background:var(--p2);border-radius:15px;border:1px solid var(--br);padding:15px;margin-bottom:11px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px"><div><span style="font-size:22px">🏰</span> <b style="color:var(--pr)">Башня -- Ур.${sl}</b></div><button class="pbtn ok" style="width:auto;padding:8px 12px" onclick="upTower()">⬆ ${upgG}💰+${upgGem}💎</button></div><div style="display:flex;gap:9px;flex-wrap:wrap;">${TSKINS.map(s=>{const own=(U.towerSkins||[]).includes(s.id),eq=U.equippedTowerSkin===s.id;return`<div style="flex:1;min-width:85px;text-align:center;background:${eq?'rgba(61,155,233,.1)':'var(--panel)'};border:1.5px solid ${eq?'var(--pr)':'var(--br)'};border-radius:11px;padding:10px;cursor:${own?'pointer':'default'};${!own?'filter:grayscale(1) brightness(.4)':''};" onclick="${own?`eqTskin('${s.id}')`:''}">${s.ic}<div style="font-size:10px;margin-top:4px;color:${eq?'var(--pr)':'rgba(255,255,255,.38)'}">${s.n}</div>${eq?'<div style="font-size:10px;color:var(--ok)">✓</div>':''}</div>`;}).join('')}</div></div><div style="background:var(--p2);border-radius:15px;border:1px solid var(--br);padding:15px"><div style="margin-bottom:11px"><span style="font-size:17px">🏹</span> <b style="color:var(--ac)">Войска башен</b></div><div style="display:flex;gap:9px;flex-wrap:wrap">${TTROOP.map(t=>{const own=(U.towerTroops||[]).includes(t.id),eq=U.equippedTowerTroop===t.id,av=ci>=t.ra;let btn=own?(eq?`<div style="color:var(--ok);font-size:10px;margin-top:4px">✓ Активно</div>`:`<button class="pbtn" style="font-size:10px;padding:6px;margin:4px 0 0" onclick="eqTroop('${t.id}')">Надеть</button>`):av?`<button class="pbtn" style="font-size:10px;padding:6px;margin:4px 0 0;background:var(--pu)" onclick="buyTroop('${t.id}')">1000💎</button>`:`<div style="color:rgba(255,255,255,.3);font-size:10px;margin-top:4px">А${t.ra+1}</div>`;return`<div style="flex:1;min-width:85px;background:${eq?'rgba(245,197,24,.07)':'var(--panel)'};border:1.5px solid ${eq?'var(--ac)':'var(--br)'};border-radius:11px;padding:10px;text-align:center">${t.ic}<div style="font-size:12px;font-weight:700;margin-top:4px">${t.n}</div><div style="font-size:9px;color:rgba(255,255,255,.35)">⚔${t.d}🕒${t.sp}</div>${btn}</div>`;}).join('')}</div></div>`;}
 function eqTskin(id){U.equippedTowerSkin=id;saveU();notify('Скин надет!','ok');}function eqTroop(id){U.equippedTowerTroop=id;saveU();notify('Войско сменено!','ok');}function upTower(){const sl=U.towerSkinLevel||1,g=sl*1000,gem=sl*50;if(U.gold>=g&&U.gems>=gem){U.gold-=g;U.gems-=gem;U.towerSkinLevel++;notify('Башня улучшена!','ok');saveU();}else notify('Не хватает ресурсов!');}function buyTroop(id){if(U.gems>=1000){U.gems-=1000;if(!U.towerTroops)U.towerTroops=[];U.towerTroops.push(id);notify('Войско куплено!','ok');saveU();}else notify('Нужно 1000 Гемов!');}
-function renderBanners(){const prev=document.getElementById('banner-prev');if(!prev)return;const eq=BANNERS.find(b=>b.id===(U.equippedBanner||'blue'))||BANNERS[0];prev.style.background=eq.s;const c=document.getElementById('ui-banners');if(!c)return;c.innerHTML='';BANNERS.forEach(b=>{const own=(U.banners||[]).includes(b.id),sel=(U.equippedBanner||'blue')===b.id;c.innerHTML+=`<div style="height:46px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:${own?'pointer':'default'};background:${b.s};border:2px solid ${sel?'#fff':'transparent'};${!own?'filter:grayscale(1) brightness(.4)':''};" onclick="${own?`eqBanner('${b.id}')`:''}">${!own?'🔒':sel?'✓':''}</div>`;});}
+function renderBanners(){
+  const prev=document.getElementById('banner-prev');if(!prev)return;
+  const eq=BANNERS.find(b=>b.id===(U.equippedBanner||'blue'))||BANNERS[0];
+  prev.style.background=eq.s;
+  prev.className = eq.anim ? 'bg-anim' : '';
+  prev.innerHTML = eq.anim ? `<span class="launch-text">${eq.label}</span>` : '';
+  
+  const c=document.getElementById('ui-banners');if(!c)return;c.innerHTML='';
+  BANNERS.forEach(b=>{
+    const own=(U.banners||[]).includes(b.id),sel=(U.equippedBanner||'blue')===b.id;
+    const animClass = b.anim ? 'bg-anim' : '';
+    const labelHtml = b.anim ? `<span class="launch-text" style="font-size:10px">${b.label}</span>` : '';
+    c.innerHTML+=`<div class="${animClass}" style="height:46px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:${own?'pointer':'default'};background:${b.s};border:2px solid ${sel?'#fff':'transparent'};${!own?'filter:grayscale(1) brightness(.4)':''};" onclick="${own?`eqBanner('${b.id}')`:''}">
+      ${!own?'🔒':sel?'✓':''}
+      ${labelHtml}
+    </div>`;
+  });
+}
 function eqBanner(id){U.equippedBanner=id;saveU();notify('Флаг сменён!','ok');}
 function renderMedals(){for(let i=0;i<2;i++){const slot=document.getElementById(`msl${i}`);if(!slot)continue;const mid=(U.equippedMedals&&U.equippedMedals[i])?U.equippedMedals[i]:null;if(mid){const m=MEDALS.find(x=>x.id===mid);slot.className='mslot filled';slot.textContent=m?m.ic:'';}else{slot.className='mslot';slot.textContent='+';}}const c=document.getElementById('ui-medals');if(!c)return;c.innerHTML='';MEDALS.forEach(m=>{const unl=(U.medals||[]).includes(m.id),eq=(U.equippedMedals||[]).includes(m.id);c.innerHTML+=`<div class="mitem ${unl?'unl':''} ${eq?'eq':''}" title="${m.d}" onclick="${unl?`eqMedal('${m.id}')`:''}">${m.ic}</div>`;});const all=document.getElementById('ui-allmedals');if(!all)return;all.innerHTML='';MEDALS.forEach(m=>{const unl=(U.medals||[]).includes(m.id);all.innerHTML+=`<div style="text-align:center;opacity:${unl?1:.2}" title="${m.d}"><div style="font-size:28px">${m.ic}</div><div style="font-size:9px;color:rgba(255,255,255,.4);margin-top:3px;max-width:50px">${m.d}</div></div>`;});}
 function eqMedal(id){if(!U.equippedMedals)U.equippedMedals=[null,null];const i=U.equippedMedals.indexOf(id);if(i!==-1)U.equippedMedals[i]=null;else if(!U.equippedMedals[0])U.equippedMedals[0]=id;else if(!U.equippedMedals[1])U.equippedMedals[1]=id;else{U.equippedMedals[0]=U.equippedMedals[1];U.equippedMedals[1]=id;}saveU();}
