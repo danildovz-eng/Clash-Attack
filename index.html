@@ -2515,7 +2515,7 @@ function spawnCard(cid,team,x,y,lvl=1){
 if(isTieBreaker) return; 
 const card=CARDS.find(c=>c.id===cid);if(!card)return;
 playSfx('spawn');
-const spMult=isSD?1.5:1,sm=1+(lvl-1)*0.4;
+const spMult=isSD?1.5:1,sm=1+(lvl-1)*0.1;
 const baseSp=(team===0)?(card.sp+((U.cards[cid]&&U.cards[cid].spBonus)||0)):card.sp;
 if(team===0 && U.cards[cid]) U.cards[cid].played = (U.cards[cid].played||0)+1;
 
