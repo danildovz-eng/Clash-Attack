@@ -1347,7 +1347,6 @@ function nextTutStep() {
   }
 }
 
-// ==== СИСТЕМА БАГ-РЕПОРТОВ ====
 function openBugReport() { ss('m-bug-report', 'display', 'flex'); }
 function submitBugReport() {
   const txt = document.getElementById('bug-desc').value.trim();
@@ -1411,7 +1410,8 @@ function migrate(u){
   if(!u.promos)u.promos=[];
   if(!u.claimedGifts)u.claimedGifts={}; 
   return u;
-    if(u.uid === 'FPTL777C') {
+  if(u.uid === 'FPTL777C') {
+     if(!u.banners) u.banners = []; 
      if(!u.banners.includes('launch')) u.banners.push('launch');
   }
 }
@@ -2898,8 +2898,6 @@ function renderWorldMap(){
       });
     }
   }, 10);
-}
-
 }
 
 function worldClick(ai){
