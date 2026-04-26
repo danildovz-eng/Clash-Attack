@@ -2896,10 +2896,6 @@ function renderWorldMap(){
   svg.innerHTML=d;
   const wt=document.getElementById('world-tooltip');if(wt)wt.classList.remove('active');
   
-  svg.innerHTML=d; 
-  
-  const wt=document.getElementById('world-tooltip');if(wt)wt.classList.remove('active');
-  
   setTimeout(() => {
     const currNode = WORLD_NODES.find(n => n.ai === ci);
     if(currNode) {
