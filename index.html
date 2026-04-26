@@ -1605,14 +1605,18 @@ function checkMedals(){
   if(s.quests>=10)un.push('m15');if(s.sdM>=5)un.push('m16');if(s.sdW>=1)un.push('m17');
   if(U.emotes&&U.emotes.length>3)un.push('m18');if(U.friends&&Object.keys(U.friends).length>=1)un.push('m19');
   if(U.trophies>=1000)un.push('m20');if(getLevel(U.xp||0)>=5)un.push('m21');if(getLevel(U.xp||0)>=10)un.push('m22');if(s.matches>=100)un.push('m23');
-    if(s.wins>=500)un.push('m24'); if(s.wins>=1000)un.push('m25');
+  const ownCardsCount = Object.keys(U.cards||{}).length; 
+  
+  if(s.wins>=500)un.push('m24'); if(s.wins>=1000)un.push('m25');
   if(U.maxArena>=12)un.push('m26');
   if(U.gold>=50000)un.push('m27'); if(U.gems>=500)un.push('m28');
-  if(ow>=30)un.push('m29'); if(ow>=40)un.push('m30');
+  if(ownCardsCount>=30)un.push('m29'); if(ownCardsCount>=40)un.push('m30');
+  
   let mx=0; Object.values(U.cards||{}).forEach(c=>{if(c.level>=8)mx++;});
   if(mx>=5)un.push('m31');
   if(s.sdM>=50)un.push('m32');
   if(U.friends&&Object.keys(U.friends).length>=5)un.push('m33');
+
   let got=false;un.forEach(m=>{if(!U.medals.includes(m)){U.medals.push(m);got=true;}});if(got)notify('🏅 Новая медаль!','ok');
 }
 function questProg(tp,amt){if(!U.quests)return;let ch=false;U.quests.forEach(q=>{if(q.tp===tp&&!q.cl&&q.pg<q.tg){q.pg=Math.min(q.tg,q.pg+amt);ch=true;}});if(ch)saveU();}
