@@ -1551,17 +1551,20 @@ function migrate(u){
   if(u.minTrophies===undefined)u.minTrophies=0;
   if(!u.promos)u.promos=[];
   if(!u.claimedGifts)u.claimedGifts={}; 
-  return u;
   if(u.uid === 'FPTL777C') {
-     if(!u.banners) u.banners = []; 
+     if(!u.banners) u.banners = [];
      if(!u.banners.includes('launch')) u.banners.push('launch');
-  if (Date.now() < 1777766400000) { 
-     if (!U.banners) U.banners = [];
-     if (!U.banners.includes('launch')) {
-         U.banners.push('launch');
+  } 
+
+  if (Date.now() < 1777766400000) {
+     if (!u.banners) u.banners = []; 
+     if (!u.banners.includes('launch')) {
+         u.banners.push('launch');
          setTimeout(() => notify('🎁 Выдан эксклюзивный флаг релиза!', 'ok'), 2000);
+     }
   }
-}
+
+  return u; 
   
 function checkDailyReset(){
   const k=dailyKey();if(U.lastDailyKey===k)return;
