@@ -1565,7 +1565,8 @@ function migrate(u){
   }
 
   return u; 
-  
+}
+    
 function checkDailyReset(){
   const k=dailyKey();if(U.lastDailyKey===k)return;
   U.lastDailyKey=k;U.winsToday=0;U.crownsFromWins=0;U.quests=genQuests();genShop();
