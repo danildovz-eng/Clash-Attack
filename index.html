@@ -3199,6 +3199,7 @@ function acceptFriendReq(fromUid,fromName){
 
 function declineFriendReq(fromUid){db.ref(`users/${U.uid}/friendReqs/${fromUid}`).remove().then(()=>{notify('Запрос отклонён');renderFriendReqs();});}
 function removeFriend(fuid){if(!U.friends)return;delete U.friends[fuid];Promise.all([db.ref(`users/${U.uid}/friends/${fuid}`).remove(),db.ref(`users/${fuid}/friends/${U.uid}`).remove()]).then(()=>{saveU();renderFriendList();notify('Друг удалён');});}
+}
 
 </script>
 </body>
