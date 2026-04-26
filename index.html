@@ -2819,7 +2819,9 @@ function renderWorldMap(){
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   
   svg.style.width = '100%';
-  svg.style.height = 'auto'; 
+  let screenW = window.innerWidth;
+  if (screenW > 480) screenW = 480; 
+  svg.style.height = (screenW * 3.611) + 'px';
   svg.style.display = 'block';
   
   let d='';
@@ -2853,9 +2855,7 @@ function renderWorldMap(){
     
     if(unlocked){
       d+=`<path d="${pathD}" fill="none" stroke="rgba(245,197,24,0.2)" stroke-width="8" stroke-linecap="round"/>`;
-      d+=`<path d="${pathD}" fill="none" stroke="#f5c518" stroke-width="3" stroke-dasharray="8 6">
-        <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite" linear/>
-      </path>`;
+      d+=`<path d="${pathD}" fill="none" stroke="#f5c518" stroke-width="3" stroke-dasharray="8 6"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite" linear/></path>`;
     } else {
       d+=`<path d="${pathD}" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-dasharray="4 6"/>`;
     }
@@ -2863,7 +2863,7 @@ function renderWorldMap(){
   
   WORLD_NODES.forEach((node)=>{
     const ar=ARENAS[node.ai], unlocked=node.ai<=ci, isCurr=node.ai===ci;
-    const rX = isCurr ? 36 : 28; 
+    const rX = isCurr ? 36 : 28;
     const rY = rX * 0.6;
     
     d+=`<ellipse cx="${node.x}" cy="${node.y+18}" rx="${rX+5}" ry="${rY+4}" fill="rgba(0,0,0,0.7)" filter="url(#glow)"/>`;
@@ -2895,6 +2895,7 @@ function renderWorldMap(){
   });
   
   svg.innerHTML=d;
+  
   const wt=document.getElementById('world-tooltip');if(wt)wt.classList.remove('active');
   
   setTimeout(() => {
@@ -2902,17 +2903,13 @@ function renderWorldMap(){
     if(currNode) {
       let scroller = svg.closest('.scr') || svg.parentElement;
       if (scroller && typeof scroller.scrollTo === 'function') {
-        // Узнаем реальный масштаб карты на экране твоего телефона
-        const scale = svg.clientWidth / 360; 
-        const realY = currNode.y * scale; // Переводим координаты
-        
-        scroller.scrollTo({ 
-          top: realY - (scroller.clientHeight / 2), 
-          behavior: 'smooth' 
-        });
+        const scale = (screenW > 480 ? 480 : screenW) / 360; 
+        const realY = currNode.y * scale; 
+        scroller.scrollTo({ top: realY - (scroller.clientHeight / 2), behavior: 'smooth' });
       }
     }
   }, 100);
+}
 
 function worldClick(ai){
   const ar=ARENAS[ai],ci=arenaIdx(),unlocked=ai<=ci;
