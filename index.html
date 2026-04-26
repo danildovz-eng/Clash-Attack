@@ -40,12 +40,28 @@ html, body {
 
 .scr, #pass-wrap, #world-container, #fav-pick-grid, #admin-player-list { overscroll-behavior-y: contain; }
 
+@keyframes menuPan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 #app-container {
   width: 100%; height: 100%; max-width: 480px; 
   position: relative; background-color: var(--bg);
-  background-size: cover; background-position: center;
+  background-size: 150% 150%; /* Увеличено для возможности движения */
+  background-position: center; 
   overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.9);
   transition: background 0.8s ease, background-color 0.8s ease;
+  animation: menuPan 45s ease-in-out infinite; /* Плавное движение фона */
+}
+
+.island-tower {
+  filter: drop-shadow(0 4px 5px rgba(0,0,0,0.8));
+  transition: transform 0.2s;
+}
+.island-tower:active {
+  transform: scale(0.9);
 }
 
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -2786,57 +2802,81 @@ if(winChestPending){winChestPending=false;setTimeout(()=>genChest('g'),600);}
 function renderWorldMap(){
   const svg=document.getElementById('world-svg');if(!svg)return;
   const ci=arenaIdx();
-  const W=360,H=950; 
+  const W=360, H=1300; 
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  let d='';
-  d+=`<defs> <radialGradient id="wbg" cx="40%" cy="30%"><stop offset="0%" stop-color="#0d1e3a"/><stop offset="60%" stop-color="#07111f"/><stop offset="100%" stop-color="#020609"/></radialGradient> <radialGradient id="neb1" cx="15%" cy="20%" r="40%"><stop offset="0%" stop-color="#3d9be9" stop-opacity=".1"/><stop offset="100%" stop-color="transparent"/></radialGradient> <radialGradient id="neb2" cx="85%" cy="75%" r="35%"><stop offset="0%" stop-color="#9b5de5" stop-opacity=".08"/><stop offset="100%" stop-color="transparent"/></radialGradient> <radialGradient id="neb3" cx="50%" cy="95%" r="30%"><stop offset="0%" stop-color="#2ebd6b" stop-opacity=".07"/><stop offset="100%" stop-color="transparent"/></radialGradient> <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"> <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/> <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge> </filter> <filter id="softglow" x="-30%" y="-30%" width="160%" height="160%"> <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/> <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge> </filter> ${ARENAS.map((a,i)=>`<radialGradient id="ng${i}" cx="38%" cy="32%"><stop offset="0%" stop-color="white" stop-opacity=".35"/><stop offset="100%" stop-color="${a.col}"/></radialGradient>`).join('')} </defs>`;
-  d+=`<rect width="${W}" height="${H}" fill="url(#wbg)"/>`;
-  d+=`<rect width="${W}" height="${H}" fill="url(#neb1)"/>`;
-  d+=`<rect width="${W}" height="${H}" fill="url(#neb2)"/>`;
-  d+=`<rect width="${W}" height="${H}" fill="url(#neb3)"/>`;
   
-  const STARS=[[18,22,1.1,1],[45,68,0.8,2],[88,18,1.3,3],[118,55,0.7,4],[165,28,1.0,5],[208,42,0.6,6],[248,19,1.2,7],[292,58,0.9,8],[335,32,0.8,9],[348,78,1.1,10],[12,105,0.7,11],[340,130,1.2,12],[58,155,0.8,13],[315,168,0.6,14],[22,240,1.0,15],[348,210,0.9,16],[10,318,0.7,17],[340,295,1.1,18],[28,408,0.8,19],[345,382,0.6,20],[15,478,1.0,21],[348,455,0.9,22],[55,548,0.7,23],[318,528,0.8,24],[180,15,1.2,25],[80,340,0.6,26],[295,440,0.7,27]];
-  d+=STARS.map(([x,y,r,i])=>`<circle cx="${x}" cy="${y+250}" r="${r}" fill="white" opacity="${0.2+Math.random()*0.5}"><animate attributeName="opacity" values="${0.15+i%3*0.1};${0.6+i%4*0.15};${0.15+i%3*0.1}" dur="${1.8+i%5*0.4}s" repeatCount="indefinite"/></circle>`).join('');
-  d+=`<line x1="300" y1="300" x2="240" y2="340" stroke="white" stroke-width="1.5" opacity="0"><animate attributeName="opacity" values="0;0.8;0" dur="4s" begin="3s" repeatCount="indefinite"/></line>`;
+  let d='';
+  d+=`<defs>
+    <radialGradient id="wbg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0f192b"/><stop offset="100%" stop-color="#050914"/></radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>`;
+  d+=`<rect width="${W}" height="${H}" fill="url(#wbg)"/>`;
+
+  for(let i=0; i<40; i++) {
+    let sx = Math.random()*W, sy = Math.random()*H, sr = Math.random()*1.5+0.5;
+    d+=`<circle cx="${sx}" cy="${sy}" r="${sr}" fill="#fff" opacity="${Math.random()*0.5+0.1}">
+      <animate attributeName="opacity" values="0.1;0.8;0.1" dur="${Math.random()*3+2}s" repeatCount="indefinite"/>
+    </circle>`;
+  }
   
   const WORLD_NODES=[
-    {ai:0,x:180,y:895}, {ai:1,x:88, y:842}, {ai:2,x:268,y:820}, {ai:3,x:68, y:758},
-    {ai:4,x:225,y:735}, {ai:5,x:298,y:665}, {ai:6,x:108,y:628}, {ai:7,x:238,y:578},
-    {ai:8,x:78, y:518}, {ai:9,x:188,y:438}, {ai:10,x:280,y:360}, {ai:11,x:140,y:290},
-    {ai:12,x:250,y:220}, {ai:13,x:90,y:150}, {ai:14,x:210,y:90}, {ai:15,x:180,y:30}
+    {ai:0,x:180,y:1200}, {ai:1,x:90, y:1120}, {ai:2,x:260,y:1050}, {ai:3,x:110,y:970},
+    {ai:4,x:250,y:900}, {ai:5,x:100,y:820}, {ai:6,x:260,y:750}, {ai:7,x:120,y:670},
+    {ai:8,x:240,y:590}, {ai:9,x:90,y:510}, {ai:10,x:260,y:440}, {ai:11,x:110,y:360},
+    {ai:12,x:250,y:290}, {ai:13,x:100,y:210}, {ai:14,x:260,y:140}, {ai:15,x:180,y:50}
   ];
 
-  for(let i=0;i<WORLD_NODES.length-1;i++){
-    const a=WORLD_NODES[i],b=WORLD_NODES[i+1],unlocked=i<ci;
+  for(let i=0; i<WORLD_NODES.length-1; i++){
+    const a = WORLD_NODES[i], b = WORLD_NODES[i+1], unlocked = i < ci;
+    const midY = (a.y + b.y) / 2;
+    const pathD = `M ${a.x} ${a.y} C ${a.x} ${midY}, ${b.x} ${midY}, ${b.x} ${b.y}`;
+    
     if(unlocked){
-      d+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(245,197,24,0.6)" stroke-width="2" stroke-dasharray="6 4"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.2s" repeatCount="indefinite"/></line>`;
-      d+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(245,197,24,0.15)" stroke-width="5"/>`;
-    }else{
-      d+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-dasharray="4 5"/>`;
+      d+=`<path d="${pathD}" fill="none" stroke="rgba(245,197,24,0.2)" stroke-width="8" stroke-linecap="round"/>`;
+      d+=`<path d="${pathD}" fill="none" stroke="#f5c518" stroke-width="3" stroke-dasharray="8 6">
+        <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite" linear/>
+      </path>`;
+    } else {
+      d+=`<path d="${pathD}" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-dasharray="4 6"/>`;
     }
   }
   
-  WORLD_NODES.forEach((node,ni)=>{
-    const ar=ARENAS[node.ai],unlocked=node.ai<=ci,isCurr=node.ai===ci;
-    const r=isCurr?20:14;
-    d+=`<ellipse cx="${node.x+2}" cy="${node.y+4}" rx="${r+3}" ry="${r*.5}" fill="rgba(0,0,0,0.5)"/>`;
+  WORLD_NODES.forEach((node)=>{
+    const ar=ARENAS[node.ai], unlocked=node.ai<=ci, isCurr=node.ai===ci;
+    const rX = isCurr ? 36 : 28; 
+    const rY = rX * 0.6;
+    
+    d+=`<ellipse cx="${node.x}" cy="${node.y+18}" rx="${rX+5}" ry="${rY+4}" fill="rgba(0,0,0,0.7)" filter="url(#glow)"/>`;
+    d+=`<ellipse cx="${node.x}" cy="${node.y+6}" rx="${rX}" ry="${rY}" fill="${unlocked ? '#3d1c04' : '#111824'}"/>`;
+    d+=`<ellipse cx="${node.x}" cy="${node.y}" rx="${rX}" ry="${rY}" fill="${unlocked ? ar.col : '#1e2535'}" stroke="${isCurr?'#fff':'rgba(255,255,255,0.1)'}" stroke-width="1.5" onclick="worldClick(${node.ai})" style="cursor:pointer"/>`;
+    
     if(isCurr){
-      d+=`<circle cx="${node.x}" cy="${node.y}" r="${r+10}" fill="${ar.col}" opacity="0.12" filter="url(#glow)"><animate attributeName="r" values="${r+8};${r+16};${r+8}" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.12;0.04;0.12" dur="2s" repeatCount="indefinite"/></circle>`;
-      d+=`<circle cx="${node.x}" cy="${node.y}" r="${r+4}" fill="none" stroke="${ar.col}" stroke-width="1.5" opacity="0.4"><animate attributeName="r" values="${r+2};${r+8};${r+2}" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/></circle>`;
+      d+=`<ellipse cx="${node.x}" cy="${node.y}" rx="${rX+8}" ry="${rY+6}" fill="none" stroke="#f5c518" stroke-width="2" opacity="0.8">
+        <animate attributeName="rx" values="${rX};${rX+15};${rX}" dur="1.5s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="${rY};${rY+10};${rY}" dur="1.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.8;0;0.8" dur="1.5s" repeatCount="indefinite"/>
+      </ellipse>`;
     }
-    d+=`<circle cx="${node.x}" cy="${node.y}" r="${r}" fill="${unlocked?`url(#ng${node.ai})`:'#1e2535'}" stroke="${isCurr?'#f5c518':unlocked?ar.col:'rgba(255,255,255,0.18)'}" stroke-width="${isCurr?3:2}" filter="${unlocked?'url(#softglow)':''}" onclick="worldClick(${node.ai})" style="cursor:pointer" class="world-node"/>`;
-    d+=`<text x="${node.x}" y="${node.y+5}" font-size="${isCurr?15:11}" text-anchor="middle" opacity="${unlocked?1:0.35}" onclick="worldClick(${node.ai})" style="cursor:pointer">${unlocked?ar.em:'🔒'}</text>`;
-    const labelY=node.y+r+15;
-    d+=`<text x="${node.x}" y="${labelY}" font-size="9" font-weight="700" font-family="Orbitron,sans-serif" text-anchor="middle" fill="${isCurr?'#f5c518':unlocked?'rgba(255,255,255,0.75)':'rgba(255,255,255,0.25)'}" onclick="worldClick(${node.ai})" style="cursor:pointer">А${node.ai+1}</text>`;
+    
+    const iconSize = isCurr ? 32 : 24;
+    d+=`<text x="${node.x}" y="${node.y+8}" font-size="${iconSize}" text-anchor="middle" class="island-tower" onclick="worldClick(${node.ai})" style="cursor:pointer">${unlocked?ar.em:'🔒'}</text>`;
+    
     if(isCurr){
-      d+=`<text x="${node.x}" y="${node.y-r-5}" font-size="16" text-anchor="middle"><animate attributeName="y" values="${node.y-r-5};${node.y-r-12};${node.y-r-5}" dur="1.6s" repeatCount="indefinite"/>📍</text>`;
-      d+=`<rect x="${node.x-26}" y="${node.y-r-34}" width="52" height="16" rx="8" fill="rgba(245,197,24,0.9)"/>`;
-      d+=`<text x="${node.x}" y="${node.y-r-23}" font-size="8.5" font-weight="700" font-family="Orbitron,sans-serif" text-anchor="middle" fill="#1a1000">ВЫ ЗДЕСЬ</text>`;
+      d+=`<text x="${node.x}" y="${node.y-rY-15}" font-size="20" text-anchor="middle"><animate attributeName="y" values="${node.y-rY-15};${node.y-rY-25};${node.y-rY-15}" dur="1.2s" repeatCount="indefinite"/>🔻</text>`;
     }
-    if(!unlocked&&node.ai>0){
-      d+=`<text x="${node.x}" y="${labelY+12}" font-size="8" text-anchor="middle" fill="rgba(245,197,24,0.5)">${ar.th}🏆</text>`;
+    
+    const labelY=node.y+rY+18;
+    d+=`<rect x="${node.x-25}" y="${labelY-10}" width="50" height="14" rx="4" fill="rgba(0,0,0,0.6)"/>`;
+    d+=`<text x="${node.x}" y="${labelY}" font-size="9" font-weight="900" font-family="Orbitron,sans-serif" text-anchor="middle" fill="${isCurr?'#f5c518':unlocked?'#fff':'rgba(255,255,255,0.4)'}">А${node.ai+1}</text>`;
+    
+    if(!unlocked){
+      d+=`<text x="${node.x}" y="${labelY+12}" font-size="8" font-weight="700" text-anchor="middle" fill="rgba(245,197,24,0.6)">${ar.th} 🏆</text>`;
     }
   });
+  
   svg.innerHTML=d;
   const wt=document.getElementById('world-tooltip');if(wt)wt.classList.remove('active');
 }
@@ -2849,10 +2889,8 @@ function worldClick(ai){
   wt.classList.add('active');
 }
 
-/* ЗАЩИТА И РЕГИСТРАЦИЯ */
 function saveTutNick(){const n=document.getElementById('tnick').value.trim();if(!n||n.length<2)return notify('Мин. 2 символа');U.nickname=n;ss('m-nick','display','none');ss('m-reg','display','flex');}
 
-// Обновленная функция: лимиты убраны для гостевого режима
 function skipReg(){
   ss('m-reg','display','none');
   U.isGuest=true;
