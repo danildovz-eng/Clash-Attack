@@ -2803,7 +2803,11 @@ function renderWorldMap(){
   const svg=document.getElementById('world-svg');if(!svg)return;
   const ci=arenaIdx();
   const W=360, H=1300; 
+  
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  
+  svg.style.height = H + 'px';
+  svg.style.width = '100%';
   
   let d='';
   d+=`<defs>
@@ -2879,6 +2883,21 @@ function renderWorldMap(){
   
   svg.innerHTML=d;
   const wt=document.getElementById('world-tooltip');if(wt)wt.classList.remove('active');
+  
+  svg.innerHTML=d; 
+  
+  const wt=document.getElementById('world-tooltip');if(wt)wt.classList.remove('active');
+  
+  setTimeout(() => {
+    const currNode = WORLD_NODES.find(n => n.ai === ci);
+    if(currNode) {
+      let scroller = svg.closest('.scr') || svg.parentElement;
+      scroller.scrollTo({
+        top: currNode.y - (scroller.clientHeight / 2),
+        behavior: 'smooth'
+      });
+    }
+  }, 10);
 }
 
 function worldClick(ai){
