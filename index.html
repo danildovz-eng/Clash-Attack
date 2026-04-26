@@ -344,6 +344,14 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 </script>
 <body>
 
+<div id="offline-screen" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,13,20,0.95); z-index:999999; flex-direction:column; justify-content:center; align-items:center; text-align:center; backdrop-filter: blur(5px);">
+  <div style="font-size:60px; margin-bottom:15px; filter: drop-shadow(0 0 10px rgba(255,0,50,0.5));">📡</div>
+  <h2 style="color:#fff; font-family:'Orbitron', sans-serif; margin-bottom:10px; text-shadow: 0 2px 4px #000;">НЕТ СВЯЗИ</h2>
+  <p style="color:rgba(255,255,255,0.6); max-width:80%; font-size:13px; margin-bottom:30px; line-height:1.5;">Не удалось подключиться к серверам Clash Arena.<br>Проверьте подключение к интернету.</p>
+  <button class="pbtn ok" onclick="startAppConnection()" style="padding:15px 40px; font-size:16px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">ПОВТОРИТЬ</button>
+  <div id="offline-loader" style="display:none; color:var(--ac); margin-top:20px; font-size:12px;">Подключение...</div>
+</div>
+
 <div id="pwa-block">
   <div style="font-size:50px;margin-bottom:10px">📱</div>
   <h2 style="font-family:'Orbitron',sans-serif;color:var(--pr);margin-bottom:10px;font-size:24px">УСТАНОВИТЕ ИГРУ</h2>
@@ -375,6 +383,13 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div id="dghost"><div id="dg-icon" style="font-size:36px"></div><div id="dg-name" style="font-size:10px;font-weight:bold;margin-top:4px"></div></div>
   <div id="intro"><h1>TERROV<br>STUDIO</h1><p>Game Development</p></div>
   <div id="loading"><h1>CLASH<br><span>ARENA</span></h1><div class="lbar"><div id="lprog"></div></div><div id="ltxt">ИНИЦИАЛИЗАЦИЯ...</div></div>
+  <div id="offline-screen" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,13,20,0.95); z-index:999999; flex-direction:column; justify-content:center; align-items:center; text-align:center; backdrop-filter: blur(5px);">
+  <div style="font-size:60px; margin-bottom:15px; filter: drop-shadow(0 0 10px rgba(255,0,50,0.5));">📡</div>
+  <h2 style="color:#fff; font-family:'Orbitron', sans-serif; margin-bottom:10px; text-shadow: 0 2px 4px #000;">НЕТ СВЯЗИ</h2>
+  <p style="color:rgba(255,255,255,0.6); max-width:80%; font-size:13px; margin-bottom:30px; line-height:1.5;">Не удалось подключиться к серверам Clash Arena.<br>Проверьте подключение к интернету.</p>
+  <button class="pbtn ok" onclick="startAppConnection()" style="padding:15px 40px; font-size:16px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">ПОВТОРИТЬ</button>
+  <div id="offline-loader" style="display:none; color:var(--ac); margin-top:20px; font-size:12px;">Подключение...</div>
+</div>
 
   <div id="m-profile" class="ov" style="z-index:5500">
     <div class="mbox" style="padding:24px;align-items:center;overflow-y:auto">
@@ -890,7 +905,6 @@ const ls=k=>{try{return localStorage.getItem(k);}catch(e){return _mst[k]||null;}
 const lw=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){_mst[k]=v;}};
 const ld=k=>{try{localStorage.removeItem(k);}catch(e){delete _mst[k];}};
 
-// Новая защита от спама (макс. 3 аккаунта за 24 часа)
 function canRegister() {
   let history = JSON.parse(ls('reg_history') || '[]');
   const now = Date.now();
@@ -901,6 +915,72 @@ function canRegister() {
   return true;
 }
 
+let connectionAttempts = 3; // Сколько раз пытаемся при слабом интернете
+
+function startAppConnection() {
+  const offScreen = document.getElementById('offline-screen');
+  const offLoader = document.getElementById('offline-loader');
+  
+  // Если нажали "Повторить", показываем текст "Подключение..."
+  if (offScreen.style.display === 'flex') {
+    offLoader.style.display = 'block';
+  }
+
+  // Функция пинга надежного сервера (Cloudflare)
+  const ping = () => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      // Добавляем случайное число, чтобы телефон не брал ответ из кэша
+      xhr.open('GET', 'https://1.1.1.1/cdn-cgi/trace?' + Math.random(), true);
+      xhr.timeout = 5000; // Ждем ровно 5 секунд (настройка для слабого интернета)
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) resolve();
+        else reject();
+      };
+      xhr.onerror = () => reject();
+      xhr.ontimeout = () => reject();
+      xhr.send();
+    });
+  };
+
+  const attempt = (attemptsLeft) => {
+    // Если телефон вообще пишет "Авиарежим" или отключен Wi-Fi/LTE
+    if (!navigator.onLine) {
+       showOfflineUI();
+       return;
+    }
+    
+    // Делаем пинг
+    ping().then(() => {
+       // ИНТЕРНЕТ ЕСТЬ И РАБОТАЕТ!
+       offScreen.style.display = 'none';
+       offLoader.style.display = 'none';
+       
+       // ВАЖНО: ЗДЕСЬ ДОЛЖЕН БЫТЬ ВЫЗОВ ТВОЕЙ ФУНКЦИИ ЗАГРУЗКИ ИГРЫ
+       // Например: loadUserData(), initGame() или checkAuth()
+       // Замени console.log на свою функцию старта!
+       console.log("Интернет стабилен, загружаем базу данных...");
+       
+    }).catch(() => {
+       if (attemptsLeft > 1) {
+         console.log(`Слабый интернет. Осталось попыток: ${attemptsLeft - 1}. Ждем 5 сек...`);
+         setTimeout(() => attempt(attemptsLeft - 1), 5000); 
+       } else {
+         showOfflineUI();
+       }
+    });
+  };
+
+  function showOfflineUI() {
+    offScreen.style.display = 'flex';
+    offLoader.style.display = 'none';
+    const intro = document.getElementById('intro-screen'); 
+    if (intro) intro.style.display = 'none';
+  }
+
+  attempt(connectionAttempts);
+}
+
 const FBC={
   apiKey: "AIzaSyDGOo6Y07l_9utgsaj6INMogMVnAhx1ZAo", 
   authDomain: "battle-royale-b5084.firebaseapp.com", 
@@ -908,7 +988,6 @@ const FBC={
   projectId: "battle-royale-b5084"
 };
 
-// Проверка PWA
 const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 if(!isPWA && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
    document.addEventListener('DOMContentLoaded', () => {
@@ -925,21 +1004,17 @@ if(!isPWA && !window.location.hostname.includes('localhost') && !window.location
    });
 }
 
-// PWA: Регистрация Service Worker с АВТООБНОВЛЕНИЕМ
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').then(reg => {
-      // Права на пуши
       if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
         Notification.requestPermission();
       }
       
-      // Слушаем скачивание новых обновлений
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'activated') {
-            // Как только новая версия игры скачана — обновляем страницу для игрока!
             window.location.reload();
           }
         });
@@ -949,7 +1024,6 @@ if ('serviceWorker' in navigator) {
 }
 
 
-// Музыка и пауза игры в фоне (фикс бага со сворачиванием)
 document.addEventListener('visibilitychange', () => {
   if(navigator.serviceWorker.controller) {
     if (document.hidden) navigator.serviceWorker.controller.postMessage({type: 'HIDDEN'});
@@ -969,7 +1043,6 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// Экран 30 апреля 2026
 function checkAprilWelcome() {
   const today = new Date();
   if(today.getFullYear() === 2026 && today.getMonth() === 3 && today.getDate() === 30) {
@@ -1091,7 +1164,6 @@ const PROMOS = {};
 "GEM-X9A1,GEM-B2C3,GEM-K8L9".split(',').forEach(k=>PROMOS[k.trim()]={t:'gems',v:100});
 "COIN-Q1W2,COIN-E3R4".split(',').forEach(k=>PROMOS[k.trim()]={t:'gold',v:1000});
 
-// ПОЛНЫЕ МАССИВЫ АРЕН И КАРТ (С РЕБАЛАНСОМ ХП И УРОНА)
 const ARENAS=[
 {n:'Лужайка',     th:0,    bg:"url('img/arena_0.JPG'), radial-gradient(circle at top, #1e3c1a, #12131a)",col:'#2ebd6b',em:'🌿'},
 {n:'Пустыня',     th:600,  bg:"url('img/arena_1.JPG'), radial-gradient(circle at top, #4a2e00, #12131a)",col:'#e67e22',em:'🏜️'},
@@ -1269,7 +1341,7 @@ try {
     throw 0;
   }
 } catch(e) {
-  // ЭТОТ ALERT ПОКАЖЕТ ТОЧНУЮ ОШИБКУ ПРЯМО НА ЭКРАНЕ
+
   alert("ОШИБКА ЗАПУСКА БАЗЫ ДАННЫХ: " + (e.message || "Проверьте ключи FBC!"));
   
   db={ref:()=>({once:()=>Promise.reject('offline'),set:()=>Promise.resolve(),update:()=>Promise.resolve(),on:()=>{},off:()=>{},push:()=>Promise.resolve({key:'mock'}),remove:()=>Promise.resolve(),orderByChild(){return this;},equalTo(){return this;}})}
@@ -1277,11 +1349,76 @@ try {
 
 function hideCover(){const c=document.getElementById('app-cover');if(c){c.style.opacity='0';setTimeout(()=>c.style.display='none',400);}}
 
+let connectionAttempts = 3;
+
+function startAppConnection() {
+  const offScreen = document.getElementById('offline-screen');
+  const offLoader = document.getElementById('offline-loader');
+  const mainLoader = document.getElementById('loading');
+  
+  if (offScreen && offScreen.style.display === 'flex' && offLoader) {
+    offLoader.style.display = 'block'; 
+  }
+
+  const ping = () => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'https://1.1.1.1/cdn-cgi/trace?' + Math.random(), true);
+      xhr.timeout = 5000; 
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) resolve();
+        else reject();
+      };
+      xhr.onerror = () => reject();
+      xhr.ontimeout = () => reject();
+      xhr.send();
+    });
+  };
+
+  const attempt = (attemptsLeft) => {
+    if (!navigator.onLine) return showOfflineUI();
+    
+    ping().then(() => {
+       if(offScreen) offScreen.style.display = 'none';
+       if(offLoader) offLoader.style.display = 'none';
+       if(mainLoader) mainLoader.style.display = 'flex'; 
+       
+       doLoad('Загрузка данных…', () => initApp());
+       
+    }).catch(() => {
+       if (attemptsLeft > 1) {
+         setTimeout(() => attempt(attemptsLeft - 1), 5000); 
+       } else {
+         showOfflineUI(); 
+       }
+    });
+  };
+
+  function showOfflineUI() {
+    if(offScreen) offScreen.style.display = 'flex';
+    if(offLoader) offLoader.style.display = 'none';
+    if(mainLoader) mainLoader.style.display = 'none'; // Скрываем обычную полоску загрузки
+  }
+
+  attempt(connectionAttempts);
+}
+
 function startApp(){
   if(appStarted)return;appStarted=true;
-  const intro=document.getElementById('intro'),loader=document.getElementById('loading');
+  const intro=document.getElementById('intro'), loader=document.getElementById('loading');
+  
   if(intro)intro.style.opacity='1';
-  setTimeout(()=>{if(intro)intro.style.opacity='0';setTimeout(()=>{if(intro)intro.style.display='none';if(loader){loader.style.display='flex';setTimeout(()=>loader.style.opacity='1',10);}doLoad('Загрузка данных…',()=>initApp());},500);},1500);
+  
+  setTimeout(()=>{
+    if(intro)intro.style.opacity='0';
+    setTimeout(()=>{
+      if(intro)intro.style.display='none';
+      if(loader){loader.style.display='flex';setTimeout(()=>loader.style.opacity='1',10);}
+      
+      startAppConnection();
+      
+    },500);
+  },1500);
 }
 
 if(document.readyState==='complete'||document.readyState==='interactive')setTimeout(startApp,80);
@@ -1320,7 +1457,6 @@ function startTut(){
   ss('mainnav','display','none');ss('topbar','display','none');
   startBattle('Бот-Обучение','linear-gradient(135deg,#8b0000,#e8415a)');
   
-  // Пауза перед обучением
   setTimeout(() => {
     bState = 'paused'; 
     tutStep = 0;
