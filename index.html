@@ -2360,12 +2360,11 @@ function specBotAI(dt) {
 }
 
 function prepMM(sd, draft = false){
-  if (!U) return; 
+  if (!U) return;
   
   if (draft && !isDraft) { initDraft(); return; }
+  
   isSD = sd; isMP = false; isFriendly = false;
-function prepMM(sd, draft = false){
-if (draft && !isDraft) { initDraft(); return; }
 
 isSD = sd; isMP = false; isFriendly = false;
 const pBan = BANNERS.find(b => b.id === (U.equippedBanner || 'blue')) || BANNERS[0];
